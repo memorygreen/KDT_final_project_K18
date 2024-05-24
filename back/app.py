@@ -12,5 +12,5 @@ CORS(app)
 app.add_url_rule('/user/kakao/callback',
                  view_func=kakao_callback, methods=['GET', 'POST'])
 
-if __name__ == '__main__':
+if __name__ == '__main__' :
     app.run(debug=True, port=5000)
