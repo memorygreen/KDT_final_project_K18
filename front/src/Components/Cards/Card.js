@@ -178,7 +178,9 @@ const Card = () => {
 
     return (
         <div className='Card_body'>
-            <SliderComponent articles={articles} handleImageClick={handleImageClick} settings={settings} />
+            <div className='Slider_size'>
+                <SliderComponent articles={articles} handleImageClick={handleImageClick} settings={settings} />
+            </div>
             <div className='Wanted_size'>
                 <Articles articles={articles} handleImageClick={handleImageClick} />
             </div>
