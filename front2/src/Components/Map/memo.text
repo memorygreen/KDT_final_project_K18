@@ -1,0 +1,133 @@
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import ReactDOM from 'react-dom';
+import { Map, useKakaoLoader, MapMarker, CustomOverlayMap } from 'react-kakao-maps-sdk';
+
+const TooltipMarker = ({ position }) => {
+    // useRef를 사용하여 DOM 노드를 참조합니다.
+    const node = useRef(document.createElement('div'));
+
+    // useMemo를 사용하여 position 값이 변경될 때마다 LatLng 객체를 생성합니다.
+    const positionLatlng = useMemo(() => {
+        return new window.kakao.maps.LatLng(position.lat, position.lng);
+    }, [position.lat, position.lng]);
+
+    // AbstractOverlay의 onAdd 메서드는 오버레이가 추가될 때 호출됩니다.
+    // 이 메서드에서 DOM 노드를 오버레이 레이어에 추가합니다.
+    function onAdd() {
+        const panel = this.getPanels().overlayLayer;
+        panel.appendChild(node.current);
+    }
+
+    // AbstractOverlay의 onRemove 메서드는 오버레이가 제거될 때 호출됩니다.
+    // 이 메서드에서 DOM 노드를 제거합니다.
+    function onRemove() {
+        node.current.parentNode.removeChild(node.current);
+    }
+
+
+    // AbstractOverlay의 draw 메서드는 오버레이가 그려질 때마다 호출됩니다.
+    // 이 메서드에서 DOM 노드의 위치를 계산하고 스타일을 설정합니다.
+    function draw() {
+        const projection = this.getProjection();
+        const point = projection.pointFromCoords(positionLatlng);
+        const width = node.current.offsetWidth;
+        const height = node.current.offsetHeight;
+
+        console.log(point, width, height);
+
+        node.current.style.left = `${point.x - width / 2}px`;
+        node.current.style.top = `${point.y - height / 2}px`;
+    }
+
+    // useEffect를 사용하여 DOM 노드의 초기 스타일을 설정합니다.
+    useEffect(() => {
+        node.current.style.position = 'absolute';
+        node.current.style.whiteSpace = 'nowrap';
+    }, []);
+
+
+
+    // TooltipMarker 컴포넌트는 AbstractOverlay 컴포넌트를 렌더링하고,
+    // ReactDOM.createPortal을 사용하여 DOM 노드를 오버레이 레이어에 렌더링합니다.
+    // 이 DOM 노드는 툴팁 마커로 사용됩니다.
+    return (
+        <>
+            <AbstractOverlay onAdd={onAdd} onRemove={onRemove} draw={draw} />
+            {ReactDOM.createPortal(
+                <div
+                    style={{
+                        color: '#fff',
+                        backgroundColor: '#3498db', // 파란색 배경색
+                        padding: '5px',
+                        borderRadius: '50%', // 원형 모양
+                        width: '20px', // 마커 크기 조정
+                        height: '20px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                >
+                    &bull; {/* 파란색 원형 마커 */}
+                </div>,
+                node.current
+            )}
+        </>
+    );
+};
+
+
+
+
+            <CustomOverlayMap position={{ lat: 36.54699, lng: 126.09598 }}>
+                <div
+                    style={{ padding: "42px", backgroundColor: "#fff", color: "#000" }}
+                >
+                    Custom Overlay!
+                </div>
+            </CustomOverlayMap>
+
+
+
+------------------------------------------------------------
+
+import React from 'react';
+import { Map, useKakaoLoader, MapMarker } from 'react-kakao-maps-sdk';
+import mapicons_red from './icons/mapicons_red.png';
+import mapicons_blue from './icons/mapicons_blue.png';
+
+const KakaoMap = () => {
+    const [loading, error] = useKakaoLoader({
+        appkey: process.env.REACT_APP_KAKAO_MAP_KEY,
+    });
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error.message}</div>;
+
+    return (
+        <Map
+            center={{ lat: 35.14978, lng: 126.9199 }}
+            style={{ width: '100%', height: '680px' }}
+            level={3}
+        >
+            <MapMarker
+                position={{ lat: 35.14978, lng: 126.9199 }}
+                image={{
+                    src: mapicons_red,
+                    size: { width: 40, height: 40 },
+                    options: { offset: { x: 15, y: 40 } }
+                }}
+            />
+            <MapMarker
+                position={{ lat: 35.14954, lng: 126.9195 }}
+                image={{
+                    src: mapicons_red,
+                    size: { width: 40, height: 40 },
+                    options: { offset: { x: 15, y: 40 } }
+                }}
+            />
+        </Map>
+    );
+};
+
+export default KakaoMap;
+--------------------------------------------------------------------------
