@@ -1,0 +1,19 @@
+/* Main.css */
+.main-main-container{
+  height: 100vh; 
+}
+
+
+.map-container {
+  position: relative; /* 맵 컨테이너도 relative 포지션으로 설정합니다. */
+  width: 100%; /* 맵 컨테이너의 너비를 100%로 설정합니다. */
+  z-index: 1; /* 맵의 z-index를 설정하여 사이드바 위로 나타나도록 합니다. */
+}
+
+.sidebar1 {
+  position: absolute;
+  top: 0;
+  left: 0; /* 왼쪽에서부터의 거리를 0으로 설정합니다. */
+  z-index: 2;
+  /* 다른 스타일 설정 */
+}

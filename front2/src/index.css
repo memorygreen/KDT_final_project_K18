@@ -1,0 +1,21 @@
+:root {
+    /*#3F77BF*/
+    --cigBlue: #3b87c9;
+    --cigBlue2: #3370A6;
+    --cigBlack: #36403C;
+    --cigSkin: #F2D1B3;
+    --cigRed2: #D9414E;
+    --cigRed: #D94141;
+    --cigWhite: #F2F2F2;
+    --cigGrey: #8C7B65;
+
+    --textBalck: #000000;
+    --textWhite: #ffffff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Mulish, sans-serif;
+}

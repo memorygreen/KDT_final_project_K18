@@ -1,0 +1,8 @@
+.Not_container{
+    background-color: rgb(250,250,250);
+    height: calc(100vh - 62px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
