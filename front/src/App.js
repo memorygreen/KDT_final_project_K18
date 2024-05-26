@@ -13,6 +13,7 @@ import Sidebar from './Components/SideBar/SideBar';
 import Nevbar from './Components/NevBar/NevBar';
 import KakaoLogin from './Components/KakaoLogin/KakaoLogin';
 import Card from './Components/Cards/Card';
+import OpenAI from './Components/OpenAI/OpenAI';
 
 function App() {
   return (
@@ -33,6 +34,8 @@ function App() {
           <Route path="/Nevbar" element={<Nevbar />} />
           <Route path="/Login/Kakao" element={<KakaoLogin />} />
           <Route path='/Card' element={<Card />} />
+          <Route path='/OpenAI' element={<OpenAI />} />
+
         </Routes>
       </Router>
     </div>
