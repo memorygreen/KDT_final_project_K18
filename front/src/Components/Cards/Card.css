@@ -1,12 +1,21 @@
 .Card_body {
     font-size: 16px;
-    font-family: Poppins, sans-serif;
     padding: 6rem 2rem;
-    background: #F8F8FF;
 }
 
 .articles123 {
     display: flex;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    justify-content: center;
+    max-width: 1200px;
+    gap: 1.5rem;
+}
+.Wanted_size{
+    margin-top: 50px;
+}
+
+.Slider_size{
     flex-wrap: wrap;
     margin: 0 auto;
     justify-content: center;
@@ -57,11 +66,6 @@
     height: 24rem;
     overflow: hidden;
 }
-
-.slider_items {
-    display: flex;
-}
-
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -110,16 +114,16 @@
     align-items: flex-start;
 }
 
-.detailsss {
+/* .detailsss {
     align-self: flex-end;
-}
+} */
 
 .slick-slide {
     transition: transform 0.8s ease-in-out;
 }
 
 .slick-list {
-    margin: 0 -10px;  /* Adjusted for narrower gap */
+    margin: 0 -10px; /* Adjusted for narrower gap */
 }
 
 .slick-dots {
@@ -149,31 +153,10 @@
     z-index: 1;
     opacity: 0.7;
     transition: opacity 0.3s ease;
-    background-color: #0072bc;  /* Blue background for buttons */
-}
+    background-color: #ff0000; /* Red background for buttons */
+}   
 
-.slick-prev:hover,
-.slick-next:hover {
-    opacity: 1;
-}
-
-.slick-prev:before,
-.slick-next:before {
-    font-size: 30px;
-    color: white;
-}
-
-.slick-prev {
-    left: -50px;
-}
-
-.slick-next {
-    right: -50px;
-}
-.slider_size{
-    width: 80%;
-}
-
-.Wanted_size{
-    margin-top: 50px;
+.ACard {
+    position: relative;
+    transform: translate(-50%, -50%); /* 자식 요소 가운데 정렬 */  
 }

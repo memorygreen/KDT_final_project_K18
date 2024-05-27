@@ -75,7 +75,8 @@ const Card = () => {
     const [showModal, setShowModal] = useState(false);
     const [selectedArticle, setSelectedArticle] = useState(null);
 
-    const handleImageClick = (article) => {
+    const handleImageClick = (article, event) => {
+        event.preventDefault(); // 드래그 방지
         setSelectedArticle(article);
         setShowModal(true);
     };
@@ -92,6 +93,10 @@ const Card = () => {
         slidesToShow: 3,
         slidesToScroll: 1,
         autoplay: true,
+        centerMode: true,
+        infinite : true,
+        arrows : true,
+        centerPadding :'50px',
         autoplaySpeed: 2000,
         swipeToSlide: true,
         draggable: true,
@@ -110,14 +115,21 @@ const Card = () => {
                     slidesToScroll: 1,
                 },
             },
+            {
+                breakpoint: 300,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                },
+            },
         ],
     };
 
     // 카드
     const Article = ({ article, handleImageClick }) => (
-        <article onClick={() => handleImageClick(article)} className='card_art'>
+        <article onClick={(event) => handleImageClick(article, event)} className='card_art'>
             <figure>
-                <img src={article.imgSrc} alt={article.imgAlt} onClick={() => handleImageClick(article)} />
+                <img src={article.imgSrc} alt={article.imgAlt} onClick={(event) => handleImageClick(article, event)} />
             </figure>
             <div className="article-preview">
                 <h2>{article.title}</h2>
@@ -139,7 +151,7 @@ const Card = () => {
         </div>
     );
 
-    // 모달 컴포넌트
+    // 모달 컴포넌트    
     const Modal = ({ isOpen, onClose, selectedArticle }) => {
         if (!isOpen) return null;
         return (
@@ -166,7 +178,7 @@ const Card = () => {
     const SliderComponent = ({ articles, handleImageClick, settings }) => (
         <Slider {...settings}>
             {articles.map((article, index) => (
-                <div key={index}>
+                <div key={index} className='Acard'>
                     <Article
                         article={article}
                         handleImageClick={handleImageClick}
@@ -178,7 +190,9 @@ const Card = () => {
 
     return (
         <div className='Card_body'>
-            <SliderComponent articles={articles} handleImageClick={handleImageClick} settings={settings} />
+            <div className='Slider_size'>
+                <SliderComponent articles={articles} handleImageClick={handleImageClick} settings={settings} />
+            </div>
             <div className='Wanted_size'>
                 <Articles articles={articles} handleImageClick={handleImageClick} />
             </div>
