@@ -1,7 +1,7 @@
 import React from 'react';
 import NevBar from '../../Components/NevBar/NevBar';
 import './MainPage.css';
-import Card from '../../Components/Cards/Card';
+import Card from '../../Components/Cards/Card/Card';
 
 const MainPage = () => {
     return (

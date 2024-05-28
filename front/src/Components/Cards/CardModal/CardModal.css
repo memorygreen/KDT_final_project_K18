@@ -1,0 +1,121 @@
+
+.modal_backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal_content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    width: 90%;
+    max-width: 600px;
+}
+
+.modal_close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.modal_close-btn img {
+    width: 24px;
+    height: 24px;
+}
+
+.Card_modal {
+    text-align: left;
+}
+
+.Card_modal img {
+    max-width: 100%;
+    vertical-align: top;
+    opacity: 0.85;
+}
+
+.Card_modal figcaption {
+    width: 100%;
+    background-color: #141414;
+    padding: 25px;
+    position: relative;
+    color: #ffffff;
+}
+
+/* .Card_modal figcaption:before {
+    position: absolute;
+    content: '';
+    bottom: 100%;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 55px 0 0 400px;
+    border-color: transparent transparent transparent #141414;
+} */
+
+.Card_modal figcaption a {
+    padding: 5px;
+    border: 1px solid #ffffff;
+    color: #ffffff;
+    font-size: 0.7em;
+    text-transform: uppercase;
+    margin: 10px 0;
+    display: inline-block;
+    opacity: 0.65;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.Card_modal figcaption a:hover {
+    opacity: 1;
+}
+
+.Card_modal .profile {
+    border-radius: 50%;
+    position: absolute;
+    bottom: 100%;
+    left: 25px;
+    z-index: 1;
+    max-width: 90px;
+    opacity: 1;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.Card_modal .follow {
+    margin-right: 4%;
+    border-color: #2980b9;
+    color: #2980b9;
+}
+
+.Card_modal h2 {
+    margin: 0 0 5px;
+    font-weight: 300;
+}
+
+.Card_modal h2 span {
+    display: block;
+    font-size: 0.5em;
+    color: #2980b9;
+}
+
+.Card_modal p {
+    margin: 0 0 10px;
+    font-size: 0.8em;
+    letter-spacing: 1px;
+    opacity: 0.8;
+}
