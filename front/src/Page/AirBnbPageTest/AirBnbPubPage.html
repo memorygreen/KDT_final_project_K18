@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airbnb : 검색 결과</title>
+    <link rel="stylesheet" href="/css/search.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="/css/register.css">
+    <link rel="stylesheet" href="/css/book.css">
+</head>
+<body>
+    <!-- Include navbar.pug and call navBar mixin with isLoggedIn -->
+    <nav>
+        <!-- Navbar content rendered by navBar mixin with isLoggedIn -->
+    </nav>
+    
+    <!-- Include searchHeader.pug and call header mixin with location, checkin, checkout, guest -->
+    <header>
+        <!-- Header content rendered by header mixin with location, checkin, checkout, guest -->
+    </header>
+    
+    <div id="result">
+        <article id="items">
+            <div class="search-top">
+                <p class="sub-title">
+                    100개 이상의 숙소 <!-- This is a placeholder for the dynamic length -->
+                    <span>∙ 2023-05-01 - 2023-05-10</span> <!-- These are placeholders for dynamic checkin and checkout -->
+                    <span class="guest">∙ 게스트 2명</span> <!-- This is a placeholder for dynamic guest count -->
+                </p>
+                <p class="title">Seoul의 숙소</p> <!-- This is a placeholder for the dynamic location -->
+                <div class="search-buttons">
+                    <button class="condition">유연한 환불 정책</button>
+                    <button class="condition">숙소 유형</button>
+                    <button class="condition">요금</button>
+                    <button class="condition">침실과 침대</button>
+                    <button class="condition">필터 추가하기</button>
+                </div>
+            </div>
+            
+            <!-- Include book.pug and call book mixin with book-id -->
+            <div>
+                <!-- Book content rendered by book mixin with book-id -->
+            </div>
+            
+            <!-- Include zeroResult.pug and call zeroResult mixin if data.length === 0 -->
+            <div>
+                <!-- Zero result content rendered by zeroResult mixin if data.length === 0 -->
+            </div>
+            
+            <!-- Include searchItem.pug and iterate over data to call searchItem mixin -->
+            <div>
+                <!--
+                    Example search item:
+                    +searchItem(id, title, description1, description2, price, originalPrice, image, score, review)
+                -->
+                <div class="search-item">
+                    <img src="image.jpg" alt="Listing Image">
+                    <h3>Title of the listing</h3>
+                    <p>Description1 of the listing</p>
+                    <p>Description2 of the listing</p>
+                    <p>Price: $100</p>
+                    <p>Original Price: $120</p>
+                    <p>Score: 4.5</p>
+                    <p>Review: 200 reviews</p>
+                </div>
+            </div>
+        </article>
+    </div>
+    
+    <script type="module" src="/js/searchResult.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/login.js"></script>
+    <script src="/js/register.js"></script>
+</body>
+</html>

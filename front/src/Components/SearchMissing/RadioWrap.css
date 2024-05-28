@@ -1,0 +1,31 @@
+/* RadioWrap.css */
+.radio-wrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 30px;
+  }
+  
+  .radio-wrap input {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+  
+  .radio-wrap .fruit {
+    border: 1px solid red;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: #FAFAFA;
+    margin: 4px;
+    text-align: center;
+    padding: 4px 16px;
+  }
+  
