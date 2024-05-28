@@ -12,7 +12,7 @@ CORS(app)
 
 # 카카오 로그인 콜백 엔드포인트 추가
 app.add_url_rule('/user/kakao/callback',
-                 view_func=kakao_callback, methods=['GET', 'POST'])
+                view_func=kakao_callback, methods=['GET', 'POST'])
 
 # 이미지 생성 엔드포인트 추가
 app.add_url_rule('/generate-image', view_func=generate_image, methods=['POST'])

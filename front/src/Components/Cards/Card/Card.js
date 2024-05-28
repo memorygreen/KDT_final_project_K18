@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import './Card.css';
-import img1 from './assets/1.jpg';
-import img2 from './assets/2.jpg';
-import img3 from './assets/3.jpg';
-import img4 from './assets/4.jpg';
-import img5 from './assets/5.jpg';
-import img6 from './assets/6.jpg';
-import img7 from './assets/7.jpg';
-import img8 from './assets/8.jpg';
-import img9 from './assets/9.jpg';
-import closeIcon from './assets/xxx.png';
+import img1 from '../assets/1.jpg';
+import img2 from '../assets/2.jpg';
+import img3 from '../assets/3.jpg';
+import img4 from '../assets/4.jpg';
+import img5 from '../assets/5.jpg';
+import img6 from '../assets/6.jpg';
+import img7 from '../assets/7.jpg';
+import img8 from '../assets/8.jpg';
+import img9 from '../assets/9.jpg';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
+import CardModal from '../CardModal/CardModal'; // Modal 컴포넌트 임포트
 
 const articles = [
     {
@@ -86,7 +86,6 @@ const Card = () => {
         setSelectedArticle(null);
     };
 
-    // 슬라이드 세팅값
     const settings = {
         dots: true,
         speed: 500,
@@ -94,38 +93,32 @@ const Card = () => {
         slidesToScroll: 1,
         autoplay: true,
         centerMode: true,
-        infinite : true,
-        arrows : true,
-        centerPadding :'50px',
+        infinite: true,
+        arrows: true,
+        centerPadding: '50px',
         autoplaySpeed: 2000,
         swipeToSlide: true,
         draggable: true,
         responsive: [
             {
-                breakpoint: 1024,
+                breakpoint: 1140,
                 settings: {
                     slidesToShow: 2,
                     slidesToScroll: 1,
+                    centerPadding: '30px',
                 },
             },
             {
-                breakpoint: 600,
+                breakpoint: 750,
                 settings: {
                     slidesToShow: 1,
                     slidesToScroll: 1,
-                },
-            },
-            {
-                breakpoint: 300,
-                settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1,
+                    centerPadding: '30px',
                 },
             },
         ],
     };
 
-    // 카드
     const Article = ({ article, handleImageClick }) => (
         <article onClick={(event) => handleImageClick(article, event)} className='card_art'>
             <figure>
@@ -138,9 +131,8 @@ const Card = () => {
         </article>
     );
 
-    // 리스트 
     const Articles = ({ articles, handleImageClick }) => (
-        <div className="articles123">
+        <div className="Card_articles">
             {articles.map((article, index) => (
                 <Article
                     key={index}
@@ -151,30 +143,6 @@ const Card = () => {
         </div>
     );
 
-    // 모달 컴포넌트    
-    const Modal = ({ isOpen, onClose, selectedArticle }) => {
-        if (!isOpen) return null;
-        return (
-            <div className="modal-overlay">
-                <div className="modal">
-                    <button onClick={onClose} className="close-btn">
-                        <img src={closeIcon} alt="Close" />
-                    </button>
-                    {selectedArticle && (
-                        <div className='modal_detail'>
-                            <img src={selectedArticle.imgSrc} alt={selectedArticle.imgAlt} className='detailImg' />
-                            <div className='detailsss'>
-                                <h2>{selectedArticle.title}</h2>
-                                <p>{selectedArticle.description}</p>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </div>
-        );
-    };
-
-    // 슬라이더
     const SliderComponent = ({ articles, handleImageClick, settings }) => (
         <Slider {...settings}>
             {articles.map((article, index) => (
@@ -196,7 +164,7 @@ const Card = () => {
             <div className='Wanted_size'>
                 <Articles articles={articles} handleImageClick={handleImageClick} />
             </div>
-            <Modal isOpen={showModal} onClose={handleCloseModal} selectedArticle={selectedArticle} />
+            <CardModal isOpen={showModal} onClose={handleCloseModal} selectedArticle={selectedArticle} />
         </div>
     );
 };

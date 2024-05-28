@@ -10,7 +10,6 @@ const OpenAI = () => {
             const response = await axios.post("http://localhost:5000/generate-image", {
                 prompt,
             });
-            console.log(response.data);
             setImageURL(response.data);
         } catch (error) {
             console.error("Error generating image:", error);

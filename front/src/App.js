@@ -12,7 +12,7 @@ import KakaoMap from './Components/Map/KakaoMap';
 import Sidebar from './Components/SideBar/SideBar';
 import Nevbar from './Components/NevBar/NevBar';
 import KakaoLogin from './Components/KakaoLogin/KakaoLogin';
-import Card from './Components/Cards/Card';
+import Card from './Components/Cards/Card/Card';
 import OpenAI from './Components/OpenAI/OpenAI';
 
 function App() {
@@ -26,7 +26,7 @@ function App() {
           <Route path="/Login" element={<Login />} />
           <Route path="/Signup" element={<Signup />} />
           <Route path="*" element={<NotFound />} />
-
+          
           
           {/* Test용 Components */}
           <Route path="/Map" element={<KakaoMap />} />
