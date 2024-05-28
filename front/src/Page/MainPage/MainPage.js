@@ -7,7 +7,7 @@ const MainPage = () => {
     return (
         <div className="Nev-Card">
             <header className='nevibar_card'> <NevBar /></header>
-            <div className='Maincard' >
+            <div className='Main_card' >
             <Card />
             </div>
         </div>

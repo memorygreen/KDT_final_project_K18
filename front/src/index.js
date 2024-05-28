@@ -14,5 +14,12 @@ root.render(
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 // test
 // tests
+<<<<<<< HEAD
 // 
+=======
+// test2
+// test3
+// test3as
+// test4
+>>>>>>> 7d6d0e8fc18be93e9042d74104ab3c5201088cc0
 reportWebVitals();
