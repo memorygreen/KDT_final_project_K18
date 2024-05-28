@@ -2,16 +2,26 @@ import React, { useState } from 'react';
 import './SignUp.css';
 import { Link } from 'react-router-dom';
 import logo from './assets/logo.png'
+
 const Signup = () => {
-  const [email, setEmail] = useState('');
+  const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState('');
+  const [dob, setDob] = useState('');
+  const [gender, setGender] = useState('');
+  const [phone, setPhone] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // 여기에 회원가입 로직을 추가하세요.
-    console.log('Email:', email);
+    // Add sign-up logic here.
+    console.log('ID:', id);
     console.log('Password:', password);
+    console.log('Confirm Password:', confirmPassword);
+    console.log('Name:', name);
+    console.log('Date of Birth:', dob);
+    console.log('Gender:', gender);
+    console.log('Phone Number:', phone);
   };
 
   return (
@@ -24,126 +34,105 @@ const Signup = () => {
             </Link>
             <h1>Sign Up!</h1>
           </div>
-          {/* <div className="socials-row">
-            <a href="#" title="Use Google">
-              <img src="" alt="Google" />
-              Use Google
-            </a>
-            <a href="#" title="Use Facebook">
-              <img src="" alt="Facebook" />
-              Use Facebook
-            </a>
-          </div> */}
-          {/* <div className="divider">
-            <div className="divider-line"></div>
-            OR
-            <div className="divider-line"></div>
-          </div> */}
           <div className="my-form__content">
             <div className="text-field">
-              <label htmlFor="email">Email:</label>
+              <label htmlFor="id">ID:</label>
               <input
-                aria-label="Email"
-                type="email"
-                id="email"
-                name="email"
-                placeholder="Your Email"
+                aria-label="ID"
+                type="text"
+                id="id"
+                name="id"
+                placeholder="Your ID"
                 autoComplete="off"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={id}
+                onChange={(e) => setId(e.target.value)}
                 required
               />
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="icon icon-tabler icon-tabler-mail"
-                width="44"
-                height="44"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="#A7A2CB"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+            </div>
+            <div className="text-field">
+              <label htmlFor="password">Password:</label>
+              <input
+                id="password"
+                type="password"
+                name="password"
+                placeholder="Your Password"
+                title="Minimum 6 characters at least 1 Alphabet and 1 Number"
+                pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            <div className="text-field">
+              <label htmlFor="confirm-password">Confirm Password:</label>
+              <input
+                id="confirm-password"
+                type="password"
+                name="confirm-password"
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+            </div>
+            <div className="text-field">
+              <label htmlFor="name">Name:</label>
+              <input
+                aria-label="Name"
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Your Name"
+                autoComplete="off"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
+            <div className="text-field">
+              <label htmlFor="dob">Date of Birth:</label>
+              <input
+                aria-label="Date of Birth"
+                type="date"
+                id="dob"
+                name="dob"
+                placeholder="Your Date of Birth"
+                value={dob}
+                onChange={(e) => setDob(e.target.value)}
+                required
+              />
+            </div>
+            <div className="text-field">
+              <label htmlFor="phone">Phone Number:</label>
+              <input
+                aria-label="Phone Number"
+                type="tel"
+                id="phone"
+                name="phone"
+                placeholder="Your Phone Number"
+                autoComplete="off"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                required
+              />
+            </div>
+            <div className="text-field">
+              <label htmlFor="gender">Gender:</label>
+              <select
+                id="gender"
+                name="gender"
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+                required
               >
-                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z" />
-                <path d="M3 7l9 6l9 -6" />
-              </svg>
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
             </div>
-            <div className="text-field">
-              <label htmlFor="password">
-                Password:
-                <input
-                  id="password"
-                  type="password"
-                  name="password"
-                  placeholder="Your Password"
-                  title="Minimum 6 characters at least 1 Alphabet and 1 Number"
-                  pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  strokeWidth="2"
-                  stroke="currentColor"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                  <path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z"></path>
-                  <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0"></path>
-                  <path d="M8 11v-4a4 4 0 1 1 8 0v4"></path>
-                </svg>
-              </label>
-            </div>
-            <div className="text-field">
-              <label htmlFor="confirm-password">
-                Repeat Password:
-                <input
-                  id="confirm-password"
-                  type="password"
-                  name="confirm-password"
-                  placeholder="Repeat Password"
-                  title="Minimum 6 characters at least 1 Alphabet and 1 Number"
-                  pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  required
-                />
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  strokeWidth="2"
-                  stroke="currentColor"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                  <path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z"></path>
-                  <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0"></path>
-                  <path d="M8 11v-4a4 4 0 1 1 8 0v4"></path>
-                </svg>
-              </label>
-            </div>
-            <input type="submit" className="my-form__button" value="Sign-Up" />
           </div>
           <div className="my-form__actions">
-            {/* <div>
-              By registering you agree to our
-              <a href="#" title="Reset Password">
-                Terms
-              </a>
-              and <a href="#" title="Reset Password">Privacy</a>
-            </div> */}
+          <input type="submit" className="my-form__button" value="Sign-Up" />
             <div className="my-form__signin">
               <Link to="/Login" title="Login" className='Login'>
                 Login

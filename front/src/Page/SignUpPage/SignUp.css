@@ -190,12 +190,15 @@
     text-align: center;
     gap: 1rem;
     margin-top: 0.5rem;
+    width: 100%;
 }
 
 .my-form__content {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    max-height: 300px; /* Set the maximum height for scrolling */
+    overflow-y: auto;/* Enable vertical scrolling */
 }
 
 .my-form__actions a {

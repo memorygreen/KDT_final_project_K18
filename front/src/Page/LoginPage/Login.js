@@ -5,16 +5,16 @@ import logo from './assets/storeify.png';
 import { Link } from 'react-router-dom';
 
 const LoginPage = () => {
-    const [email, setEmail] = useState('');
+    const [id, setId] = useState(''); // Changed state variable from 'email' to 'id'
     const [password, setPassword] = useState('');
-
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Email:', email);
+        console.log('ID:', id);
         console.log('Password:', password);
         // process and send to API
     }
+
     const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code`;
 
     return (
@@ -29,16 +29,16 @@ const LoginPage = () => {
                 </div>
                 <div className="input__wrapper">
                     <input
-                        type="email"
-                        id="email"
-                        name="email"
+                        type="text" // Changed input type from 'email' to 'text'
+                        id="id" // Changed id from 'email' to 'id'
+                        name="id"
                         className="input__field"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        value={id}
+                        onChange={(e) => setId(e.target.value)}
                         required
                     />
-                    <label htmlFor="email" className="input__label">
-                        Email
+                    <label htmlFor="id" className="input__label"> {/* Changed 'htmlFor' value from 'email' to 'id' */}
+                        ID {/* Changed label text from 'Email' to 'ID' */}
                     </label>
                     <svg
                         className="input__icon"
