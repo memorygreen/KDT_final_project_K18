@@ -1,9 +1,7 @@
-# kakao_login.py
 import requests
 import os
-from flask import request, jsonify
+from flask import Blueprint, request, jsonify
 from dotenv import load_dotenv
-
 
 # 환경 변수 로드
 load_dotenv()
@@ -11,6 +9,7 @@ load_dotenv()
 KAKAO_CLIENT_ID = os.environ.get('KAKAO_CLIENT_ID')
 KAKAO_REDIRECT_URI = os.environ.get('KAKAO_REDIRECT_URI')
 
+kakao_bp = Blueprint('kakao', __name__)
 
 def get_access_token(auth_code):
     data = {
@@ -37,6 +36,7 @@ def get_user_info(access_token):
     user_info = response.json()
     return user_info
 
+@kakao_bp.route('/user/kakao/callback', methods=['GET', 'POST'])
 def kakao_callback():
     # 1. 카카오 로그인 인증 코드 받기
     code = request.args.get('code')
