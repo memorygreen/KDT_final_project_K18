@@ -6,6 +6,7 @@ import Login from './Page/LoginPage/Login';
 import Mappage from './Page/MapPage/Mappage';
 import Signup from './Page/SignUpPage/SignUp';
 import MainPage from './Page/MainPage/MainPage';
+import SerchMissing from './Page/SearchMissingPage/SearchMissingPage' /** 자영 추가*/
 
 /* Test용 Components */
 import KakaoMap from './Components/Map/KakaoMap';
@@ -26,7 +27,7 @@ function App() {
           <Route path="/Login" element={<Login />} />
           <Route path="/Signup" element={<Signup />} />
           <Route path="*" element={<NotFound />} />
-          
+          <Route path='/SearchMissingPage' element={<SerchMissing />} /> {/* 자영 추가*/}
           
           {/* Test용 Components */}
           <Route path="/Map" element={<KakaoMap />} />
