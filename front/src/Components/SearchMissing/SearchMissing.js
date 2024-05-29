@@ -147,7 +147,6 @@ const SearchMissing = () => {
                     <li>
                         <h3 onClick={() => toggle_categories('personal_info')} className="search_missing_cate_group_name">인적사항</h3>
                         <div className="search_missing_cate_group">
-                            
                             {show_categories.personal_info && (
                                 <div className="search_missing_cate_content">
                                     <div>
@@ -191,7 +190,7 @@ const SearchMissing = () => {
                     <li>
                         <h3 onClick={() => toggle_categories('top')} className="search_missing_cate_group_name">상의</h3>
                         <div className="search_missing_cate_group">
-                           
+
                             {show_categories.top && (
                                 <div className="search_missing_cate_content">
                                     <h2>상의 구분</h2>
@@ -242,7 +241,7 @@ const SearchMissing = () => {
                     <li>
                         <h3 onClick={() => toggle_categories('bottoms')} className="search_missing_cate_group_name">하의</h3>
                         <div className="search_missing_cate_group">
-                            
+
                             {show_categories.bottoms && (
                                 <div className="search_missing_cate_content">
                                     <h2>하의 구분</h2>
@@ -250,21 +249,21 @@ const SearchMissing = () => {
                                         {bottom_options.map(option => (
 
                                             <li>
-                                            <React.Fragment key={option.id}>
-                                                <input
-                                                    type="radio"
-                                                    className="btn-check"
-                                                    name="MISSING_BOTTOMS"
-                                                    id={option.id}
-                                                    value={option.id}
-                                                    autoComplete="off"
-                                                    onChange={handle_bottom_change}
-                                                />
-                                                <label className="btn" htmlFor={option.id}>{option.label}</label>
-                                            </React.Fragment>
+                                                <React.Fragment key={option.id}>
+                                                    <input
+                                                        type="radio"
+                                                        className="btn-check"
+                                                        name="MISSING_BOTTOMS"
+                                                        id={option.id}
+                                                        value={option.id}
+                                                        autoComplete="off"
+                                                        onChange={handle_bottom_change}
+                                                    />
+                                                    <label className="btn" htmlFor={option.id}>{option.label}</label>
+                                                </React.Fragment>
                                             </li>
                                         ))}
-                                        
+
                                     </div>
                                 </div>
                             )}
@@ -295,7 +294,7 @@ const SearchMissing = () => {
                     <li>
                         <h3 onClick={() => toggle_categories('belongings')} className="search_missing_cate_group_name">소지품</h3>
                         <div className="search_missing_cate_group">
-                            
+
                             {show_categories.belongings && (
                                 <div className="search_missing_cate_content">
                                     <h2>소지품 선택</h2>
@@ -320,9 +319,8 @@ const SearchMissing = () => {
                             )}
                         </div>
                     </li>
+                    <button type='submit' className="btn btn-primary">검색</button>
                 </ul>
-
-                <button type='submit' className="btn btn-primary">검색</button>
             </form>
         </div>
     );
