@@ -68,9 +68,9 @@ const CardModal = ({ isOpen, onClose, selectedArticle }) => {
                 </button>
                 {selectedArticle && (
                     <figure className='Card_modal'>
-                        <img src={selectedArticle.imgSrc} alt="sample87" />
+                        <img src={selectedArticle.POSTER_INFO.POSTER_IMG_PATH} alt="sample87" />
                         <figcaption>
-                            <h2>{selectedArticle.title}</h2>
+                            <h2>{selectedArticle.MISSING_NAME}</h2>
                             <p>{selectedArticle.description}</p>
                             <div className="button-group">
                                 {showFirstButton && (
