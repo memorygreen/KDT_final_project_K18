@@ -257,6 +257,8 @@
 
 .logout {
     margin-left: auto;
+    background-color: #19191900;
+    border-color: #19191900;
 }
 
 .logout svg {

@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import './SideBar.css';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import logoutIcon from './assets/logoutIcon.png'
 import Notifications from './assets/Notifications.png'
 import Settings from './assets/Settings.png'
@@ -9,8 +9,9 @@ import profile from './assets/profile.jpg'
 import logo from './assets/logo.png'
 const Sidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(true); // 로그인 상태 관리
     const sidebarRef = useRef(null);
-
+    const navigate = useNavigate(); // 네비게이션 함수
 
     const handleExpandClick = () => {
         setIsCollapsed(!isCollapsed);
@@ -19,6 +20,11 @@ const Sidebar = () => {
 
     const handleSearchFocus = () => {
         setIsCollapsed(false);
+    };
+    const handleLogout = () => {
+        sessionStorage.removeItem('userId'); // 세션 값 삭제
+        setIsLoggedIn(false); // 로그인 상태 업데이트
+        navigate('/Login'); // 로그인 페이지로 이동
     };
 
     return (<div className="all_sidebar">
@@ -107,9 +113,9 @@ const Sidebar = () => {
                     <div className="user-name">Willy</div>
                     <div className="email">Where's Willy?</div>
                 </div>
-                <Link to="/Login" className='logout'>
+                <button onClick={handleLogout} className='logout'> {/* Link 대신 button 사용 */}
                     <img src={logoutIcon} alt="logout" width="40" height="40" />
-                </Link>
+                </button>
             </div>
         </nav>
     </div>
