@@ -20,6 +20,28 @@ const Adminpage = () => {
             });
     }, []);
 
+    const handleStatusChange = (userId, currentStatus) => {
+        const action = currentStatus === 'stop' ? '활성화' : '정지';
+        const confirmMessage = `정말로 이 사용자를 ${action}시키겠습니까?`;
+        const confirmStatusChange = window.confirm(confirmMessage);
+
+        if (confirmStatusChange) {
+            const newStatus = currentStatus === 'stop' ? 'action' : 'stop';
+            // 상태 변경 요청 보내기
+            axios.post('/user_status_change', { userId, newStatus })
+                .then(response => {
+                    console.log(`User status changed:`, response.data);
+                    // 상태 업데이트
+                    setPosters(posters.map(user =>
+                        user.USER_ID === userId ? { ...user, USER_STATUS: newStatus } : user
+                    ));
+                })
+                .catch(error => {
+                    console.error('There was a problem with the status change operation:', error);
+                });
+        }
+    };
+
     return (
         <div>
             <header>
@@ -38,6 +60,7 @@ const Adminpage = () => {
                             <th>휴대폰</th>
                             <th>회원구분</th>
                             <th>활동상태</th>
+                            <th> </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -52,7 +75,12 @@ const Adminpage = () => {
                                 <td>{user.USER_CATE}</td>
                                 <td>{user.USER_STATUS}</td>
                                 <td>
-                                    <button type='submit'>정지</button>
+                                    <button
+                                        type='button'
+                                        onClick={() => handleStatusChange(user.USER_ID, user.USER_STATUS)}
+                                    >
+                                        {user.USER_STATUS === 'stop' ? '해제' : '정지'}
+                                    </button>
                                 </td>
                             </tr>
                         ))}
