@@ -18,12 +18,13 @@ def get_user_info():
             user.append({
                 "USER_ID": row[0],
                 "USER_NAME": row[1],
-                "USER_BRT_DT": row[2],
+                "USER_BRT_DT": row[2].strftime("%Y-%m-%d"),
                 "USER_GENDER": row[3],
                 "USER_PHONE": row[4],
                 "USER_CATE": row[5],
                 "USER_STATUS": row[6]
             })
+        print(user[2])    
     finally:
         cursor.close()
         db.close()
