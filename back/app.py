@@ -10,6 +10,7 @@ from post import post_bp
 from CCTVLocation import cctv_bp
 from report import report_bp
 from SignUp import signup_bp  # SignUp 블루프린트 가져오기
+from Admin import Admin_bp
 
 
 # 환경 변수 로드
@@ -28,6 +29,8 @@ app.register_blueprint(post_bp)
 app.register_blueprint(cctv_bp)
 app.register_blueprint(report_bp)
 app.register_blueprint(signup_bp)  # SignUp 블루프린트 등록
+app.register_blueprint(Admin_bp)  
+
 
 
 if __name__ == '__main__':
