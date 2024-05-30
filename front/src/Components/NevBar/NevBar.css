@@ -261,7 +261,7 @@
 }
 
 @media (max-width: 44rem) {
-    .hide {
+    .nevbar_hide {
         display: none;
     }
 

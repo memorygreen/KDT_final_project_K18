@@ -90,21 +90,21 @@ const Sidebar = () => {
             <div className="sidebar-links">
                 <ul>
                     <li>
-                        <a href="#dashboard" title="Dashboard" className="tooltip">
+                        <a href="#dashboard" title="Dashboard" className="sidebar_tooltip">
                             <img src={Dashboard} alt="logout" width="24" height="24" />
                             <span className="link hide">Dashboard</span>
                             <span className="tooltip__content">Dashboard</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#settings" title="Settings" className="tooltip">
+                        <a href="#settings" title="Settings" className="sidebar_tooltip">
                             <img src={Settings} alt="logout" width="24" height="24" />
                             <span className="link hide">Settings</span>
                             <span className="tooltip__content">Settings</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#notifications" title="Notifications" className="tooltip">
+                        <a href="#notifications" title="Notifications" className="sidebar_tooltip">
                             <img src={Notifications} alt="logout" width="24" height="24" />
                             <span className="link hide">Notifications</span>
                             <span className="tooltip__content">Notifications</span>

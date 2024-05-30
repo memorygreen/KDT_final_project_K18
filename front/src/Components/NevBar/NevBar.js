@@ -18,9 +18,10 @@ const NevBar = () => {
                             <img src={logo} alt="logo" />
                         </Link>
                         <nav>
-                            <ul className={`navigation ${isMenuOpen ? '' : 'hide'}`}>
+                            <ul className={`navigation ${isMenuOpen ? '' : 'nevbar_hide'}`}>
                                 <li>
                                     <button type="button">
+
                                         Product
                                         <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16">
                                             <path
@@ -155,7 +156,7 @@ const NevBar = () => {
                         </nav>
                     </div>
 
-                    <div className={`action-buttons ${isMenuOpen ? '' : 'hide'}`}>
+                    <div className={`action-buttons ${isMenuOpen ? '' : 'nevbar_hide'}`}>
                         <Link to="/Login" title="Sign in" className="secondary">
                             Sign in
                         </Link>
