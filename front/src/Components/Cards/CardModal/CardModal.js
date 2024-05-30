@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import closeIcon from '../assets/xxx.png';
+import axios from 'axios'; // Import Axios
 import './CardModal.css'; // 모달 스타일이 필요하면 추가
 
 const CardModal = ({ isOpen, onClose, selectedArticle }) => {
@@ -49,10 +50,23 @@ const CardModal = ({ isOpen, onClose, selectedArticle }) => {
 
     const handleReportSubmit = (e) => {
         e.preventDefault();
-        // 여기에 폼 데이터를 전송하는 로직을 추가합니다.
-        console.log('Report submitted:', reportDetails);
-        setShowReportForm(false);
-        onClose(); // 모달을 닫고 싶으면 추가
+        // POST request to submit form data
+        axios.post('/report', {
+            POSTER_IDX: selectedArticle.POSTER_INFO.POSTER_IDX, // Assuming you have access to selectedArticle.POSTER_INFO.POSTER_IDX
+            REPORT_SIGHTING_PLACE: reportDetails.location,
+            REPORT_SIGHTING_TIME: reportDetails.time,
+            REPORT_ETC: reportDetails.details
+        })
+            .then(response => {
+                console.log('Report submitted successfully:', response.data);
+                setShowReportForm(false);
+                onClose(); // 모달을 닫고 싶으면 추가
+                // 감사멘트 추가하기
+            })
+            .catch(error => {
+                console.error('Error submitting report:', error);
+                // Handle error
+            });
     };
 
     const handleCloseForm = () => {
@@ -95,6 +109,7 @@ const CardModal = ({ isOpen, onClose, selectedArticle }) => {
                                             <div>발견시간 :</div>
                                             <div>
                                                 <input
+                                                    type='datetime-local'
                                                     name="time"
                                                     value={reportDetails.time}
                                                     onChange={handleInputChange}
