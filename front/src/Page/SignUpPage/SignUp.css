@@ -212,7 +212,7 @@
 
 .my-form__row {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .my-form__signin {

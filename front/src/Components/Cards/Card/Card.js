@@ -40,17 +40,21 @@ const Card = () => {
     };
 
     // 개별 포스터 사진
-    const Article = ({ article }) => (
-        <article onClick={(event) => handleImageClick(article, event)} className='card_art'>
-            <figure>
-                <img src={article.POSTER_INFO.POSTER_IMG_PATH} alt="Poster" onClick={(event) => handleImageClick(article, event)} />
-            </figure>
-            <div className="article-preview">
-                <h2>{article.MISSING_NAME}</h2>
-                <p>{article.description}</p>
-            </div>
-        </article>
-    );
+    const Article = ({ article }) => {
+        if (!article.POSTER_INFO.POSTER_IMG_PATH) return null; // 이미지 경로가 없으면 렌더링하지 않음
+
+        return (
+            <article onClick={(event) => handleImageClick(article, event)} className='card_art'>
+                <figure>
+                    <img src={article.POSTER_INFO.POSTER_IMG_PATH} alt="Poster" onClick={(event) => handleImageClick(article, event)} />
+                </figure>
+                <div className="article-preview">
+                    <h2>{article.MISSING_NAME}</h2>
+                    <p>{article.description}</p>
+                </div>
+            </article>
+        );
+    };
 
     // 전체 포스터 리스트
     const Articles = ({ posters }) => (

@@ -205,5 +205,5 @@
 .my-form__row {
     display: flex;
     gap: 0.5rem;
-    justify-content: space-between;
+    justify-content: center;
 }

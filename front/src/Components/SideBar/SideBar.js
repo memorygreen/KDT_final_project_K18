@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import './SideBar.css';
 import { Link } from 'react-router-dom';
 import logoutIcon from './assets/logoutIcon.png'
@@ -9,27 +9,13 @@ import profile from './assets/profile.jpg'
 import logo from './assets/logo.png'
 const Sidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
-    const [activeLink, setActiveLink] = useState(null);
     const sidebarRef = useRef(null);
 
-    useEffect(() => {
-        const currentUrl = window.location.href;
-        const links = sidebarRef.current.querySelectorAll('.sidebar-links a');
-        links.forEach((link) => {
-            if (link.href === currentUrl) {
-                setActiveLink(link);
-            }
-        });
-    }, []);
 
     const handleExpandClick = () => {
         setIsCollapsed(!isCollapsed);
     };
 
-    const handleLinkClick = (e, link) => {
-        e.preventDefault();
-        setActiveLink(link);
-    };
 
     const handleSearchFocus = () => {
         setIsCollapsed(false);
