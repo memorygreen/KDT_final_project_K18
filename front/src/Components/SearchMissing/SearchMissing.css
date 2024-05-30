@@ -1,3 +1,5 @@
+/*자영(240529) : 검색기능 css*/
+
 
 /* 검색바 부분 */
 .search_missing{
@@ -63,9 +65,6 @@
 }
 
 
-.btn,btn-primary,search_missing_cate_group{
-
-}
 
 /* 각 항목 안의 내용 */
 .search_missing_cate_content{
