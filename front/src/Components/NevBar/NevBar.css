@@ -49,7 +49,10 @@
     align-items: center;
     gap: 1rem;
     background-color: #141318;
+    margin-bottom: 0%;
+    padding-left: 0%;
 }
+
 
 .navigation>li {
     display: flex;
