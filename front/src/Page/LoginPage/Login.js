@@ -5,14 +5,36 @@ import logo from './assets/storeify.png';
 import { Link } from 'react-router-dom';
 
 const LoginPage = () => {
-    const [id, setId] = useState(''); // Changed state variable from 'email' to 'id'
+    const [id, setId] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('ID:', id);
-        console.log('Password:', password);
-        // process and send to API
+        
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id,
+                    password,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to log in');
+            }
+
+            const data = await response.json();
+            console.log('Login successful:', data);
+
+            // 로그인에 성공하면 다음 작업을 수행할 수 있습니다.
+        } catch (error) {
+            console.error('Login error:', error.message);
+            // 에러가 발생하면 처리할 수 있습니다.
+        }
     }
 
     const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code`;
@@ -29,16 +51,16 @@ const LoginPage = () => {
                 </div>
                 <div className="input__wrapper">
                     <input
-                        type="text" // Changed input type from 'email' to 'text'
-                        id="id" // Changed id from 'email' to 'id'
+                        type="text"
+                        id="id"
                         name="id"
                         className="input__field"
                         value={id}
                         onChange={(e) => setId(e.target.value)}
                         required
                     />
-                    <label htmlFor="id" className="input__label"> {/* Changed 'htmlFor' value from 'email' to 'id' */}
-                        ID {/* Changed label text from 'Email' to 'ID' */}
+                    <label htmlFor="id" className="input__label">
+                        ID
                     </label>
                     <svg
                         className="input__icon"

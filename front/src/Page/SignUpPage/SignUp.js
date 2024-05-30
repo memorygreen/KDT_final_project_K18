@@ -12,16 +12,42 @@ const Signup = () => {
   const [gender, setGender] = useState('');
   const [phone, setPhone] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add sign-up logic here.
-    console.log('ID:', id);
-    console.log('Password:', password);
-    console.log('Confirm Password:', confirmPassword);
-    console.log('Name:', name);
-    console.log('Date of Birth:', dob);
-    console.log('Gender:', gender);
-    console.log('Phone Number:', phone);
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+  
+    const userData = {
+      id,
+      password,
+      confirm_password: confirmPassword,
+      name,
+      dob,
+      gender,
+      phone,
+    };
+  
+    try {
+      const response = await fetch('http://localhost:5000/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+  
+      const data = await response.json();
+      if (response.ok) {
+        alert(data.message);
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred. Please try again.');
+    }
   };
 
   return (
