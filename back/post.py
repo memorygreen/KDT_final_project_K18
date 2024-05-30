@@ -39,6 +39,7 @@ def get_all_missing_info():
             'MISSING_IMG': missing[5],
             'MISSING_LOCATION_LAT': missing[6],
             'MISSING_LOCATION_LON': missing[7],
+            'MISSING_FINDING': missing[8],
             'MISSING_CLOTHES': [{
                 'MISSING_CLOTHES_IDX': cloth[0],
                 'MISSING_IDX': cloth[1],

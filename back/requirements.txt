@@ -6,6 +6,7 @@
    python-dotenv
    requests
    flask-cors
-
+   
+# cd back
 # pip install -r requirements.txt
 

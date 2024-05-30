@@ -11,14 +11,15 @@ const Card = () => {
     const [showModal, setShowModal] = useState(false);
     const [selectedArticle, setSelectedArticle] = useState(null);
 
-
     useEffect(() => {
         // 포스터 데이터 가져오기
         axios.get('/missing_info')
             .then(response => {
                 // 성공적으로 데이터를 받았을 때 처리
                 console.log(response.data);
-                setPosters(response.data);
+                // "MISSING_FINDING"이 "finding"인 데이터만 필터링
+                const filteredData = response.data.filter(item => item.MISSING_FINDING === "finding");
+                setPosters(filteredData);
             })
             .catch(error => {
                 // 에러 처리
