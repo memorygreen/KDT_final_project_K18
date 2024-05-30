@@ -105,7 +105,7 @@ const Card = () => {
     // 슬라이더 
     const SliderComponent = ({ posters }) => (
         <Slider {...settings}>
-            {posters.map((poster, index) => (
+            {posters.filter(poster => poster.POSTER_INFO && poster.POSTER_INFO.POSTER_IMG_PATH).map((poster, index) => (
                 <div key={index} className='Acard'>
                     <Article
                         article={poster}
