@@ -1,12 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './NevBar.css'; // Make sure to create and style this CSS file accordingly
 import logo from "./assets/logo.png"
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 const NevBar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const navigate = useNavigate()
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
+    };
+    useEffect(() => {
+        // 세션 스토리지에서 userId 값을 확인하는 로직으로 변경
+        const session = sessionStorage.getItem('userId');
+        setIsLoggedIn(session ? true : false);
+    }, [])
+    const handleLogout = () => {
+        sessionStorage.removeItem('userId'); // 세션 값 삭제
+        setIsLoggedIn(false); // 로그인 상태 업데이트
+        navigate('/Login'); // 로그인 페이지로 이동
     };
 
     return (
@@ -155,14 +166,22 @@ const NevBar = () => {
                             </ul>
                         </nav>
                     </div>
-
                     <div className={`action-buttons ${isMenuOpen ? '' : 'nevbar_hide'}`}>
-                        <Link to="/Login" title="Sign in" className="secondary">
-                            Sign in
-                        </Link>
-                        <Link to="/Signup" title="Sign up" className="primary">
-                            Sign up
-                        </Link>
+                        {!isLoggedIn && (
+                            <>
+                                <Link to="/Login" title="Sign in" className="secondary">
+                                    Sign in
+                                </Link>
+                                <Link to="/Signup" title="Sign up" className="primary">
+                                    Sign up
+                                </Link>
+                            </>
+                        )}
+                        {isLoggedIn && (
+                            <button onClick={handleLogout} className="primary">
+                                Logout
+                            </button>
+                        )}
                     </div>
                     <button aria-label="Open menu" className="burger-menu" type="button" onClick={toggleMenu}>
                         <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-menu-2" width="24"

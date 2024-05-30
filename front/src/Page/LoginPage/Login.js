@@ -7,10 +7,9 @@ import { Link } from 'react-router-dom';
 const LoginPage = () => {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
-
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         try {
             const response = await fetch('/login', {
                 method: 'POST',
@@ -24,16 +23,17 @@ const LoginPage = () => {
             });
 
             if (!response.ok) {
+                alert('아이디 또는 패스워드가 틀렸습니다. 다시 입력해 주세요.'); // alert 추가
+            } else if (response.ok) {
+                const data = await response.json();
+                console.log('Login successful:', data);
+                sessionStorage.setItem('userId', id);
+                window.location.href = '/'; // 메인 페이지로 이동
+            } else {
                 throw new Error('Failed to log in');
             }
-
-            const data = await response.json();
-            console.log('Login successful:', data);
-
-            // 로그인에 성공하면 다음 작업을 수행할 수 있습니다.
         } catch (error) {
             console.error('Login error:', error.message);
-            // 에러가 발생하면 처리할 수 있습니다.
         }
     }
 

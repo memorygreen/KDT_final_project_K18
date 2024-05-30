@@ -2,7 +2,7 @@ from db import db_con
 import pymysql
 from flask import Blueprint, request, jsonify
 
-Admin_bp = Blueprint('post', __name__)
+Admin_bp = Blueprint('Admin', __name__)
 
 @Admin_bp.route('/Admin', methods=['POST'])
 def get_user_info():

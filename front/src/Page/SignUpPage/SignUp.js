@@ -18,7 +18,7 @@ const Signup = () => {
       alert("Passwords do not match");
       return;
     }
-  
+
     const userData = {
       id,
       password,
@@ -28,7 +28,7 @@ const Signup = () => {
       gender,
       phone,
     };
-  
+
     try {
       const response = await fetch('http://localhost:5000/signup', {
         method: 'POST',
@@ -37,10 +37,12 @@ const Signup = () => {
         },
         body: JSON.stringify(userData),
       });
-  
+
       const data = await response.json();
       if (response.ok) {
         alert(data.message);
+        // 성공적으로 회원가입 후 로그인 페이지로 리다이렉트
+        window.location.href = '/Login';
       } else {
         alert(data.message);
       }
@@ -158,7 +160,7 @@ const Signup = () => {
             </div>
           </div>
           <div className="my-form__actions">
-          <input type="submit" className="my-form__button" value="Sign-Up" />
+            <input type="submit" className="my-form__button" value="Sign-Up" />
             <div className="my-form__signin">
               <Link to="/Login" title="Login" className='Login'>
                 Login
