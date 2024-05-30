@@ -2,6 +2,11 @@ from flask import Blueprint, request, jsonify
 import jwt
 import datetime
 from db import db_con
+import os  # os 모듈 추가
+
+# .env 파일에서 SECRET_KEY 불러오기
+SECRET_KEY = os.getenv('SECRET_KEY')
+
 
 signup_bp = Blueprint('signup', __name__)
 
@@ -14,7 +19,7 @@ def encode_password(password):
         'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)
     }
     # JWT 생성
-    encoded_jwt = jwt.encode(payload, 'SECRET_KEY', algorithm='HS256')
+    encoded_jwt = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     return encoded_jwt
 
 @signup_bp.route('/signup', methods=['POST'])
@@ -71,7 +76,7 @@ def login():
             cursor.execute(sql, (user_id,))
             encoded_password_from_db = cursor.fetchone()[0]  # 디코딩 전의 저장된 JWT 비밀번호 가져오기
 
-            decoded = jwt.decode(encoded_password_from_db, 'SECRET_KEY', algorithms=['HS256'])
+            decoded = jwt.decode(encoded_password_from_db, SECRET_KEY, algorithms=['HS256'])
             saved_password = decoded['password']
             if provided_pw == saved_password:
                 # 로그인 성공

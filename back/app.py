@@ -9,7 +9,6 @@ from OpenAI import openai_bp
 from post import post_bp
 from CCTVLocation import cctv_bp
 from report import report_bp
-from login import init_app as init_login
 from SignUp import signup_bp  # SignUp 블루프린트 가져오기
 
 
@@ -30,8 +29,6 @@ app.register_blueprint(cctv_bp)
 app.register_blueprint(report_bp)
 app.register_blueprint(signup_bp)  # SignUp 블루프린트 등록
 
-# 로그인 블루프린트를 초기화하고 등록
-init_login(app)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
