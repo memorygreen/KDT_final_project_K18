@@ -1,5 +1,4 @@
 from db import db_con
-import pymysql
 from flask import Blueprint, request, jsonify
 
 Admin_bp = Blueprint('Admin', __name__)
@@ -29,7 +28,7 @@ def get_user_info():
         db.close()
     
     return jsonify(user)
-
+# 회원상태 변경
 @Admin_bp.route('/user_status_change', methods=['POST'])
 def change_user_status():
     user_id = request.json['userId']
@@ -48,6 +47,7 @@ def change_user_status():
         cursor.close()
         db.close()
 
+# 회원구분 변경
 @Admin_bp.route('/user_category_change', methods=['POST'])
 def change_user_category():
     user_id = request.json['userId']
