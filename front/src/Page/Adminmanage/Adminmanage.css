@@ -1,5 +1,25 @@
+.main {
+    padding: 20px;
+}
+
+.user-info {
+    margin-bottom: 20px;
+}
+.user_poster{
+    width: 30%;
+  }
+
+.images-container {
+    width: 30%;
+}
+
+.pic-container {
+   /* 각 항목이 가로로 4개씩 배치되도록 설정 */
+    box-sizing: border-box;
+}
+
 .pic {
     width: 15vw;
     height: 10%;
-    object-fit: cover; 
+    object-fit: cover;
 }

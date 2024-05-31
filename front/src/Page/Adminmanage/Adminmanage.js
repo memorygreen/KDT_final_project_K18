@@ -49,17 +49,16 @@ const Adminmanage = () => {
                 <NevBar />
             </header>
             <div className="main">
-                <h1>사용자 관리 페이지</h1>
+                <h1>포스터 관리 페이지</h1>
                 <p>사용자 ID: {user_id}</p>
                 {loading && <p>로딩 중...</p>}
                 {error && <p>에러 발생: {error}</p>}
                 {userInfo && userInfo.length > 0 ? (
                     userInfo.map((user, index) => (
                         <div key={index} className="user-info">
-                            <h2>실종자 정보</h2>
                             <div className="images-container">
                                 {user.POSTER_INFO.POSTER_IMG_PATH.split(',').map((imgPath, imgIndex) => (
-                                    <div key={imgIndex}>
+                                    <div key={imgIndex} className='user_poster'>
                                         <img className='pic' src={imgPath} alt={user.MISSING_NAME} />
                                         <br />
                                         <button
