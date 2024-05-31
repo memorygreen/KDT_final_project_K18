@@ -2,24 +2,25 @@ import React, { useState, useEffect } from 'react';
 import './Adminpage.css'; // 여기에서 경로와 파일 이름이 일치하도록 합니다.
 import NevBar from '../../Components/NevBar/NevBar';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Adminpage = () => {
     const [posters, setPosters] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 25;
+    const navigate = useNavigate();
 
     useEffect(() => {
-        // 포스터 데이터 가져오기
         axios.post('/Admin')
             .then(response => {
-                // 성공적으로 데이터를 받았을 때 처리
                 console.log(response.data);
                 setPosters(response.data);
             })
             .catch(error => {
-                // 에러 처리
                 console.error('There was a problem with the axios operation:', error);
             });
     }, []);
-
+    // 회원 정지
     const handleStatusChange = (userId, currentStatus) => {
         const action = currentStatus === 'stop' ? '활성화' : '정지';
         const confirmMessage = `정말로 이 사용자를 ${action}시키겠습니까?`;
@@ -27,11 +28,9 @@ const Adminpage = () => {
 
         if (confirmStatusChange) {
             const newStatus = currentStatus === 'stop' ? 'action' : 'stop';
-            // 상태 변경 요청 보내기
             axios.post('/user_status_change', { userId, newStatus })
                 .then(response => {
                     console.log(`User status changed:`, response.data);
-                    // 상태 업데이트
                     setPosters(posters.map(user =>
                         user.USER_ID === userId ? { ...user, USER_STATUS: newStatus } : user
                     ));
@@ -40,6 +39,51 @@ const Adminpage = () => {
                     console.error('There was a problem with the status change operation:', error);
                 });
         }
+    };
+    // 회원
+    const handleCategoryChange = (userId, newCategory) => {
+        axios.post('/user_category_change', { userId, newCategory })
+            .then(response => {
+                console.log(`User category changed:`, response.data);
+                setPosters(posters.map(user =>
+                    user.USER_ID === userId ? { ...user, USER_CATE: newCategory } : user
+                ));
+            })
+            .catch(error => {
+                console.error('There was a problem with the category change operation:', error);
+            });
+    };
+
+    const handleRowClick = (userId) => {
+        navigate(`/Adminmanage?id=${userId}`);
+    };
+
+    // 현재 페이지에 맞는 데이터 계산
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = posters.slice(indexOfFirstItem, indexOfLastItem);
+
+    // 페이지 변경 함수
+    const handleClick = (event) => {
+        setCurrentPage(Number(event.target.id));
+    };
+
+    // 페이지 번호 렌더링
+    const renderPageNumbers = () => {
+        const pageNumbers = [];
+        for (let i = 1; i <= Math.ceil(posters.length / itemsPerPage); i++) {
+            pageNumbers.push(i);
+        }
+        return pageNumbers.map(number => (
+            <li
+                key={number}
+                id={number}
+                onClick={handleClick}
+                className={currentPage === number ? 'active' : null}
+            >
+                {number}
+            </li>
+        ));
     };
 
     return (
@@ -64,20 +108,32 @@ const Adminpage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {posters.map((user, index) => (
-                            <tr key={index}>
-                                <td>{index + 1}</td>
-                                <td>{user.USER_ID}</td>
-                                <td>{user.USER_NAME}</td>
-                                <td>{user.USER_BRT_DT}</td>
-                                <td>{user.USER_GENDER}</td>
-                                <td>{user.USER_PHONE}</td>
-                                <td>{user.USER_CATE}</td>
+                        {currentItems.map((user, index) => (
+                            <tr key={index} onClick={() => handleRowClick(user.USER_ID)}>
+                                <td>{indexOfFirstItem + index + 1}</td> {/* 번호 */}
+                                <td>{user.USER_ID}</td> {/* 아이디 */}
+                                <td>{user.USER_NAME}</td> {/* 이름 */}
+                                <td>{user.USER_BRT_DT}</td> {/* 생일 */}
+                                <td>{user.USER_GENDER}</td> {/* 성별 */}
+                                <td>{user.USER_PHONE}</td> {/* 휴대폰 */}
+                                <td>
+                                    <select
+                                        value={user.USER_CATE}
+                                        onClick={e => e.stopPropagation()} // 행 클릭 이벤트 전파 방지
+                                        onChange={(e) => handleCategoryChange(user.USER_ID, e.target.value)}
+                                    >
+                                        <option value="INDI">INDI</option>
+                                        <option value="ENT">ENT</option>
+                                    </select>
+                                </td>
                                 <td>{user.USER_STATUS}</td>
                                 <td>
                                     <button
                                         type='button'
-                                        onClick={() => handleStatusChange(user.USER_ID, user.USER_STATUS)}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleStatusChange(user.USER_ID, user.USER_STATUS);
+                                        }}
                                     >
                                         {user.USER_STATUS === 'stop' ? '해제' : '정지'}
                                     </button>
@@ -86,6 +142,9 @@ const Adminpage = () => {
                         ))}
                     </tbody>
                 </table>
+                <ul id="page-numbers">
+                    {renderPageNumbers()}
+                </ul>
             </div>
         </div>
     );

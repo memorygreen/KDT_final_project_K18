@@ -17,4 +17,20 @@
   th {
     background-color: #f2f2f2;
   }
-  
+  #page-numbers {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 0;
+}
+
+#page-numbers li {
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+#page-numbers li.active {
+    font-weight: bold;
+    color: red;
+}
