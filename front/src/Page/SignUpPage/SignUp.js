@@ -51,6 +51,17 @@ const Signup = () => {
       alert('An error occurred. Please try again.');
     }
   };
+  const handlePhoneChange = (e) => {
+    const { value } = e.target;
+    let formattedValue = value.replace(/\D/g, ''); // 숫자가 아닌 모든 문자 제거
+    if (formattedValue.length > 3 && formattedValue.length <= 7) {
+      formattedValue = formattedValue.slice(0, 3) + '-' + formattedValue.slice(3);
+    } else if (formattedValue.length > 7) {
+      formattedValue = formattedValue.slice(0, 3) + '-' + formattedValue.slice(3, 7) + '-' + formattedValue.slice(7, 11);
+    }
+    setPhone(formattedValue); // 상태 업데이트
+  };
+
 
   return (
     <div className="background">
@@ -140,7 +151,9 @@ const Signup = () => {
                 placeholder="Your Phone Number"
                 autoComplete="off"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={handlePhoneChange}
+                pattern="^\d{3}-\d{4}-\d{4}$"
+                title="Enter phone number in 000-0000-0000 format"
                 required
               />
             </div>
