@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 const LoginPage = () => {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -22,15 +23,17 @@ const LoginPage = () => {
                 }),
             });
 
-            if (!response.ok) {
-                alert('아이디 또는 패스워드가 틀렸습니다. 다시 입력해 주세요.'); // alert 추가
+            if (response.status === 401) {
+                alert('아이디 또는 패스워드가 틀렸습니다. 다시 입력해 주세요.'); // 비밀번호 불일치
+            } else if (response.status === 403) {
+                alert('계정 사용이 정지된 회원입니다'); // 계정 정지된 경우 알림 메시지
             } else if (response.ok) {
                 const data = await response.json();
                 console.log('Login successful:', data);
                 sessionStorage.setItem('userId', id);
                 window.location.href = '/'; // 메인 페이지로 이동
             } else {
-                throw new Error('Failed to log in');
+                alert('로그인에 실패했습니다. 다시 시도해 주세요.');
             }
         } catch (error) {
             console.error('Login error:', error.message);

@@ -7,7 +7,6 @@ import os  # os 모듈 추가
 # .env 파일에서 SECRET_KEY 불러오기
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-
 signup_bp = Blueprint('signup', __name__)
 
 # 비밀번호를 JWT로 인코딩하는 함수
@@ -72,9 +71,17 @@ def login():
     try:
         connection = db_con()
         with connection.cursor() as cursor:
-            sql = "SELECT USER_PW FROM TB_USER WHERE USER_ID = %s"
+            sql = "SELECT USER_PW, USER_STATUS FROM TB_USER WHERE USER_ID = %s"
             cursor.execute(sql, (user_id,))
-            encoded_password_from_db = cursor.fetchone()[0]  # 디코딩 전의 저장된 JWT 비밀번호 가져오기
+            user_data = cursor.fetchone()
+
+            if user_data is None:
+                return jsonify({'message': 'User not found'}), 404
+
+            encoded_password_from_db, user_status = user_data  # 저장된 JWT 비밀번호와 상태 가져오기
+
+            if user_status == 'stop':
+                return jsonify({'message': 'Account is suspended'}), 403  # 계정 사용 정지
 
             decoded = jwt.decode(encoded_password_from_db, SECRET_KEY, algorithms=['HS256'])
             saved_password = decoded['password']
