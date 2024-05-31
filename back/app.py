@@ -3,7 +3,7 @@ from flask_cors import CORS
 from dotenv import load_dotenv
 from KakaoLogin import kakao_callback
 from OpenAI import generate_image
-
+from post import poster_get
 # 환경 변수 로드
 load_dotenv()
 
@@ -16,6 +16,8 @@ app.add_url_rule('/user/kakao/callback',
 
 # 이미지 생성 엔드포인트 추가
 app.add_url_rule('/generate-image', view_func=generate_image, methods=['POST'])
+
+app.add_url_rule('/posterInfo',view_func=poster_get, mathods=['GET'])
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
