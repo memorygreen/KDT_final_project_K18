@@ -3,7 +3,7 @@ import pymysql
 #gitignore 에 db.py 추가해서 관리필요
 def db_con():
     return pymysql.connect(
-        host='project-db-campus.smhrd.com',
+        host='project-db-cgi.smhrd.com',
         user='campus_23K_AI18_p3_2',
         password='smhrd2',
         db='campus_23K_AI18_p3_2',
