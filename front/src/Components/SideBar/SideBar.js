@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import './SideBar.css';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import logoutIcon from './assets/logoutIcon.png'
 import Notifications from './assets/Notifications.png'
 import Settings from './assets/Settings.png'
@@ -9,30 +9,22 @@ import profile from './assets/profile.jpg'
 import logo from './assets/logo.png'
 const Sidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
-    const [activeLink, setActiveLink] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(true); // 로그인 상태 관리
     const sidebarRef = useRef(null);
-
-    useEffect(() => {
-        const currentUrl = window.location.href;
-        const links = sidebarRef.current.querySelectorAll('.sidebar-links a');
-        links.forEach((link) => {
-            if (link.href === currentUrl) {
-                setActiveLink(link);
-            }
-        });
-    }, []);
+    const navigate = useNavigate(); // 네비게이션 함수
 
     const handleExpandClick = () => {
         setIsCollapsed(!isCollapsed);
     };
 
-    const handleLinkClick = (e, link) => {
-        e.preventDefault();
-        setActiveLink(link);
-    };
 
     const handleSearchFocus = () => {
         setIsCollapsed(false);
+    };
+    const handleLogout = () => {
+        sessionStorage.removeItem('userId'); // 세션 값 삭제
+        setIsLoggedIn(false); // 로그인 상태 업데이트
+        navigate('/Login'); // 로그인 페이지로 이동
     };
 
     return (<div className="all_sidebar">
@@ -90,21 +82,21 @@ const Sidebar = () => {
             <div className="sidebar-links">
                 <ul>
                     <li>
-                        <a href="#dashboard" title="Dashboard" className="tooltip">
+                        <a href="#dashboard" title="Dashboard" className="sidebar_tooltip">
                             <img src={Dashboard} alt="logout" width="24" height="24" />
                             <span className="link hide">Dashboard</span>
                             <span className="tooltip__content">Dashboard</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#settings" title="Settings" className="tooltip">
+                        <a href="#settings" title="Settings" className="sidebar_tooltip">
                             <img src={Settings} alt="logout" width="24" height="24" />
                             <span className="link hide">Settings</span>
                             <span className="tooltip__content">Settings</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#notifications" title="Notifications" className="tooltip">
+                        <a href="#notifications" title="Notifications" className="sidebar_tooltip">
                             <img src={Notifications} alt="logout" width="24" height="24" />
                             <span className="link hide">Notifications</span>
                             <span className="tooltip__content">Notifications</span>
@@ -121,9 +113,9 @@ const Sidebar = () => {
                     <div className="user-name">Willy</div>
                     <div className="email">Where's Willy?</div>
                 </div>
-                <Link to="/Login" className='logout'>
+                <button onClick={handleLogout} className='logout'> {/* Link 대신 button 사용 */}
                     <img src={logoutIcon} alt="logout" width="40" height="40" />
-                </Link>
+                </button>
             </div>
         </nav>
     </div>

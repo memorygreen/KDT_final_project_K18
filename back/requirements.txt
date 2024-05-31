@@ -1,0 +1,12 @@
+   Flask
+   Flask-Bcrypt
+   Flask-JWT-Extended
+   PyMySQL
+   openai
+   python-dotenv
+   requests
+   flask-cors
+   
+# cd back
+# pip install -r requirements.txt
+

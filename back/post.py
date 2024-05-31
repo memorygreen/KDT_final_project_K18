@@ -1,112 +1,66 @@
+from flask import Blueprint, request, jsonify
+import pymysql
 from db import db_con
 
-#post 작성에 필요한 전체값 가져오기 description
-#M = MISSING C=MISSING_CLOTHES B=BELONGINGS
-#(M.IDX,USER_ID,M.NAME, M.GENDER, M.AGE, M.IMG, M.LAT, M.LON, C.IDX, M.IDX, TOP, TOP_COLOR, BOTTOMS, BOTTOMS_COLOR, M.ETC, B.IDX, M.IDX, B.CATE, B.ETC)
-def poster_get(): #
-    # 데이터베이스 연결 가져오기
+
+post_bp = Blueprint('post', __name__)
+
+
+@post_bp.route('/missing_info', methods=['GET'])
+def get_all_missing_info():
     db = db_con()
     cursor = db.cursor()
 
-    # MISSING_IDX 값  받아와야함
-    sql = """SELECT * 
-    FROM TB_MISSING M INNER JOIN TB_MISSING_CLOTHES C 
-    ON M.MISSING_IDX=C.MISSING_IDX INNER JOIN TB_BELONGINGS B
-    ON M.MISSING_IDX=B.MISSING_IDX 
-    AND M.MISSING_IDX=1""" 
-    cursor.execute(sql)
-    results = cursor.fetchall()
+    # 실종자 정보 가져오기 (테이블 이름을 정확하게 확인하고 수정)
+    sql_missing = "SELECT * FROM TB_MISSING"
+    cursor.execute(sql_missing)
+    missings = cursor.fetchall()
 
-    # 연결 및 커서 닫기
-    cursor.close()
-    db.close()
-    
-    return results
+    result = []
+    for missing in missings:
+        missing_idx = missing[0]
 
-#poster_url 생성형 이미지 url ,poster_idx 값 가져와야함  card:imgSrc
-def poster_url():
-    db = db_con()
-    cursor = db.cursor()
+        # 실종자 옷 정보 가져오기
+        sql_clothes = "SELECT * FROM TB_MISSING_CLOTHES WHERE MISSING_IDX=%s"
+        cursor.execute(sql_clothes, (missing_idx,))
+        clothes = cursor.fetchall()
 
-    sql = """SELECT POSTER_IMG_PATH
-               FROM TB_POSTER
-              WHERE POSTER_IDX=6""" 
-    cursor.execute(sql)
-    results = cursor.fetchall()
+        # 포스터 정보 가져오기
+        sql_poster = "SELECT * FROM TB_POSTER WHERE MISSING_IDX=%s"
+        cursor.execute(sql_poster, (missing_idx,))
+        poster = cursor.fetchone()
 
-    
-    cursor.close()
-    db.close()
-    
-    return results
-
-#실종자 이름     card.js : title
-def poster_name():
-    db = db_con()
-    cursor = db.cursor()
-
-    sql = """SELECT MISSING_NAME
-               FROM TB_MISSING
-              WHERE MISSING_IDX=1""" 
-    cursor.execute(sql)
-    results = cursor.fetchall()
-
-    
-    cursor.close()
-    db.close()
-    
-    return results
-
-
-def post_create():
-    db = db_con()
-    cursor = db.cursor()
-
-    sql=""" """
-    cursor.execute(sql)
-    results = cursor.fetchall()
+        missing_info = {
+            'MISSING_IDX': missing[0],
+            'USER_ID': missing[1],
+            'MISSING_NAME': missing[2],
+            'MISSING_GENDER': missing[3],
+            'MISSING_AGE': missing[4],
+            'MISSING_IMG': missing[5],
+            'MISSING_LOCATION_LAT': missing[6],
+            'MISSING_LOCATION_LON': missing[7],
+            'MISSING_FINDING': missing[8],
+            'MISSING_CLOTHES': [{
+                'MISSING_CLOTHES_IDX': cloth[0],
+                'MISSING_IDX': cloth[1],
+                'MISSING_TOP': cloth[2],
+                'MISSING_TOP_COLOR': cloth[3],
+                'MISSING_BOTTOMS': cloth[4],
+                'MISSING_BOTTOMS_COLOR': cloth[5],
+                'MISSING_CLOTHES_ETC': cloth[6]
+            } for cloth in clothes],
+            'POSTER_INFO': {
+                'POSTER_IDX': poster[0] if poster else None,
+                'MISSING_IDX': poster[1] if poster else None,
+                'POSTER_CREATED_AT': poster[2] if poster else None,
+                'POSTER_VIEW': poster[3] if poster else None,
+                'POSTER_IMG_PATH': poster[4] if poster else None,
+                'POSTER_SHOW': poster[5] if poster else None
+            }
+        }
+        result.append(missing_info)
 
     cursor.close()
     db.close()
 
-    return results
-
-def post_update():
-    db = db_con()
-    cursor = db.cursor()
-
-    sql = """
-    """
-    
-    cursor.execute(sql)
-    results = cursor.fetchall()
-
-    cursor.close()
-    db.close()
-    
-    return results
-
-#예제 함수 호출 및 결과 출력
-
-#전체
-# if __name__ == '__main__':
-#    data = poster_get()
-#    for row in data:
-#        print(row)
-
-#url
-# if __name__ == '__main__':
-#     data = poster_url()
-#     for row in data:
-#         print(row)
-
-#이름
-if __name__ == '__main__':
-    data = poster_name()
-    for row in data:
-        print(row)
-
-
-
-
-
+    return jsonify(result)

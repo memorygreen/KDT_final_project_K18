@@ -5,16 +5,38 @@ import logo from './assets/storeify.png';
 import { Link } from 'react-router-dom';
 
 const LoginPage = () => {
-    const [email, setEmail] = useState('');
+    const [id, setId] = useState('');
     const [password, setPassword] = useState('');
-
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Email:', email);
-        console.log('Password:', password);
-        // process and send to API
+
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id,
+                    password,
+                }),
+            });
+
+            if (!response.ok) {
+                alert('아이디 또는 패스워드가 틀렸습니다. 다시 입력해 주세요.'); // alert 추가
+            } else if (response.ok) {
+                const data = await response.json();
+                console.log('Login successful:', data);
+                sessionStorage.setItem('userId', id);
+                window.location.href = '/'; // 메인 페이지로 이동
+            } else {
+                throw new Error('Failed to log in');
+            }
+        } catch (error) {
+            console.error('Login error:', error.message);
+        }
     }
+
     const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code`;
 
     return (
@@ -29,16 +51,16 @@ const LoginPage = () => {
                 </div>
                 <div className="input__wrapper">
                     <input
-                        type="email"
-                        id="email"
-                        name="email"
+                        type="text"
+                        id="id"
+                        name="id"
                         className="input__field"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        value={id}
+                        onChange={(e) => setId(e.target.value)}
                         required
                     />
-                    <label htmlFor="email" className="input__label">
-                        Email
+                    <label htmlFor="id" className="input__label">
+                        ID
                     </label>
                     <svg
                         className="input__icon"

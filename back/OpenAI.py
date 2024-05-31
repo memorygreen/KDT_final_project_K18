@@ -1,6 +1,4 @@
-# openAI.py
-
-from flask import request, jsonify
+from flask import Blueprint, request, jsonify
 import os
 import openai
 
@@ -8,27 +6,25 @@ import openai
 API_KEY = os.getenv("FLASK_API_KEY")
 openai.api_key = API_KEY
 
+openai_bp = Blueprint('openai', __name__)
 
+
+@openai_bp.route('/generate-image', methods=['POST'])
 def generate_image():
     data = request.json
+    print(data)
     prompt = data.get('prompt')
-
     if not prompt:
         return jsonify({"error": "Prompt is required"}), 400
-
-# Optional
-# Defaults to url
-# The format in which the generated images are returned
-# Must be one of url or b64_json. 
-# URLs are only valid for 60 minutes after the image has been generated.
     try:
         response = openai.images.generate(
             # b64_json.로 받는 코드 추가 작성
-            model="dall-e-3",
+            # model="dall-e-3",
             prompt=prompt,
             size="1024x1024",
             n=1,
         )
+        print(response)
         image_url = response.data[0].url
         # b64_json.로 받아서 db에 저장을 같이 해야함 (현재는 유효기간 30분짜리 url)
         return image_url

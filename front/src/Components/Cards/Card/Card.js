@@ -1,91 +1,75 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Card.css';
-import img1 from '../assets/1.jpg';
-import img2 from '../assets/2.jpg';
-import img3 from '../assets/3.jpg';
-import img4 from '../assets/4.jpg';
-import img5 from '../assets/5.jpg';
-import img6 from '../assets/6.jpg';
-import img7 from '../assets/7.jpg';
-import img8 from '../assets/8.jpg';
-import img9 from '../assets/9.jpg';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 import CardModal from '../CardModal/CardModal'; // Modal 컴포넌트 임포트
-
-const articles = [
-    {
-        imgSrc: img1,
-        imgAlt: "Monkey D. Luffy",
-        title: "Monkey D. Luffy",
-        description: "현상금 3,000,000,000 베리. 스트로하트 해적단 단장. 세계정부가 가장 주시하는 초영급 인물.",
-    },
-    {
-        imgSrc: img2,
-        imgAlt: "Roronoa Zoro",
-        title: "Roronoa Zoro",
-        description: "현상금 1,111,000,000 베리. 스트로하트 해적단 부단장. 세계 최강의 검객을 꿈꾸는 삼검류 사용자.",
-    },
-    {
-        imgSrc: img3,
-        imgAlt: "Nami",
-        title: "Nami",
-        description: "현상금 366,000,000 베리. 스트로하트 해적단 항해사. 뛰어난 내비게이션 실력을 가진 천재 항해사.",
-    },
-    {
-        imgSrc: img4,
-        imgAlt: "Vinsmoke Sanji",
-        title: "Vinsmoke Sanji",
-        description: "현상금 1,032,000,000 베리. 스트로하트 해적단 요리사. 뛰어난 발기술과 요리 실력을 가진 블루노의 후계자.",
-    },
-    {
-        imgSrc: img5,
-        imgAlt: "Usopp",
-        title: "Usopp",
-        description: "현상금 200,000,000 베리. 스트로하트 해적단 저격수. 뛰어난 저격 실력과 함께 거짓말쟁이로 유명하다.",
-    },
-    {
-        imgSrc: img6,
-        imgAlt: "Brook",
-        title: "Brook",
-        description: "현상금 183,000,000 베리. 스트로하트 해적단 음유시인. 해골 되살아난 자로, 뛰어난 검술과 음악 실력을 가지고 있다.",
-    },
-    {
-        imgSrc: img7,
-        imgAlt: "Tony Tony Chopper",
-        title: "Tony Tony Chopper",
-        description: "현상금 1,000 베리. 스트로하트 해적단 의사. 인간형 토나카이로, 다양한 변신 능력을 가지고 있다.",
-    },
-    {
-        imgSrc: img8,
-        imgAlt: "Nico Robin",
-        title: "Nico Robin",
-        description: "현상금 930,000,000 베리. 스트로하트 해적단 고고학자. 세계정부가 가장 주시하는 초영급 인물.",
-    },
-    {
-        imgSrc: img9,
-        imgAlt: "Jinbe",
-        title: "Jinbe",
-        description: "현상금 1,038,000,000 베리. 스트로하트 해적단 선장. 전 해군본부 중장으로, 물고기인간족의 대표격이다.",
-    },
-];
+import axios from 'axios';
 
 const Card = () => {
+    const [posters, setPosters] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedArticle, setSelectedArticle] = useState(null);
 
+    useEffect(() => {
+        // 포스터 데이터 가져오기
+        axios.get('/missing_info')
+            .then(response => {
+                // 성공적으로 데이터를 받았을 때 처리
+                console.log(response.data);
+                // "MISSING_FINDING"이 "finding"인 데이터만 필터링
+                const filteredData = response.data.filter(item => item.MISSING_FINDING === "finding");
+                setPosters(filteredData);
+            })
+            .catch(error => {
+                // 에러 처리
+                console.error('There was a problem with the axios operation:', error);
+            });
+    }, []);
+
+    // 모달 창 보는 기능
     const handleImageClick = (article, event) => {
         event.preventDefault(); // 드래그 방지
         setSelectedArticle(article);
         setShowModal(true);
     };
 
+    // 모달 창 닫는 기능
     const handleCloseModal = () => {
         setShowModal(false);
         setSelectedArticle(null);
     };
 
+    // 개별 포스터 사진
+    const Article = ({ article }) => {
+        if (!article.POSTER_INFO.POSTER_IMG_PATH) return null; // 이미지 경로가 없으면 렌더링하지 않음
+
+        return (
+            <article onClick={(event) => handleImageClick(article, event)} className='card_art'>
+                <figure>
+                    <img src={article.POSTER_INFO.POSTER_IMG_PATH} alt="Poster" onClick={(event) => handleImageClick(article, event)} />
+                </figure>
+                <div className="article-preview">
+                    <h2>{article.MISSING_NAME}</h2>
+                    <p>{article.description}</p>
+                </div>
+            </article>
+        );
+    };
+
+    // 전체 포스터 리스트
+    const Articles = ({ posters }) => (
+        <div className="Card_articles">
+            {posters.map((poster, index) => (
+                <Article
+                    key={index}
+                    article={poster}
+                />
+            ))}
+        </div>
+    );
+
+    // 슬라이더 세팅값
     const settings = {
         dots: true,
         speed: 500,
@@ -119,37 +103,13 @@ const Card = () => {
         ],
     };
 
-    const Article = ({ article, handleImageClick }) => (
-        <article onClick={(event) => handleImageClick(article, event)} className='card_art'>
-            <figure>
-                <img src={article.imgSrc} alt={article.imgAlt} onClick={(event) => handleImageClick(article, event)} />
-            </figure>
-            <div className="article-preview">
-                <h2>{article.title}</h2>
-                <p>{article.description}</p>
-            </div>
-        </article>
-    );
-
-    const Articles = ({ articles, handleImageClick }) => (
-        <div className="Card_articles">
-            {articles.map((article, index) => (
-                <Article
-                    key={index}
-                    article={article}
-                    handleImageClick={handleImageClick}
-                />
-            ))}
-        </div>
-    );
-
-    const SliderComponent = ({ articles, handleImageClick, settings }) => (
+    // 슬라이더 
+    const SliderComponent = ({ posters }) => (
         <Slider {...settings}>
-            {articles.map((article, index) => (
+            {posters.filter(poster => poster.POSTER_INFO && poster.POSTER_INFO.POSTER_IMG_PATH).map((poster, index) => (
                 <div key={index} className='Acard'>
                     <Article
-                        article={article}
-                        handleImageClick={handleImageClick}
+                        article={poster}
                     />
                 </div>
             ))}
@@ -159,10 +119,10 @@ const Card = () => {
     return (
         <div className='Card_body'>
             <div className='Slider_size'>
-                <SliderComponent articles={articles} handleImageClick={handleImageClick} settings={settings} />
+                <SliderComponent posters={posters} />
             </div>
             <div className='Wanted_size'>
-                <Articles articles={articles} handleImageClick={handleImageClick} />
+                <Articles posters={posters} />
             </div>
             <CardModal isOpen={showModal} onClose={handleCloseModal} selectedArticle={selectedArticle} />
         </div>

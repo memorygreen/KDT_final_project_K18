@@ -1,0 +1,137 @@
+/*자영(240529) : 검색기능 css*/
+
+
+/* 검색바 부분 */
+.search_missing{
+    
+    background-color: rgb(230, 104, 255);
+    border-radius: 10%;
+    display: grid;
+    flex-wrap: wrap;
+    margin: 0 auto;
+
+    justify-content: space-between;
+    max-width: 70%;
+    max-height: 10%;
+    position :relative;
+
+    z-index: 1;
+
+}
+
+/* 검색바 내부 ul태그 */
+.search_missing_sections{
+
+}
+
+/* 검색바 내부 ul태그 안의 li태그*/
+.search_missing_sections >li{
+
+    float: left;
+    display: grid;
+
+}
+
+
+
+/* 각 항목(4개) */
+.search_missing_cate_group{
+
+    padding: 0;
+    position: static;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    width: 100%;
+    gap: 2rem; /*각 항목 이름 간격*/
+
+
+    max-width: 90%;
+    z-index: 2;
+    /* animation: fadeIn 0.2s ease-in-out; */
+    background-color: rgba(74, 255, 171, 0.925);
+
+}
+
+
+/* 각 항목 제목 h3태그 */
+.search_missing_cate_group_name{
+    position :relative;
+
+}
+
+
+.search_missing_cate_group > li {
+
+}
+
+
+
+/* 각 항목 안의 내용 */
+.search_missing_cate_content{
+   margin: 5%;
+   border-radius: 0.5rem;
+}
+
+
+/* nav bar css 에서 가져오기 */
+
+.list-items-with-description {
+    list-style-type: none;
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 0.75rem;
+}
+
+.list-items-with-description li {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+}
+
+.list-items-with-description li:hover {
+    background-color: #2E2E2E;
+    border-radius: 0.3rem;
+}
+
+.icon-wrapper svg {
+    color: #8F8F8F;
+}
+
+.list-items-with-description li:hover svg {
+    color: rgb(255, 255, 255);
+}
+
+.list-items-with-description li .icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    height: 2.5rem;
+    width: 2.5rem;
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+    pointer-events: all;
+    background-color: #232323;
+}
+ 
+.dropdown {
+    border-radius: 0.5rem;
+    display: none;
+    padding: 0.5rem;
+    width: 100%;
+    max-width: 600px;
+    border: 1px solid #000000;
+    z-index: 2;
+    animation: fadeIn 0.2s ease-in-out;
+    background-color: rgba(34, 19, 245, 0.925);
+}
+
+.dropdown__wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding-top: 5rem;
+}
