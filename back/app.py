@@ -1,7 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
 from dotenv import load_dotenv
-
 # 다른 모듈에서 블루프린트를 가져오기
 from KakaoLogin import kakao_bp
 from OpenAI import openai_bp
