@@ -64,3 +64,62 @@ def get_all_missing_info():
     db.close()
 
     return jsonify(result)
+
+
+    
+
+#포스터 생성 기능
+@post_bp.route('/create_poster', methods=['POST'])
+def create_poster():
+    data = request.get_json()
+
+    if not data:
+        return jsonify({'error': 'No data provided'}), 400
+
+    user_id = data.get('USER_ID')
+    missing_name = data.get('MISSING_NAME')
+
+    if not user_id or not missing_name:
+        return jsonify({'error': 'USER_ID and MISSING_NAME are required'}), 400
+
+    db = db_con()
+    cursor = db.cursor()
+
+    try:
+        # 실종자 정보 확인 (테이블 이름을 정확하게 확인하고 수정)
+        sql_check_missing = """
+            SELECT MISSING_IDX FROM TB_MISSING 
+            WHERE USER_ID=%s AND MISSING_NAME=%s
+        """
+        cursor.execute(sql_check_missing, (user_id, missing_name))
+        missing = cursor.fetchone()
+
+        if not missing:
+            return jsonify({'error': 'No missing person found for the given USER_ID and MISSING_NAME'}), 404
+
+        missing_idx = missing[0]
+
+        # 포스터 정보 생성 및 삽입
+        sql_insert_poster = """
+            INSERT INTO TB_POSTER (
+                MISSING_IDX,   
+                POSTER_IMG_PATH
+            ) VALUES (%s, %s)
+        """
+        cursor.execute(sql_insert_poster, (
+            missing_idx, 0, 
+            data['POSTER_IMG_PATH'], 1
+        ))
+
+        db.commit()
+
+        return jsonify({'message': 'Poster created successfully', 'MISSING_IDX': missing_idx}), 201
+
+    except Exception as e:
+        db.rollback()
+        return jsonify({'error': str(e)}), 500
+
+    finally:
+        cursor.close()
+        db.close()
+
