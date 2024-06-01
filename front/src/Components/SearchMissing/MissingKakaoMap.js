@@ -16,10 +16,15 @@ function useDidMountEffect(func, deps) {
 }
 
 
-export default function MissingKakaoMap() {
+export default function MissingKakaoMap({getLatLon}) {
   const [map, setMap] = useState(null);
   const [marker, setMarker] = useState(null);
   const [address, setAddress] = useState(''); // 주소를 저장할 상태
+
+  // lng, lat 위도 경도 전역변수 설정
+  var lng = 0
+  var lat = 0
+  
 
   // 1) 카카오맵 및 우편번호 서비스 스크립트 로드
   useEffect(() => {
@@ -93,10 +98,12 @@ export default function MissingKakaoMap() {
       window.kakao.maps.event.addListener(map, "click", function (mouseEvent) {
         const geocoder = new window.kakao.maps.services.Geocoder();
         
-        var lng = mouseEvent.latLng.getLng(); //경도
-        var lat = mouseEvent.latLng.getLat(); //위도
+        lng = mouseEvent.latLng.getLng(); //경도
+        lat = mouseEvent.latLng.getLat(); //위도
         console.log("경도:",lng); // 경도 출력
         console.log("위도:", lat);// 위도 출력
+
+        getLatLon(lat,lng)
 
         geocoder.coord2Address(
           mouseEvent.latLng.getLng(),

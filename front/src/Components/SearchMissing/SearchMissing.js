@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import SearchBar from './SearchBar';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import SearchMissingKakaoMap from './MissingKakaoMap';
+import MissingKakaoMap from './MissingKakaoMap';
 
 const SearchMissing = () => {
     const [selectedTxt, setSelectTxt] = useState('');
@@ -21,6 +21,11 @@ const SearchMissing = () => {
     const [missing_img, set_missing_img] = useState(null);
     const [image_url, set_image_url] = useState('');
     const [missing_gender, set_missing_gender] = useState('');
+
+    /** 위도, 경도를 받아오는 함수 */
+    const getLatLon = (lat,lon)=>{
+        console.log('정상적으로 넘어왔습니다. getLatLon function', lat, lon)
+    }
 
     const top_options = [
         { id: 'long_sleeve', label: '긴팔' },
@@ -206,7 +211,7 @@ const SearchMissing = () => {
                    
                     <div className="search_missing_cate_content">
                         <h2>지도</h2>
-                        <SearchMissingKakaoMap/>
+                        <MissingKakaoMap getLatLon={getLatLon}/>
                         
                         
                 
