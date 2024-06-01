@@ -19,7 +19,7 @@ def generate_image():
     try:
         response = openai.images.generate(
             # b64_json.로 받는 코드 추가 작성
-            # model="dall-e-3",
+            model="dall-e-3",
             prompt=prompt,
             size="1024x1024",
             n=1,
