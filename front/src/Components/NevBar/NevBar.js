@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import './NevBar.css'; // Make sure to create and style this CSS file accordingly
 import logo from "./assets/logo.png"
 import { Link, useNavigate } from 'react-router-dom';
+import { createPoster } from '../../Components/Poster/CreatePost'; // CreatePoster 함수 import
 const NevBar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
@@ -13,11 +14,18 @@ const NevBar = () => {
         // 세션 스토리지에서 userId 값을 확인하는 로직으로 변경
         const session = sessionStorage.getItem('userId');
         setIsLoggedIn(session ? true : false);
-    }, [])
+    }, []);
     const handleLogout = () => {
         sessionStorage.removeItem('userId'); // 세션 값 삭제
         setIsLoggedIn(false); // 로그인 상태 업데이트
         navigate('/Login'); // 로그인 페이지로 이동
+    };
+    const handleCreatePoster = async (event) => {
+        event.preventDefault(); // 기본 링크 동작 방지
+        const userId=sessionStorage.getItem('userId');
+        const posterImgPath = "https://duckgeun.s3.ap-northeast-2.amazonaws.com/%EC%8B%A4%EC%A0%84%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8/%EC%8B%A4%EC%A2%85%EC%9E%901.jpg"; // 포스터 이미지 경로 설정
+        console.log(userId, posterImgPath); // 값 확인
+        await createPoster(posterImgPath); // 두 번째 인자 제거
     };
 
     return (
@@ -159,7 +167,7 @@ const NevBar = () => {
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#blog" title="Blog">
+                                    <a href="#blog" title="Blog" onClick={handleCreatePoster}> #실험을위해 블로그 글자 클릭시 poster생성
                                         Blog
                                     </a>
                                 </li>
