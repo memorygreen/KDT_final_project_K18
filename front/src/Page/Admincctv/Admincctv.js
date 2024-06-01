@@ -76,7 +76,7 @@ const Admincctv = () => {
                     </thead>
                     <tbody>
                         {currentItems.map(item => (
-                            <tr key={item.CCTV_IDX}>
+                            <tr key={item.CCTV_IDX}>{/* 번호 */}
                                 <td>{item.CCTV_IDX}</td>
                                 <td>{item.CCTV_LAT}</td>
                                 <td>{item.CCTV_LNG}</td>
