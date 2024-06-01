@@ -1,7 +1,8 @@
 from flask import Blueprint, request, jsonify,session
 import pymysql
+from flask_cors import CORS
 from db import db_con
-
+import logging
 
 post_bp = Blueprint('post', __name__)
 
@@ -147,8 +148,55 @@ def user_missing():
 #포스터 생성 기능
 @post_bp.route('/create_poster', methods=['POST'])
 def create_poster():
-    data=user_missing()
+    try:
+        user_id = request.json.get('user_id')
+        if not user_id:
+            return jsonify({'error': 'User is not logged in'}), 401
+
+        poster_img_path = request.json.get('POSTER_IMG_PATH')
+        if not poster_img_path:
+            return jsonify({'error': 'POSTER_IMG_PATH is required'}), 400
+
+        db = db_con()
+        cursor = db.cursor()
+
+        # 사용자가 최근에 작성한 실종자 정보 조회
+        sql_user_missing = """
+            SELECT * FROM TB_MISSING
+            WHERE USER_ID=%s
+            ORDER BY MISSING_IDX DESC
+            LIMIT 1
+        """
+        cursor.execute(sql_user_missing, (user_id,))
+        missing = cursor.fetchone()
+
+        if not missing:
+            return jsonify({'error': 'No missing person information found for the logged-in user'}), 404
+
+        missing_idx = missing[0]
+
+        # 포스터 생성 및 삽입
+        sql_insert_poster = """
+            INSERT INTO TB_POSTER (
+                MISSING_IDX,
+                POSTER_IMG_PATH
+            ) VALUES (%s, %s)
+        """
+        cursor.execute(sql_insert_poster, (missing_idx, poster_img_path))
+        db.commit()
+
+        return jsonify({'message': 'Poster created successfully', 'MISSING_IDX': missing_idx}), 201
+
+    except Exception as e:
+        logging.error("Error creating poster: %s", str(e))
+        db.rollback()
+        return jsonify({'error': 'An error occurred while creating the poster. Please try again later.'}), 500
+    finally:
+        cursor.close()
+        db.close()
+
     
+
 
 
 
