@@ -11,6 +11,7 @@ from report import report_bp
 from SignUp import signup_bp  # SignUp 블루프린트 가져오기
 from Admin import Admin_bp
 from Adminmanage import Adminmanage_bp
+from Admincctv import Admincctv_bp
 # 환경 변수 로드
 load_dotenv()
 
@@ -26,6 +27,7 @@ app.register_blueprint(report_bp)
 app.register_blueprint(signup_bp)  # SignUp 블루프린트 등록
 app.register_blueprint(Admin_bp)
 app.register_blueprint(Adminmanage_bp)
+app.register_blueprint(Admincctv_bp)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
