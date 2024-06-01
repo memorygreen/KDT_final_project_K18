@@ -9,6 +9,7 @@ import MainPage from './Page/MainPage/MainPage';
 import SerchMissing from './Page/SearchMissingPage/SearchMissingPage' /** 자영 추가*/
 import Adminpage from './Page/Adminpage/Adminpage';
 import Adminmanage from './Page/Adminmanage/Adminmanage';
+import Admincctv from './Page/Admincctv/Admincctv';
 
 /* Test용 Components */
 import KakaoMap from './Components/Map/KakaoMap';
@@ -33,6 +34,7 @@ function App() {
           <Route path='/SearchMissingPage' element={<SerchMissing />} /> {/* 자영 추가*/}
           <Route path='/Adminpage' element={<Adminpage />}/>
           <Route path="/Adminmanage" element={<Adminmanage />} />
+          <Route path="/Admincctv" element={<Admincctv />} />
 
           {/* Test용 Components */}
           <Route path="/Map" element={<KakaoMap />} />
