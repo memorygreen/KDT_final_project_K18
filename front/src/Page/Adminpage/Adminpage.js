@@ -50,7 +50,7 @@ const Adminpage = () => {
                 ));
             })
             .catch(error => {
-                console.error('There was a problem with the category change operation:', error);
+                console.error(error);
             });
     };
 
@@ -118,10 +118,10 @@ const Adminpage = () => {
                                 <td>{user.USER_PHONE}</td> {/* 휴대폰 */}
                                 <td>
                                     <select
-                                        value={user.USER_CATE}
+                                        value={user.USER_CATE} 
                                         onClick={e => e.stopPropagation()} // 행 클릭 이벤트 전파 방지
                                         onChange={(e) => handleCategoryChange(user.USER_ID, e.target.value)}
-                                    >
+                                    > {/* 회원상태 */}
                                         <option value="INDI">INDI</option>
                                         <option value="ENT">ENT</option>
                                     </select>

@@ -7,8 +7,15 @@ const Admincctv = () => {
     const [cctv, setCctv] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [currentGroup, setCurrentGroup] = useState(1);
+    const [searchField, setSearchField] = useState(''); // 검색 필드 상태 변수
+    const [searchText, setSearchText] = useState(''); // 검색 텍스트 상태 변수
+    const [showModal, setShowModal] = useState(false); // 모달 상태 변수 추가
+    const [newCctv, setNewCctv] = useState({ latitude: '', longitude: '', location: '', status: '' }); // 새로운 CCTV 상태 변수
+    const [validationError, setValidationError] = useState(''); // 유효성 검사 에러 메시지 상태 변수
     const itemsPerPage = 25;
     const pagesPerGroup = 10;
+    const searchOptions = ['번호', '위도', '경도', '설치장소', '상태']; // 검색 옵션
+    const statusOptions = ['Active', 'Inactive', 'Maintenance']; // 상태 옵션
 
     useEffect(() => {
         axios.get('/Admincctv')
@@ -51,19 +58,109 @@ const Admincctv = () => {
         ));
     };
 
+    // CCTV 상태 변경 핸들러
+    const handle_cctv = (chg_cctvidx, chg_cctv) => {
+        axios.post('/user_cctv_change', { chg_cctvidx, chg_cctv })
+            .then(response => {
+                console.log(`cctv 상태 : `, response.data);
+                setCctv(cctv.map(item =>
+                    item.CCTV_IDX === chg_cctvidx ? { ...item, CCTV_STATUS: chg_cctv } : item
+                ));
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    };
+
+    // 검색 핸들러
+    const handleSearch = () => {
+        axios.get('/Admincctv')
+            .then(response => {
+                const filteredData = response.data.filter(item => {
+                    switch (searchField) {
+                        case '번호':
+                            return item.CCTV_IDX.toString() === searchText;
+                        case '위도':
+                            return item.CCTV_LAT.toString().includes(searchText);
+                        case '경도':
+                            return item.CCTV_LNG.toString().includes(searchText);
+                        case '설치장소':
+                            return item.CCTV_LOAD_ADDRESS.includes(searchText);
+                        case '상태':
+                            return item.CCTV_STATUS === searchText;
+                        default:
+                            return true;
+                    }
+                });
+                setCctv(filteredData);
+                setCurrentPage(1); // 검색 후 첫 페이지로 이동
+                setCurrentGroup(1); // 검색 후 첫 그룹으로 이동
+            })
+            .catch(error => console.error('Error fetching CCTV data:', error));
+    };
+
+    // 엔터키 핸들러
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            handleSearch();
+        }
+    };
+
+    // 모달 열기 핸들러
+    const openModal = () => {
+        setShowModal(true);
+    };
+
+    // 모달 닫기 핸들러
+    const closeModal = () => {
+        setShowModal(false);
+        setValidationError(''); // 모달 닫을 때 유효성 검사 에러 메시지 초기화
+    };
+
+    // 새로운 CCTV 입력 핸들러
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewCctv({ ...newCctv, [name]: value });
+    };
+
+    // 새로운 CCTV 생성 핸들러
+    const handleCreateCctv = (e) => {
+        e.preventDefault();
+        const { latitude, longitude, location, status } = newCctv;
+
+        // 모든 필드가 입력되었는지 확인
+        if (!latitude || !longitude || !location || !status) {
+            setValidationError('모든 값을 입력해주세요.');
+            return;
+        }
+
+        axios.post('/create_cctv', newCctv)
+            .then(response => {
+                console.log(response.data.message);
+                setShowModal(false);
+                setNewCctv({ latitude: '', longitude: '', location: '', status: '' });
+                axios.get('/Admincctv')
+                    .then(response => setCctv(response.data))
+                    .catch(error => console.error('에러', error));
+            })
+            .catch(error => {
+                console.error('에러', error);
+            });
+    };
+
     // 현재 페이지에 맞는 CCTV 데이터를 계산합니다.
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = cctv.slice(indexOfFirstItem, indexOfLastItem);
 
     return (
-        <div>
+        <div className='main'>
             <NevBar />
             <div className="cctv-container">
                 <h1>CCTV 관리 페이지</h1>
-                <div className='btn'>
-                    <button className='create'>+ 생성</button>
-                </div>
+
+                <button className='create' type='button' onClick={openModal}>+ 생성</button>
+
                 <table className="cctv-table">
                     <thead>
                         <tr>
@@ -76,12 +173,24 @@ const Admincctv = () => {
                     </thead>
                     <tbody>
                         {currentItems.map(item => (
-                            <tr key={item.CCTV_IDX}>{/* 번호 */}
-                                <td>{item.CCTV_IDX}</td>
-                                <td>{item.CCTV_LAT}</td>
-                                <td>{item.CCTV_LNG}</td>
-                                <td>{item.CCTV_LOAD_ADDRESS}</td>
-                                <td>{item.CCTV_STATUS}</td>
+                            <tr key={item.CCTV_IDX}>
+                                <td>{item.CCTV_IDX}</td> 
+                                <td>{item.CCTV_LAT}</td> 
+                                <td>{item.CCTV_LNG}</td> 
+                                <td>{item.CCTV_LOAD_ADDRESS}</td> 
+                                <td>
+                                    <select
+                                        value={item.CCTV_STATUS}
+                                        onClick={e => e.stopPropagation()}
+                                        onChange={(e) => handle_cctv(item.CCTV_IDX, e.target.value)}
+                                    >
+                                        {statusOptions.map((status, index) => (
+                                            <option key={index} value={status}>
+                                                {status}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </td> 
                             </tr>
                         ))}
                     </tbody>
@@ -95,6 +204,78 @@ const Admincctv = () => {
                         <li onClick={handleNextGroup} className="next-group">다음</li>
                     )}
                 </ul>
+                <div className="search-bar">
+                    <select value={searchField} onChange={e => setSearchField(e.target.value)}>
+                        <option value="">선택</option>
+                        {searchOptions.map((option, index) => (
+                            <option key={index} value={option}>
+                                {option}
+                            </option>
+                        ))}
+                    </select>
+                    <input
+                        type="text"
+                        value={searchText}
+                        onChange={e => setSearchText(e.target.value)}
+                        placeholder="검색어 입력"
+                        onKeyDown={handleKeyDown} // 엔터키 핸들러 추가
+                    />
+                    <button onClick={handleSearch}>검색</button>
+                </div>
+
+                {showModal && (
+                    <div className="modal">
+                        <div className="modal-content">
+                            <span className="close" onClick={closeModal}>&times;</span>
+                            <h2>새 CCTV 생성</h2>
+                            {validationError && <p className="error">{validationError}</p>}
+                            <form onSubmit={handleCreateCctv}>
+                                <label>
+                                    위도:
+                                    <input
+                                        type="text"
+                                        name="latitude"
+                                        value={newCctv.latitude}
+                                        onChange={handleInputChange}
+                                    />
+                                </label>
+                                <label>
+                                    경도:
+                                    <input
+                                        type="text"
+                                        name="longitude"
+                                        value={newCctv.longitude}
+                                        onChange={handleInputChange}
+                                    />
+                                </label>
+                                <label>
+                                    설치장소:
+                                    <input
+                                        type="text"
+                                        name="location"
+                                        value={newCctv.location}
+                                        onChange={handleInputChange}
+                                    />
+                                </label>
+                                <label>
+                                    상태:
+                                    <select
+                                        name="status"
+                                        value={newCctv.status}
+                                        onChange={handleInputChange}
+                                    >
+                                        {statusOptions.map((status, index) => (
+                                            <option key={index} value={status}>
+                                                {status}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </label>
+                                <button type="submit">생성</button>
+                            </form>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
