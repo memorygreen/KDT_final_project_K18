@@ -28,6 +28,6 @@ app.register_blueprint(Admin_bp)
 app.register_blueprint(Adminmanage_bp)
 app.register_blueprint(Admincctv_bp)
 
-CORS(app, resources={r"/create_poster": {"origins": "*"}})
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

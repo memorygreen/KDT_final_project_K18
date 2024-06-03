@@ -29,7 +29,9 @@ const NevBar = () => {
         await createPoster(posterImgPath); // 두 번째 인자 제거
     };
     const handleReportCk = () => {
+        
         const userId=sessionStorage.getItem('userId');
+        console.log('reportCk',userId);
         reportCk(userId);
     };
 
