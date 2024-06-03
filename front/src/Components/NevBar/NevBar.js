@@ -4,18 +4,26 @@ import logo from "./assets/logo.png"
 import { Link, useNavigate } from 'react-router-dom';
 import { createPoster } from '../../Components/Poster/CreatePost'; // CreatePoster 함수 import
 import {reportCk} from '../../Components/ReportCk/ReportCk';
+import Modal from './NevModal';
 const NevBar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
+    const [userId, setUserId] = useState(null);
+
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
+    };
+    const toggleModal = () => {
+        setIsModalOpen(!isModalOpen);
     };
     useEffect(() => {
         // 세션 스토리지에서 userId 값을 확인하는 로직으로 변경
         const session = sessionStorage.getItem('userId');
-        setIsLoggedIn(session ? true : false);
+        setIsLoggedIn(session ? true : false); 
     }, []);
+
     const handleLogout = () => {
         sessionStorage.removeItem('userId'); // 세션 값 삭제
         setIsLoggedIn(false); // 로그인 상태 업데이트
@@ -25,15 +33,25 @@ const NevBar = () => {
         event.preventDefault(); // 기본 링크 동작 방지
         const userId=sessionStorage.getItem('userId');
         const posterImgPath = "https://duckgeun.s3.ap-northeast-2.amazonaws.com/%EC%8B%A4%EC%A0%84%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8/%EC%8B%A4%EC%A2%85%EC%9E%901.jpg"; // 포스터 이미지 경로 설정
+        //이미지 경로 받아오는걸로 바꿔야함 
         console.log(userId, posterImgPath); // 값 확인
         await createPoster(posterImgPath); // 두 번째 인자 제거
     };
-    const handleReportCk = () => {
-        
+    const handleDocsClick = async() => {
         const userId=sessionStorage.getItem('userId');
-        console.log('reportCk',userId);
-        reportCk(userId);
+        if (!userId) {
+            console.error('User is not logged in');
+            return;
+        }
+        try {
+            await reportCk(userId);
+            // 모달 열기
+            toggleModal();
+        } catch (error) {
+            console.error('Error handling docs click:', error);
+        }
     };
+    
 
     return (
         <div className="all_header">
@@ -169,7 +187,7 @@ const NevBar = () => {
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#docs" title="Docs" onClick={handleReportCk}>
+                                    <a href="#docs" title="Docs" onClick={handleDocsClick}>
                                         Docs
                                     </a>
                                 </li>
@@ -180,6 +198,7 @@ const NevBar = () => {
                                 </li>
                             </ul>
                         </nav>
+                        
                     </div>
                     <div className={`action-buttons ${isMenuOpen ? '' : 'nevbar_hide'}`}>
                         {!isLoggedIn && (
@@ -197,6 +216,7 @@ const NevBar = () => {
                                 Logout
                             </button>
                         )}
+                        {isModalOpen && <Modal onClose={toggleModal} />} {/* 모달 창 표시 */}
                     </div>
                     <button aria-label="Open menu" className="burger-menu" type="button" onClick={toggleMenu}>
                         <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-menu-2" width="24"

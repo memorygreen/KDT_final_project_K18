@@ -40,13 +40,15 @@ def report_missing_person():
 
 
 #제보 받은 알람 확인
-@report_bp.route('/my_report', methods=['GET', 'POST'])
+@report_bp.route('/my_report', methods=['POST'])
 def my_notification():
-    user_id = request.json.get('user_id')
+    data = request.get_json()
+    user_id = data.get('user_id')
     if not user_id:
         return jsonify({'error': 'User is not logged in'}), 401
-    db=db_con()
-    cursor=db.cursor()
+
+    db = db_con()
+    cursor = db.cursor()
 
     sql_my_report="""
     SELECT `REPORT_ID`
@@ -59,7 +61,7 @@ def my_notification():
         FROM `TB_MISSING`
         WHERE `USER_ID` = %s
         )
-        );
+    );
     """
     cursor.execute(sql_my_report, (user_id))
 
@@ -67,29 +69,34 @@ def my_notification():
 
     result = []
     for report in reports:
-        poster_idx = report[0]
+        report_id = report[0]
 
     # 포스터 제보 정보 가져오기
-        sql_poster_notification = "SELECT REPORT_SIGHTING_TIME,REPORT_SIGHTING_PLACE,REPORT_ETC FROM TB_REPORT WHERE =%s"
-        cursor.execute(sql_poster_notification,(poster_idx))
+        sql_poster_notification = """
+        SELECT * 
+        FROM TB_REPORT 
+        WHERE REPORT_ID=%s
+        """
+        cursor.execute(sql_poster_notification,(report_id))
         poster = cursor.fetchone()
 
-        report_info = {
-            'REPORT_ID': report[0],
-            'POSTER_IDX': report[1],
-            'REPORT_TIME': report[2],
-            'REPORT_SIGHTING_TIME': report[3],
-            'REPORT_SIGHTING_PLACE': report[4],
-            'REPORT_ETC': report[5],
-            'REPORT_NOTIFICATION': report[6],
-            'REPORT_CK_TIME': report[7],
-            } 
-        result.append(report_info)
+        if poster:
+            report_info = {
+                'REPORT_ID': poster[0],
+                'POSTER_IDX': poster[1],
+                'REPORT_TIME': poster[2],
+                'REPORT_SIGHTING_TIME': poster[3],
+                'REPORT_SIGHTING_PLACE': poster[4],
+                'REPORT_ETC': poster[5],
+                'REPORT_NOTIFICATION': poster[6],
+                'REPORT_CK_TIME': poster[7],
+            }
+            result.append(report_info)
 
     cursor.close()
     db.close()
 
-    return jsonify(result)
+    return jsonify(result), 200
    
 
 
