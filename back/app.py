@@ -11,12 +11,9 @@ from SignUp import signup_bp  # SignUp 블루프린트 가져오기
 from Admin import Admin_bp
 from Adminmanage import Adminmanage_bp
 from Admincctv import Admincctv_bp
-<<<<<<< HEAD
 from Adminmissing import Adminmissing_bp
-=======
 from searchMissing import search_missing_bp
 
->>>>>>> bd74402045d8160377adffa4a38c813b14f8220e
 # 환경 변수 로드
 load_dotenv()
 
@@ -33,11 +30,9 @@ app.register_blueprint(signup_bp)  # SignUp 블루프린트 등록
 app.register_blueprint(Admin_bp)
 app.register_blueprint(Adminmanage_bp)
 app.register_blueprint(Admincctv_bp)
-<<<<<<< HEAD
 app.register_blueprint(Adminmissing_bp)
-=======
 app.register_blueprint(search_missing_bp)
->>>>>>> bd74402045d8160377adffa4a38c813b14f8220e
+
 
 CORS(app, resources={r"/create_poster": {"origins": "*"}})
 if __name__ == '__main__':
