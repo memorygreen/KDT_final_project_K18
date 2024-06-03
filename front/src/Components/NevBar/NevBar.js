@@ -167,7 +167,7 @@ const NevBar = () => {
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#blog" title="Blog" onClick={handleCreatePoster}> #실험을위해 블로그 글자 클릭시 poster생성
+                                    <a href="#blog" title="Blog" onClick={handleCreatePoster}> 
                                         Blog
                                     </a>
                                 </li>

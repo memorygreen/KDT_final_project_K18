@@ -1,11 +1,14 @@
 from flask import Blueprint, request, jsonify,session
 import pymysql
 from flask_cors import CORS
+from datetime import datetime,timedelta
 from db import db_con
 import logging
-
+from apscheduler.schedulers.background import BackgroundScheduler
 post_bp = Blueprint('post', __name__)
-
+#BackgroundScheduler 인스턴스 생성
+scheduler = BackgroundScheduler()
+scheduler.start()
 
 @post_bp.route('/missing_info', methods=['GET'])
 def get_all_missing_info():
@@ -183,6 +186,10 @@ def create_poster():
             ) VALUES (%s, %s)
         """
         cursor.execute(sql_insert_poster, (missing_idx, poster_img_path))
+
+        scheduler.add_job(disable_poster, 'date', run_date=datetime.now() + timedelta(minutes=1),
+                          args=[user_id, missing_idx])
+
         db.commit()
 
         return jsonify({'message': 'Poster created successfully', 'MISSING_IDX': missing_idx}), 201
@@ -195,6 +202,25 @@ def create_poster():
         cursor.close()
         db.close()
 
+
+def disable_poster(user_id, missing_idx):
+    try:
+        db = db_con()
+        cursor = db.cursor()
+
+        # 포스터 자동 삭제
+        sql_disable_poster = """
+            UPDATE TB_POSTER SET POSTER_SHOW=0 
+            WHERE USER_ID=%s AND MISSING_IDX=%s
+        """
+        cursor.execute(sql_disable_poster, (user_id, missing_idx))
+        db.commit()
+    except Exception as e:
+        logging.error("Error disabling poster: %s", str(e))
+        db.rollback()
+    finally:
+        cursor.close()
+        db.close()
     
 
 
