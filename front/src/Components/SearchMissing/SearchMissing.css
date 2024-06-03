@@ -104,6 +104,7 @@
 }
 
 .list-items-with-description li .icon-wrapper {
+    
     display: flex;
     align-items: center;
     justify-content: center;
