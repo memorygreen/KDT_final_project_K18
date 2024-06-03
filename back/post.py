@@ -9,7 +9,7 @@ post_bp = Blueprint('post', __name__)
 #BackgroundScheduler 인스턴스 생성
 scheduler = BackgroundScheduler()
 scheduler.start()
-
+#포스터 조회
 @post_bp.route('/missing_info', methods=['GET'])
 def get_all_missing_info():
     db = db_con()
@@ -69,7 +69,7 @@ def get_all_missing_info():
 
     return jsonify(result)
 
-#작성한 실종자 정보 가져오기
+#작성한 실종자 정보 가져오기 
 @post_bp.route('/user_missing',methods=['GET'])
 def user_missing():
     # 세션에서 사용자의 ID 가져오기
@@ -188,7 +188,7 @@ def create_poster():
         cursor.execute(sql_insert_poster, (missing_idx, poster_img_path))
 
         scheduler.add_job(disable_poster, 'date', run_date=datetime.now() + timedelta(minutes=1),
-                          args=[user_id, missing_idx])
+                          args=[user_id, missing_idx]) #minutes=1 을 
 
         db.commit()
 
@@ -202,19 +202,22 @@ def create_poster():
         cursor.close()
         db.close()
 
-
+# 30일후 포스터 자동 업데이트 Poster_show=1>0 현재는 1분으로 설정되어있음
 def disable_poster(user_id, missing_idx):
     try:
+        
+
         db = db_con()
         cursor = db.cursor()
 
-        # 포스터 자동 삭제
-        sql_disable_poster = """
+        
+        sql_update_poster = """
             UPDATE TB_POSTER SET POSTER_SHOW=0 
-            WHERE USER_ID=%s AND MISSING_IDX=%s
+            WHERE MISSING_IDX=%s
         """
-        cursor.execute(sql_disable_poster, (user_id, missing_idx))
+        cursor.execute(sql_update_poster, (missing_idx))
         db.commit()
+        logging.info(f"Poster updated successfully for USER_ID: {user_id}, MISSING_IDX: {missing_idx}")
     except Exception as e:
         logging.error("Error disabling poster: %s", str(e))
         db.rollback()
