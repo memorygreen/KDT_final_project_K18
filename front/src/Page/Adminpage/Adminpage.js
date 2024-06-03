@@ -88,9 +88,7 @@ const Adminpage = () => {
 
     return (
         <div>
-            <header>
-                <NevBar />
-            </header>
+            <NevBar />  
             <div className="main">
                 <h1>운영자 페이지</h1>
                 <table>
