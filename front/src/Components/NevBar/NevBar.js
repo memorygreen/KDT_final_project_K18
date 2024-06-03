@@ -3,6 +3,7 @@ import './NevBar.css'; // Make sure to create and style this CSS file accordingl
 import logo from "./assets/logo.png"
 import { Link, useNavigate } from 'react-router-dom';
 import { createPoster } from '../../Components/Poster/CreatePost'; // CreatePoster 함수 import
+import {reportCk} from '../../Components/ReportCk/ReportCk';
 const NevBar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -26,6 +27,10 @@ const NevBar = () => {
         const posterImgPath = "https://duckgeun.s3.ap-northeast-2.amazonaws.com/%EC%8B%A4%EC%A0%84%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8/%EC%8B%A4%EC%A2%85%EC%9E%901.jpg"; // 포스터 이미지 경로 설정
         console.log(userId, posterImgPath); // 값 확인
         await createPoster(posterImgPath); // 두 번째 인자 제거
+    };
+    const handleReportCk = () => {
+        const userId=sessionStorage.getItem('userId');
+        reportCk(userId);
     };
 
     return (
@@ -162,7 +167,7 @@ const NevBar = () => {
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#docs" title="Docs">
+                                    <a href="#docs" title="Docs" onClick={handleReportCk}>
                                         Docs
                                     </a>
                                 </li>
