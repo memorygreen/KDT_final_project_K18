@@ -26,4 +26,5 @@ yarn-error.log*
 
 db.py
 __pycache__
+
 venv
