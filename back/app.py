@@ -15,7 +15,7 @@ from Admincctv import Admincctv_bp
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+CORS(app,resources={r"/*": {"origins": "*"}})
 
 # 블루프린트 등록
 app.register_blueprint(kakao_bp)
