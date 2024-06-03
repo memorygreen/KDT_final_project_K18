@@ -60,7 +60,7 @@ def get_missing():
                 "MISSING_BOTTOMS_KOR": i[14],
                 "MISSING_BOTTOMS_COLOR_KOR": i[15],
                 "POSTER_IDX": i[16],
-                "POSTER_CREATED_AT": i[17],
+                "POSTER_CREATED_AT": i[17].strftime("%Y-%m-%d"),
                 "POSTER_SHOW": i[18]
             })    
     finally:

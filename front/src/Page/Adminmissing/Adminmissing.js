@@ -5,6 +5,7 @@ import axios from 'axios';
 
 const Adminmissing = () => {
     const [missingData, setMissingData] = useState([]);
+    const [filteredData, setFilteredData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [currentGroup, setCurrentGroup] = useState(1);
     const [searchField, setSearchField] = useState('');
@@ -27,10 +28,32 @@ const Adminmissing = () => {
         setCurrentPage(currentGroup * pagesPerGroup + 1);
     };
 
+    const handleSearch = () => {
+        const filtered = missingData.filter(item => {
+            switch (searchField) {
+                case '아이디':
+                    return item.USER_ID.toString().includes(searchText);
+                case '이름':
+                    return item.MISSING_NAME.toString().includes(searchText);
+                default:
+                    return true;
+            }
+        });
+        setFilteredData(filtered);
+        setCurrentPage(1);
+        setCurrentGroup(1);
+    };
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            handleSearch();
+        }
+    };
+
     const renderPageNumbers = () => {
         const pageNumbers = [];
         const startPage = (currentGroup - 1) * pagesPerGroup + 1;
-        const endPage = Math.min(startPage + pagesPerGroup - 1, Math.ceil(missingData.length / itemsPerPage));
+        const endPage = Math.min(startPage + pagesPerGroup - 1, Math.ceil(filteredData.length / itemsPerPage));
 
         for (let i = startPage; i <= endPage; i++) {
             pageNumbers.push(i);
@@ -50,42 +73,49 @@ const Adminmissing = () => {
 
     useEffect(() => {
         axios.post('/Admin_mis')
-        .then(response => {
-            console.log(response.data); // 데이터가 올바르게 수신되었는지 확인
-            setMissingData(response.data);
-        })
-        .catch(error => {
-            console.error("There was an error fetching the data!", error);  
-        });
+            .then(response => {
+                console.log(response.data); // 데이터가 올바르게 수신되었는지 확인
+                setMissingData(response.data);
+                setFilteredData(response.data);
+            })
+            .catch(error => {
+                console.error("There was an error fetching the data!", error);
+            });
     }, []);
 
     const finding_change = (idx, user_id, newfinding) => {
         axios.post('/missing_finding_change', { idx, user_id, newfinding })
-        .then(response => {
-            console.log(response.data);
-            setMissingData(missingData.map(item =>
-                item.MISSING_IDX === idx && item.USER_ID === user_id ? { ...item, MISSING_FINDING: newfinding } : item
-            ));
-        }).catch(error => {
-            console.error(error);
-        });
-    }
+            .then(response => {
+                console.log(response.data);
+                setMissingData(missingData.map(item =>
+                    item.MISSING_IDX === idx && item.USER_ID === user_id ? { ...item, MISSING_FINDING: newfinding } : item
+                ));
+                setFilteredData(filteredData.map(item =>
+                    item.MISSING_IDX === idx && item.USER_ID === user_id ? { ...item, MISSING_FINDING: newfinding } : item
+                ));
+            }).catch(error => {
+                console.error(error);
+            });
+    };
 
     const poster_change = (poster_idx, new_show) => {
         axios.post('/poster_show_change', { poster_idx, new_show: Number(new_show) })
-        .then(response => {
-            console.log(response.data);
-            setMissingData(missingData.map(item =>
-                item.POSTER_IDX === poster_idx ? { ...item, POSTER_SHOW: Number(new_show) } : item
-            ));
-        }).catch(error => {
-            console.error(error);
-        });
-    }
+            .then(response => {
+                console.log(response.data);
+                setMissingData(missingData.map(item =>
+                    item.POSTER_IDX === poster_idx ? { ...item, POSTER_SHOW: Number(new_show) } : item
+                ));
+                setFilteredData(filteredData.map(item =>
+                    item.POSTER_IDX === poster_idx ? { ...item, POSTER_SHOW: Number(new_show) } : item
+                ));
+            }).catch(error => {
+                console.error(error);
+            });
+    };
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = missingData.slice(indexOfFirstItem, indexOfLastItem);
+    const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
     return (
         <div>
@@ -94,7 +124,8 @@ const Adminmissing = () => {
             <table>
                 <thead>
                     <tr>
-                        <th>번호</th>
+                        <th> </th>
+                        <th>식별자</th>
                         <th>소지품</th>
                         <th>소지품 특이사항</th>
                         <th>아이디</th>
@@ -118,6 +149,7 @@ const Adminmissing = () => {
                     {currentItems.map((item, index) => (
                         <tr key={index}>
                             <td>{index + 1}</td>
+                            <td>{item.MISSING_IDX}</td>
                             <td>{item.BELONGINGS_CATE_KOR}</td>
                             <td>{item.BELONGINGS_ETC}</td>
                             <td>{item.USER_ID}</td>
@@ -160,10 +192,28 @@ const Adminmissing = () => {
                     <li onClick={handlePreviousGroup} className='prev-group'> 이전 </li>
                 )}
                 {renderPageNumbers()}
-                {currentGroup * pagesPerGroup < Math.ceil(missingData.length / itemsPerPage) && (
+                {currentGroup * pagesPerGroup < Math.ceil(filteredData.length / itemsPerPage) && (
                     <li onClick={handleNextGroup} className="next-group">다음</li>
                 )}
             </ul>
+            <div className='search-bar'>
+                <select value={searchField} onChange={e => setSearchField(e.target.value)}>
+                    <option value="">선택</option>
+                    {searchOptions.map((option, index) => (
+                        <option key={index} value={option}>
+                            {option}
+                        </option>
+                    ))}
+                </select>
+                <input 
+                    type='text'
+                    value={searchText}
+                    onChange={e => setSearchText(e.target.value)}
+                    placeholder='검색어 입력'
+                    onKeyDown={handleKeyDown}
+                />
+                <button onClick={handleSearch}>검색</button>
+            </div>
         </div>
     );
 }
