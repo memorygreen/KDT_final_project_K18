@@ -12,10 +12,10 @@ const Admincctv = () => {
     const [showModal, setShowModal] = useState(false); // 모달 상태 변수 추가
     const [newCctv, setNewCctv] = useState({ latitude: '', longitude: '', location: '', status: '' }); // 새로운 CCTV 상태 변수
     const [validationError, setValidationError] = useState(''); // 유효성 검사 에러 메시지 상태 변수
-    const itemsPerPage = 25;
-    const pagesPerGroup = 10;
+    const itemsPerPage = 25; // 25개씩 출력
+    const pagesPerGroup = 10; // 10페이지씩 출력
     const searchOptions = ['번호', '위도', '경도', '설치장소', '상태']; // 검색 옵션
-    const statusOptions = ['Active', 'Inactive', 'Maintenance']; // 상태 옵션
+    const statusOptions = ['Active', 'Break', 'Stop']; // 상태 옵션
 
     useEffect(() => {
         axios.get('/Admincctv')
@@ -58,7 +58,7 @@ const Admincctv = () => {
         ));
     };
 
-    // CCTV 상태 변경 핸들러
+    // CCTV 상태 변경 
     const handle_cctv = (chg_cctvidx, chg_cctv) => {
         axios.post('/user_cctv_change', { chg_cctvidx, chg_cctv })
             .then(response => {
@@ -72,7 +72,7 @@ const Admincctv = () => {
             });
     };
 
-    // 검색 핸들러
+    // 검색 
     const handleSearch = () => {
         axios.get('/Admincctv')
             .then(response => {
@@ -99,36 +99,36 @@ const Admincctv = () => {
             .catch(error => console.error('Error fetching CCTV data:', error));
     };
 
-    // 엔터키 핸들러
+    // 엔터키 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             handleSearch();
         }
     };
 
-    // 모달 열기 핸들러
+    // 모달 열기 
     const openModal = () => {
         setShowModal(true);
     };
 
-    // 모달 닫기 핸들러
+    // 모달 닫기 
     const closeModal = () => {
         setShowModal(false);
         setValidationError(''); // 모달 닫을 때 유효성 검사 에러 메시지 초기화
     };
 
-    // 새로운 CCTV 입력 핸들러
+    // 새로운 CCTV 입력
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setNewCctv({ ...newCctv, [name]: value });
     };
 
-    // 새로운 CCTV 생성 핸들러
+    // 새로운 CCTV 생성
     const handleCreateCctv = (e) => {
         e.preventDefault();
         const { latitude, longitude, location, status } = newCctv;
 
-        // 모든 필드가 입력되었는지 확인
+        // 값이 입력되었는지 확인
         if (!latitude || !longitude || !location || !status) {
             setValidationError('모든 값을 입력해주세요.');
             return;
@@ -154,7 +154,7 @@ const Admincctv = () => {
     const currentItems = cctv.slice(indexOfFirstItem, indexOfLastItem);
 
     return (
-        <div className='main'>
+        <div>
             <NevBar />
             <div className="cctv-container">
                 <h1>CCTV 관리 페이지</h1>
@@ -231,7 +231,7 @@ const Admincctv = () => {
                             {validationError && <p className="error">{validationError}</p>}
                             <form onSubmit={handleCreateCctv}>
                                 <label>
-                                    위도:
+                                    위도 :
                                     <input
                                         type="text"
                                         name="latitude"
@@ -240,7 +240,7 @@ const Admincctv = () => {
                                     />
                                 </label>
                                 <label>
-                                    경도:
+                                    경도 :
                                     <input
                                         type="text"
                                         name="longitude"
@@ -249,7 +249,7 @@ const Admincctv = () => {
                                     />
                                 </label>
                                 <label>
-                                    설치장소:
+                                    설치장소 :
                                     <input
                                         type="text"
                                         name="location"
@@ -258,7 +258,7 @@ const Admincctv = () => {
                                     />
                                 </label>
                                 <label>
-                                    상태:
+                                    상태 :
                                     <select
                                         name="status"
                                         value={newCctv.status}

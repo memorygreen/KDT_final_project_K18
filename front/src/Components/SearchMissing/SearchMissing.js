@@ -5,8 +5,8 @@ import MissingKakaoMap from './MissingKakaoMap';
 import SearchBar from './SearchBar';
 
 const SearchMissing = () => {
-    const [selectedTxt, setSelectTxt] = useState('');
-    const [selectBox, setSelectBox] = useState('');
+    const [selectedTxt, setSelectTxt] = useState('');// 인상착의,  상의, 하의, 소지품 
+    const [selectBox, setSelectBox] = useState(''); // 인상착의, 상의, 하의, 소지품 구분에따라 나오는 박스
 
 
     // 인적사항 변수
@@ -25,6 +25,10 @@ const SearchMissing = () => {
     const [selectedBottom, setSelectedBottom] = useState('');
     const [selectedBottomColor, setSelectedBottomColor] = useState('');
     const [selectedBelongings, setSelectedBelongings] = useState('');
+
+    const[missingClothesEtc, setMissingClothesEtc] = useState('');
+    const[missingBelongingsEtc, setMissingBelongingsEtc] = useState('');
+
 
     // 인상착의의 라벨(한글)을 받기 위한 변수 설정
     const [selectedTopKor, setSelectedTopKor] = useState('');
@@ -111,19 +115,27 @@ const SearchMissing = () => {
             missing_name: missingName,
             missing_gender: missingGender,
             missing_age: missingAge,
+            
+            missing_location: missingLocation,
             missing_location_lat: missingLocationLat,
             missing_location_lng: missingLocationLng,
+            missing_img: missingImg,
+            
             selected_top: selectedTop,
             selected_top_color: selectedTopColor,
             selected_bottom: selectedBottom,
             selected_bottom_color: selectedBottomColor,
             selected_belongings: selectedBelongings,
-            missing_img: missingImg,
+
             selected_top_kor: selectedTopKor,
             selected_top_color_kor: selectedTopColorKor,
             selected_bottom_kor: selectedBottomKor,
             selected_bottom_color_kor: selectedBottomColorKor,
             selected_belongings_kor: selectedBelongingsKor,
+            
+            missing_clothes_etc: missingClothesEtc,
+            missing_belongings_etc: missingBelongingsEtc,
+
         })
             .then(response => {
                 console.log('Report submitted successfully:', response.data);
@@ -135,6 +147,7 @@ const SearchMissing = () => {
 
 
         // 인적사항 확인
+        console.log('프론트에서 넘어오는지 확인')
         console.log('Missing Name:', missingName);
         console.log('Missing Age:', missingAge);
         console.log('Missing Gender:', missingGender);
@@ -155,6 +168,9 @@ const SearchMissing = () => {
         console.log('Selected Bottom(Kor):', selectedBottomKor);
         console.log('Selected Bottom Color(Kor):', selectedBottomColorKor);
         console.log('Selected Belongings(Kor):', selectedBelongingsKor);
+
+        console.log('missingClothesEtc(인상착의 특이사항):', missingClothesEtc);
+        console.log('missingBelongingsEtc(소지품 특이사항):', missingBelongingsEtc);
     };
 
 
@@ -200,6 +216,14 @@ const SearchMissing = () => {
         setMissingAge(event.target.value);
     };
     
+    const handleClothesEtcChange = (event) => {
+        setMissingClothesEtc(event.target.value);
+    };
+
+    const handleBelongingsEtcChange = (event) => {
+        setMissingBelongingsEtc(event.target.value);
+    };
+
     // const handleLocationChange = (event) => {
     //     setMissingLocation(event.target.value);
     // };
@@ -352,6 +376,9 @@ const SearchMissing = () => {
                         ))}
                     </div>
                 </div>
+
+                
+
             </div>
         );
     };
@@ -403,6 +430,23 @@ const SearchMissing = () => {
                         ))}
                     </div>
                 </div>
+
+
+                <div className="search_missing_cate_content">
+                    <h2>인상착의 특이사항</h2>
+                    <div className="input-group mb-3">
+                        <span className="input-group-text" id="missing_clothes_etc ">인상착의 특이사항</span>
+                        <input
+                            type="text"
+                            className="form-control"
+                            aria-label="Sizing example input"
+                            aria-describedby="missing_clothes_etc"
+                            value={missingClothesEtc}
+                            onChange={handleClothesEtcChange}
+                        />
+                    </div>
+                </div>
+
             </div>
         );
     };
@@ -430,6 +474,22 @@ const SearchMissing = () => {
                         ))}
                     </div>
                 </div>
+
+                <div className="search_missing_cate_content">
+                    <h2>소지품 특이사항</h2>
+                    <div className="input-group mb-3">
+                        <span className="input-group-text" id="missing_belongings_etc ">소지품 특이사항</span>
+                        <input
+                            type="text"
+                            className="form-control"
+                            aria-label="Sizing example input"
+                            aria-describedby="missing_belongings_etc"
+                            value={missingBelongingsEtc}
+                            onChange={handleBelongingsEtcChange}
+                        />
+                    </div>
+                </div>
+
             </div>
         );
     };

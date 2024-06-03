@@ -10,6 +10,7 @@ import SerchMissing from './Page/SearchMissingPage/SearchMissingPage' /** 자영
 import Adminpage from './Page/Adminpage/Adminpage';
 import Adminmanage from './Page/Adminmanage/Adminmanage';
 import Admincctv from './Page/Admincctv/Admincctv';
+import Adminmissing from './Page/Adminmissing/Adminmissing';
 
 /* Test용 Components */
 import KakaoMap from './Components/Map/KakaoMap';
@@ -35,6 +36,7 @@ function App() {
           <Route path='/Adminpage' element={<Adminpage />}/>
           <Route path="/Adminmanage" element={<Adminmanage />} />
           <Route path="/Admincctv" element={<Admincctv />} />
+          <Route path="/Adminmissing" element={<Adminmissing />} />
 
           {/* Test용 Components */}
           <Route path="/Map" element={<KakaoMap />} />
