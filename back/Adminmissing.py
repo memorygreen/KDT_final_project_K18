@@ -8,27 +8,36 @@ def get_missing():
     db = db_con()
     cursor = db.cursor()
     try:
-        missing_spl = """SELECT 
-        A.BELONGINGS_CATE_KOR, 
-        A.BELONGINGS_ETC, 
-        B.*, 
-        C.MISSING_CLOTHES_ETC, 
-        C.MISSING_TOP_KOR, 
-        C.MISSING_TOP_COLOR_KOR, 
-        C.MISSING_BOTTOMS_KOR, 
-        C.MISSING_BOTTOMS_COLOR_KOR,
-        D.POSTER_IDX,  -- 추가
-        D.POSTER_CREATED_AT,
-        D.POSTER_SHOW
+        missing_spl = """
+        SELECT 
+            A.BELONGINGS_CATE_KOR, 
+            A.BELONGINGS_ETC, 
+            B.MISSING_IDX,
+            B.USER_ID,
+            B.MISSING_NAME,
+            B.MISSING_GENDER,
+            B.MISSING_AGE,
+            B.MISSING_IMG,
+            B.MISSING_LOCATION_LAT,
+            B.MISSING_LOCATION_LON,
+            B.MISSING_FINDING,
+            C.MISSING_CLOTHES_ETC, 
+            C.MISSING_TOP_KOR, 
+            C.MISSING_TOP_COLOR_KOR, 
+            C.MISSING_BOTTOMS_KOR, 
+            C.MISSING_BOTTOMS_COLOR_KOR,
+            D.POSTER_IDX,
+            D.POSTER_CREATED_AT,
+            D.POSTER_SHOW
         FROM 
-        TB_BELONGINGS A
+            TB_BELONGINGS A
         INNER JOIN 
-        TB_MISSING B ON A.MISSING_IDX = B.MISSING_IDX
+            TB_MISSING B ON A.MISSING_IDX = B.MISSING_IDX
         INNER JOIN 
-        TB_MISSING_CLOTHES C ON A.MISSING_IDX = C.MISSING_IDX
+            TB_MISSING_CLOTHES C ON A.MISSING_IDX = C.MISSING_IDX
         INNER JOIN 
-        TB_POSTER D ON A.MISSING_IDX = D.MISSING_IDX;
-        """ 
+            TB_POSTER D ON A.MISSING_IDX = D.MISSING_IDX;
+        """
         cursor.execute(missing_spl)
         missing_sel = cursor.fetchall()
         missing = []
@@ -50,7 +59,7 @@ def get_missing():
                 "MISSING_TOP_COLOR_KOR": i[13],
                 "MISSING_BOTTOMS_KOR": i[14],
                 "MISSING_BOTTOMS_COLOR_KOR": i[15],
-                "POSTER_IDX": i[16],  # 추가
+                "POSTER_IDX": i[16],
                 "POSTER_CREATED_AT": i[17],
                 "POSTER_SHOW": i[18]
             })    
