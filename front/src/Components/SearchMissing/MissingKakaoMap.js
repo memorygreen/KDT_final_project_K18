@@ -1,10 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 
-
-// 자영(240531): 실종자 마지막 발견장소-> 카카오맵 위 클릭 시 마커 찍힘 + 
-// useDidMountEffect 훅을 정의합니다. 이 훅은 첫 번째 렌더링을 제외하고 실행됩니다.
+// useDidMountEffect 훅을 정의. useEffect와 비슷하지만, 이 훅은 첫 번째 렌더링 이후에만 실행
 function useDidMountEffect(func, deps) {
-  const didMount = useRef(false);
+  const didMount = useRef(false); //첫 번째 렌더링인지 여부를 판단
 
   useEffect(() => {
     if (didMount.current) {
@@ -15,18 +13,17 @@ function useDidMountEffect(func, deps) {
   }, deps);
 }
 
-
-export default function MissingKakaoMap({getLatLon}) {
-  const [map, setMap] = useState(null);
-  const [marker, setMarker] = useState(null);
-  const [address, setAddress] = useState(''); // 주소를 저장할 상태
+// 카카오맵을 로드하고, 마커를 표시, 사용자가 클릭한 위치의 위도와 경도를 부모 컴포넌트에 전달
+export default function MissingKakaoMap({ getLatLon, getMissingLocation, missingLocation }) {
+  const [map, setMap] = useState(null); // 카카오맵 객체를 저장하는 상태 변수 
+  const [marker, setMarker] = useState(null); // 지도에 표시할 마커 객체를 저장하는 상태 변수
+  const [address, setAddress] = useState(missingLocation || ''); // 클릭한 위치나 검색한 주소를 저장하는 상태 변수
 
   // lng, lat 위도 경도 전역변수 설정
-  var lng = 0
-  var lat = 0
-  
+  let lng = 0;
+  let lat = 0;
 
-  // 1) 카카오맵 및 우편번호 서비스 스크립트 로드
+  // 카카오맵 및 우편번호 검색 서비스 스크립트 로드
   useEffect(() => {
     const loadKakaoMaps = () => {
       return new Promise((resolve) => {
@@ -55,35 +52,45 @@ export default function MissingKakaoMap({getLatLon}) {
           window.kakao.maps.load(() => {
             const container = document.getElementById("map");
             const options = {
-              center: new window.kakao.maps.LatLng(35.15049446168165, 126.91616067643518 ),//스마트인재개발원 본점 위치 
+              center: new window.kakao.maps.LatLng(35.15049446168165, 126.91616067643518), // 스마트인재개발원 본점 위치 
               level: 3,
             };
 
-            const newMap = new window.kakao.maps.Map(container, options);
-            const newMarker = new window.kakao.maps.Marker();
+            const newMap = new window.kakao.maps.Map(container, options); // 새로운 지도 변수
+            const newMarker = new window.kakao.maps.Marker(); // 새로운 마커 변수
 
             setMap(newMap);
-            setMarker(newMarker);
+            setMarker(newMarker); // 새로온 마커 변수 값 업데이트(세팅)
+
+            // 이미 주소가 들어있는 경우 해당 주소에 마커 표시
+            if (address) {
+              const geocoder = new window.kakao.maps.services.Geocoder();
+              geocoder.addressSearch(address, function (result, status) {
+                if (status === window.kakao.maps.services.Status.OK) {
+                  const currentPos = new window.kakao.maps.LatLng(result[0].y, result[0].x);
+                  newMarker.setPosition(currentPos);
+                  newMarker.setMap(newMap);
+                  newMap.panTo(currentPos);
+                }
+              });
+            }
           });
         }
       });
     });
-  }, []);
+  }, [address]);
 
-  // 2) 다우미 우편번호 검색 기능
+  // 우편번호 검색 기능
   const onClickAddr = () => {
     new window.daum.Postcode({
       oncomplete: function (addrData) {
         const geocoder = new window.kakao.maps.services.Geocoder();
-
         geocoder.addressSearch(addrData.address, function (result, status) {
           if (status === window.kakao.maps.services.Status.OK) {
             const currentPos = new window.kakao.maps.LatLng(result[0].y, result[0].x);
-
             setAddress(addrData.address);
-
+            getMissingLocation(addrData.address); // 부모 컴포넌트로 주소 전달
             map.panTo(currentPos);
-            marker.setMap(null);
             marker.setPosition(currentPos);
             marker.setMap(map);
           }
@@ -92,36 +99,30 @@ export default function MissingKakaoMap({getLatLon}) {
     }).open();
   };
 
-  // 3) 지도 클릭 시 주소 표시
+  // 지도 클릭 시 주소 표시
   useDidMountEffect(() => {
     if (map) {
       window.kakao.maps.event.addListener(map, "click", function (mouseEvent) {
         const geocoder = new window.kakao.maps.services.Geocoder();
-        
-        lng = mouseEvent.latLng.getLng(); //경도
-        lat = mouseEvent.latLng.getLat(); //위도
-        console.log("경도:",lng); // 경도 출력
-        console.log("위도:", lat);// 위도 출력
 
-        getLatLon(lat,lng)
+        lng = mouseEvent.latLng.getLng();
+        lat = mouseEvent.latLng.getLat();
+        console.log("경도:", lng);
+        console.log("위도:", lat);
 
-        geocoder.coord2Address(
-          mouseEvent.latLng.getLng(),
-          mouseEvent.latLng.getLat(),
-          (result, status) => {
-            if (status === window.kakao.maps.services.Status.OK) {
-              const addr = result[0].road_address
-                ? result[0].road_address.address_name
-                : result[0].address.address_name;
+        getLatLon(lat, lng);
 
-              setAddress(addr);
-
-              marker.setMap(null);
-              marker.setPosition(mouseEvent.latLng);
-              marker.setMap(map);
-            }
+        geocoder.coord2Address(mouseEvent.latLng.getLng(), mouseEvent.latLng.getLat(), (result, status) => {
+          if (status === window.kakao.maps.services.Status.OK) {
+            var addr = result[0].road_address
+              ? result[0].road_address.address_name
+              : result[0].address.address_name;
+            setAddress(addr);
+            getMissingLocation(addr); // 부모 컴포넌트로 주소 전달
+            marker.setPosition(mouseEvent.latLng);
+            marker.setMap(map);
           }
-        );
+        });
       });
     }
   }, [map, marker]);
