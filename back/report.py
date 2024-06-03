@@ -42,6 +42,7 @@ def report_missing_person():
 #제보 받은 알람 확인
 @report_bp.route('/my_report', methods=['GET', 'POST'])
 def my_notification():
+    user_id = request.json.get('user_id')
     if not user_id:
         return jsonify({'error': 'User is not logged in'}), 401
     db=db_con()
