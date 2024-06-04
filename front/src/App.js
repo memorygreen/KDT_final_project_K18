@@ -11,6 +11,7 @@ import Adminpage from './Page/Adminpage/Adminpage';
 import Adminmanage from './Page/Adminmanage/Adminmanage';
 import Admincctv from './Page/Admincctv/Admincctv';
 import Adminmissing from './Page/Adminmissing/Adminmissing';
+import ReportNotificationPage from './Page/NotificationPage/ReportNotificationPage';
 
 /* Test용 Components */
 import KakaoMap from './Components/Map/KakaoMap';
@@ -37,6 +38,7 @@ function App() {
           <Route path="/Adminmanage" element={<Adminmanage />} />
           <Route path="/Admincctv" element={<Admincctv />} />
           <Route path="/Adminmissing" element={<Adminmissing />} />
+          <Route path="/ReportNotificationPage" element={<ReportNotificationPage />} />
 
           {/* Test용 Components */}
           <Route path="/Map" element={<KakaoMap />} />

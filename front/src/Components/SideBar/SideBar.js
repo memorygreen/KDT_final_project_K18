@@ -7,6 +7,7 @@ import Settings from './assets/Settings.png'
 import Dashboard from './assets/Dashboard.png'
 import profile from './assets/profile.jpg'
 import logo from './assets/logo.png'
+
 const Sidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(true); // 로그인 상태 관리

@@ -1,10 +1,9 @@
 import React,{useState,useEffect} from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const NevModal = ({ onClose }) => {
+const Modal = ({ onClose }) => {
     const [notifications, setNotifications] = useState([]);
-    const navigate = useNavigate();
+
     useEffect(() => {
         // 알림 가져오기
         const fetchNotifications = async () => {
@@ -31,11 +30,7 @@ const NevModal = ({ onClose }) => {
 
         fetchNotifications();
     }, []);
-    const showDetail = (notification) => {
-        navigate('/ReportNotificationPage', { state: { notification, notifications } });
-    };
 
-   
     return (
         <div className="modal">
             <button onClick={onClose}>Close Modal</button>
@@ -43,15 +38,14 @@ const NevModal = ({ onClose }) => {
                 {notifications.map(notification => (
                     <div key={notification.id} className="notification">
                         <div className="notification-header">제보 알림</div>
-                        <div className="notification-content" onClick={() => showDetail(notification)}>
-                            {notification.POSTER_IDX}번째 포스터에대한 제보입니다.
+                        <div className="notification-content">
+                            {notification.REPORT_SIGHTING_TIME}에온 제보입니다.
                         </div>
                     </div>
                 ))}
             </div>
-                </div>
-          
+        </div>
     );
 };
 
-export default NevModal;
+export default Modal;
