@@ -17,6 +17,7 @@ const SearchMissing = () => {
     const [missingLocation, setMissingLocation] = useState(''); //실종자 마지막 발견 장소
     const [missingLocationLat, setMissingLocationLat] = useState(''); //마지막 발견 장소 위도
     const [missingLocationLng, setMissingLocationKLng] = useState(''); //마지막 발견 장소 경도
+    const [missingImgUrl, setMissingImgUrl] = useState(''); //마지막 발견 장소 경도
 
 
     // 인상착의 변수
@@ -36,6 +37,7 @@ const SearchMissing = () => {
     const [selectedBottomKor, setSelectedBottomKor] = useState('');
     const [selectedBottomColorKor, setSelectedBottomColorKor] = useState('');
     const [selectedBelongingsKor, setSelectedBelongingsKor] = useState('');
+
 
     /** 자영(240603):주소 받아오는 함수 */
     const getMissingLocation = (address) => {
@@ -109,20 +111,26 @@ const SearchMissing = () => {
     ];
 
 
-    const [missingImgUrl, setMissingImgUrl] = useState(''); //마지막 발견 장소 경도
+    // 포스터 생성 유무 
+    const [posterGenerating, setPosterGenerating] = useState(false);
 
+    const handlePosterToggle = () => {
+        setPosterGenerating(!posterGenerating);
+    };
+
+
+    
 
     const handle_submit = async (event) => {
         event.preventDefault();
-        console.log("무슨파일임", missingImg);
         if (missingImg) {
             try {
                 setMissingImgUrl(await UploadMissingImg(missingImg));
               
                 // missingImgUrl = Url;
-                console.log("업로드된 이미지 URL 제발되라!!!!(얘가 최종):", missingImgUrl); // URL을 로그로 출력
+                console.log("업로드된 이미지 URL (확인)):", missingImgUrl); // URL을 로그로 출력
             } catch (error) {
-                console.error('Failed to upload image');
+                console.error('실종자 이미지 업로드 실패 Failed to upload image');
             }
 
             if (missingImgUrl) {
@@ -161,10 +169,10 @@ const SearchMissing = () => {
                         // Handle error
                     });
             } else {
-                console.error('No image to upload');
+                console.error('실종자 이미지 url 업로드 실패 No image to upload');
             }
             if (!missingImgUrl) {
-                console.error('이미지를 업로드해주세요.');
+                console.error('실종자 이미지 url을 업로드해주세요.');
             }
         };
     }
@@ -331,6 +339,24 @@ const SearchMissing = () => {
                     <label className="input-group-text" htmlFor="missing_img">업로드</label>
 
                 </div>
+
+                <div className="search_missing_cate_content">
+                    <h2>포스터 생성 유무</h2>
+                    <div className="input-group mb-3">
+                        
+                        <input
+                            type="checkbox"
+                            className='poster_check_box'
+                            aria-label="포스터 생성 유무"
+                            checked={posterGenerating} // 이 상태는 useState를 사용하여 관리해야 합니다.
+                            onChange={handlePosterToggle} // 적절한 이벤트 핸들러 함수로 변경
+                        />
+                    </div>
+                </div>
+                
+
+
+
             </div>
         );
     };
