@@ -1,5 +1,6 @@
 import requests
 import os
+import pymysql
 from flask import Blueprint, request, jsonify
 from dotenv import load_dotenv
 
@@ -10,6 +11,16 @@ KAKAO_CLIENT_ID = os.environ.get('KAKAO_CLIENT_ID')
 KAKAO_REDIRECT_URI = os.environ.get('KAKAO_REDIRECT_URI')
 
 kakao_bp = Blueprint('kakao', __name__)
+
+def db_con():
+    return pymysql.connect(
+        host='project-db-cgi.smhrd.com',
+        user='campus_23K_AI18_p3_2',
+        password='smhrd2',
+        db='campus_23K_AI18_p3_2',
+        port=3307,
+        charset='utf8'
+    )
 
 def get_access_token(auth_code):
     data = {
@@ -57,4 +68,33 @@ def kakao_callback():
         return jsonify({'error': 'Failed to get user info'}), 400
     print("사용자 정보: ", user_info)
 
-    return jsonify(user_info)
+    # 사용자 정보와 토큰 반환
+    return jsonify({'token': access_token, 'user': user_info})
+
+@kakao_bp.route('/user/kakao/login', methods=['POST'])
+def kakao_login():
+    data = request.get_json()
+    user_id = data.get('id')
+    print(f"User ID received: {user_id}")
+
+    # 데이터베이스 연결
+    conn = db_con()
+    cursor = conn.cursor()
+
+    try:
+        # 사용자 ID 확인
+        cursor.execute("SELECT COUNT(*) FROM TB_AUTH WHERE AUTH_ID = %s", (user_id,))
+        count = cursor.fetchone()[0]
+
+        if count > 0:
+            # 사용자 ID가 존재하면 로그인 성공
+            return jsonify({'success': True})
+        else:
+            # 사용자 ID가 없으면 회원가입 필요
+            return jsonify({'success': False})
+    except Exception as e:
+        print(f"Database error: {e}")
+        return jsonify({'error': 'Database error'}), 500
+    finally:
+        cursor.close()
+        conn.close()
