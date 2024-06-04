@@ -6,7 +6,9 @@
    python-dotenv
    requests
    flask-cors
-   
+   apscheduler
+   schedule
+
 # cd back
 # pip install -r requirements.txt
 

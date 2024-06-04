@@ -6,20 +6,29 @@ import { useNavigate } from 'react-router-dom';
 
 const Adminpage = () => {
     const [posters, setPosters] = useState([]);
+    const [filteredPosters, setFilteredPosters] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [currentGroup, setCurrentGroup] = useState(1);
+    const [searchField, setSearchField] = useState('');
+    const [searchText, setSearchText] = useState('');
     const itemsPerPage = 25;
+    const pagesPerGroup = 10;
     const navigate = useNavigate();
+
+    const searchOptions = ['아이디', '이름', '휴대폰', '회원구분', '활동상태'];
 
     useEffect(() => {
         axios.post('/Admin')
             .then(response => {
                 console.log(response.data);
                 setPosters(response.data);
+                setFilteredPosters(response.data);
             })
             .catch(error => {
                 console.error('There was a problem with the axios operation:', error);
             });
     }, []);
+
     // 회원 정지
     const handleStatusChange = (userId, currentStatus) => {
         const action = currentStatus === 'stop' ? '활성화' : '정지';
@@ -34,18 +43,25 @@ const Adminpage = () => {
                     setPosters(posters.map(user =>
                         user.USER_ID === userId ? { ...user, USER_STATUS: newStatus } : user
                     ));
+                    setFilteredPosters(filteredPosters.map(user =>
+                        user.USER_ID === userId ? { ...user, USER_STATUS: newStatus } : user
+                    ));
                 })
                 .catch(error => {
                     console.error('There was a problem with the status change operation:', error);
                 });
         }
     };
-    // 회원
+
+    // 회원 구분 변경
     const handleCategoryChange = (userId, newCategory) => {
         axios.post('/user_category_change', { userId, newCategory })
             .then(response => {
                 console.log(`User category changed:`, response.data);
                 setPosters(posters.map(user =>
+                    user.USER_ID === userId ? { ...user, USER_CATE: newCategory } : user
+                ));
+                setFilteredPosters(filteredPosters.map(user =>
                     user.USER_ID === userId ? { ...user, USER_CATE: newCategory } : user
                 ));
             })
@@ -61,19 +77,33 @@ const Adminpage = () => {
     // 현재 페이지에 맞는 데이터 계산
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = posters.slice(indexOfFirstItem, indexOfLastItem);
+    const currentItems = filteredPosters.slice(indexOfFirstItem, indexOfLastItem);
 
     // 페이지 변경 함수
     const handleClick = (event) => {
         setCurrentPage(Number(event.target.id));
     };
 
+    const handlePreviousGroup = () => {
+        setCurrentGroup(currentGroup - 1);
+        setCurrentPage((currentGroup - 2) * pagesPerGroup + 1);
+    };
+
+    const handleNextGroup = () => {
+        setCurrentGroup(currentGroup + 1);
+        setCurrentPage(currentGroup * pagesPerGroup + 1);
+    };
+
     // 페이지 번호 렌더링
     const renderPageNumbers = () => {
         const pageNumbers = [];
-        for (let i = 1; i <= Math.ceil(posters.length / itemsPerPage); i++) {
+        const startPage = (currentGroup - 1) * pagesPerGroup + 1;
+        const endPage = Math.min(startPage + pagesPerGroup - 1, Math.ceil(filteredPosters.length / itemsPerPage));
+
+        for (let i = startPage; i <= endPage; i++) {
             pageNumbers.push(i);
         }
+
         return pageNumbers.map(number => (
             <li
                 key={number}
@@ -86,9 +116,38 @@ const Adminpage = () => {
         ));
     };
 
+    // 검색 함수
+    const handleSearch = () => {
+        const filtered = posters.filter(user => {
+            switch (searchField) {
+                case '아이디':
+                    return user.USER_ID.toString() === searchText;
+                case '이름':
+                    return user.USER_NAME.toString() === searchText;
+                case '휴대폰':
+                    return user.USER_PHONE.toString() === searchText;
+                case '회원구분':
+                    return user.USER_CATE.toString() === searchText;
+                case '활동상태':
+                    return user.USER_STATUS.toString() === searchText;
+                default:
+                    return true;
+            }
+        });
+        setFilteredPosters(filtered);
+        setCurrentPage(1);
+        setCurrentGroup(1);
+    };
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            handleSearch();
+        }
+    };
+
     return (
         <div>
-            <NevBar />  
+            <NevBar />
             <div className="main">
                 <h1>운영자 페이지</h1>
                 <table>
@@ -141,8 +200,32 @@ const Adminpage = () => {
                     </tbody>
                 </table>
                 <ul id="page-numbers">
+                    {currentGroup > 1 && (
+                        <li onClick={handlePreviousGroup} className='prev-group'> 이전 </li>
+                    )}
                     {renderPageNumbers()}
+                    {currentGroup * pagesPerGroup < Math.ceil(filteredPosters.length / itemsPerPage) && (
+                        <li onClick={handleNextGroup} className="next-group">다음</li>
+                    )}
                 </ul>
+                <div className='search-bar'>
+                    <select value={searchField} onChange={e => setSearchField(e.target.value)}>
+                        <option value="">선택</option>
+                        {searchOptions.map((option, index) => (
+                            <option key={index} value={option}>
+                                {option}
+                            </option>
+                        ))}
+                    </select>
+                    <input
+                        type='text'
+                        value={searchText}
+                        onChange={e => setSearchText(e.target.value)}
+                        placeholder='검색어 입력'
+                        onKeyDown={handleKeyDown}
+                    />
+                    <button onClick={handleSearch}>검색</button>
+                </div>
             </div>
         </div>
     );

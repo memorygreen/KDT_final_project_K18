@@ -218,7 +218,7 @@ const Admincctv = () => {
                         value={searchText}
                         onChange={e => setSearchText(e.target.value)}
                         placeholder="검색어 입력"
-                        onKeyDown={handleKeyDown} // 엔터키 핸들러 추가
+                        onKeyDown={handleKeyDown}
                     />
                     <button onClick={handleSearch}>검색</button>
                 </div>
