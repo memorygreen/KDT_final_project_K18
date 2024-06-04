@@ -38,7 +38,7 @@ function App() {
           <Route path="/Adminmanage" element={<Adminmanage />} />
           <Route path="/Admincctv" element={<Admincctv />} />
           <Route path="/Adminmissing" element={<Adminmissing />} />
-          <Route path="/ReportNotificationPage" component={ReportNotificationPage} />
+          <Route path="/ReportNotificationPage" element={<ReportNotificationPage />} />
 
           {/* Test용 Components */}
           <Route path="/Map" element={<KakaoMap />} />

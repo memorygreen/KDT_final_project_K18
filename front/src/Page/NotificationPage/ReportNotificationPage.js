@@ -1,41 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import axios from 'axios';
+
 
 const ReportNotificationPage = () => {
     const location = useLocation();
-    const [notifications, setNotifications] = useState([]);
-    const [selectedNotification, setSelectedNotification] = useState(null);
-
-    useEffect(() => {
-        const fetchNotifications = async () => {
-            try {
-                const userId = sessionStorage.getItem('userId');
-                if (!userId) {
-                    console.error('User is not logged in');
-                    return;
-                }
-
-                const response = await axios.post('http://localhost:5000/reportCk', {
-                    user_id: userId
-                }, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                setNotifications(response.data);
-            } catch (error) {
-                console.error('Error fetching notifications:', error);
-            }
-        };
-
-        if (location.state && location.state.notifications) {
-            setNotifications(location.state.notifications);
-        } else {
-            fetchNotifications();
-        }
-    }, [location.state]);
+    const [notifications] = useState(location.state.notifications || []);
+    const [selectedNotification, setSelectedNotification] = useState(location.state.notification || null);
 
     const showDetail = (notification) => {
         setSelectedNotification(notification);
