@@ -3,6 +3,8 @@ import axios from 'axios';
 
 export const createPoster = async (posterImgPath) => {
     const userId = sessionStorage.getItem('userId'); // 세션 스토리지에서 userId 가져오기
+    console.log('userId:', userId);
+    console.log('posterImgPath:', posterImgPath);
     
     if (!userId) {
         console.error('User is not logged in');
