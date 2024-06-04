@@ -10,7 +10,7 @@ const NevBar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
-    const [userId, setUserId] = useState(null);
+    
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -31,11 +31,9 @@ const NevBar = () => {
     };
     const handleCreatePoster = async (event) => {
         event.preventDefault(); // 기본 링크 동작 방지
-        const userId=sessionStorage.getItem('userId');
         const posterImgPath = "https://duckgeun.s3.ap-northeast-2.amazonaws.com/%EC%8B%A4%EC%A0%84%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8/%EC%8B%A4%EC%A2%85%EC%9E%901.jpg"; // 포스터 이미지 경로 설정
         //이미지 경로 받아오는걸로 바꿔야함 
-        console.log(userId, posterImgPath); // 값 확인
-        await createPoster(posterImgPath); // 두 번째 인자 제거
+        await createPoster(posterImgPath); 
     };
     const handleDocsClick = async() => {
         const userId=sessionStorage.getItem('userId');

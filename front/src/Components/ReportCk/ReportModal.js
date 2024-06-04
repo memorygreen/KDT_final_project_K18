@@ -33,7 +33,7 @@ const ReportModal = ({ onClose }) => {
 
     return (
         <div className="modal">
-            <button onClick={onclose}>Close Modal</button>
+            <button onClick={onClose}>Close Modal</button>
             <div className="notification-container">
                 {notifications.map(notification => (
                     <div key={notification.id} className="notification">

@@ -7,19 +7,11 @@ import Settings from './assets/Settings.png'
 import Dashboard from './assets/Dashboard.png'
 import profile from './assets/profile.jpg'
 import logo from './assets/logo.png'
-import {reportCk} from '../../Components/ReportCk/ReportCk';
-import Modal from '../../Components/ReportCk/ReportModal';
 const Sidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(true); // 로그인 상태 관리
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const sidebarRef = useRef(null);
     const navigate = useNavigate(); // 네비게이션 함수
-
-
-    const toggleModal = () => {
-        setIsModalOpen(!isModalOpen);
-    };
 
     const handleExpandClick = () => {
         setIsCollapsed(!isCollapsed);
@@ -33,21 +25,6 @@ const Sidebar = () => {
         sessionStorage.removeItem('userId'); // 세션 값 삭제
         setIsLoggedIn(false); // 로그인 상태 업데이트
         navigate('/Login'); // 로그인 페이지로 이동
-    };
-
-    const handleDocsClick = async() => {
-        const userId=sessionStorage.getItem('userId');
-        if (!userId) {
-            console.error('User is not logged in');
-            return;
-        }
-        try {
-            await reportCk(userId);
-            // 모달 열기
-            toggleModal();
-        } catch (error) {
-            console.error('Error handling docs click:', error);
-        }
     };
 
     return (<div className="all_sidebar">
@@ -119,7 +96,7 @@ const Sidebar = () => {
                         </a>
                     </li>
                     <li>
-                        <a href="#notifications" onClick={handleDocsClick} title="Notifications" className="sidebar_tooltip">
+                        <a href="#notifications" title="Notifications" className="sidebar_tooltip">
                             <img src={Notifications} alt="logout" width="24" height="24" />
                             <span className="link hide">Notifications</span>
                             <span className="tooltip__content">Notifications</span>
