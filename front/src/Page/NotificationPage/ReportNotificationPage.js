@@ -21,9 +21,9 @@ const ReportNotificationPage = () => {
             <div className="notification-container">
                 {notifications.map(notification => (
                     <div key={notification.id} className="notification">
-                        <div className="notification-header">제보알림</div>
+                        <div className="notification-header">{notification.POSTER_IDX} 포스터 제보 알림</div>
                         <div className="notification-content" onClick={() => showDetail(notification)}>
-                            {notification.POSTER_IDX}번째 포스터에 대한 제보입니다.
+                            {notification.REPORT_TIME}에 온 제보입니다
                         </div>
                     </div>
                 ))}
