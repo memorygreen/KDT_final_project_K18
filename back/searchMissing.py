@@ -30,7 +30,7 @@ def search_missing():
         missing_location_lng = data.get('missing_location_lng')
         
         
-        image_url = data.get('image_url') # null일듯
+        image_url = data.get('missing_img') # null일듯
         
         selected_top = data.get('selected_top')
         selected_top_color = data.get('selected_top_color')
