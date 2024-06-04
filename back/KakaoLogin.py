@@ -50,26 +50,22 @@ def get_user_info(access_token):
 
 @kakao_bp.route('/user/kakao/callback', methods=['GET', 'POST'])
 def kakao_callback():
-    # 1. 카카오 로그인 인증 코드 받기
     code = request.args.get('code')
     print("카카오 로그인 인증 코드: ", code)
     
     if not code:
         return jsonify({'error': 'Authorization code not found'}), 400
 
-    # 2. 인증 코드를 사용하여 액세스 토큰 받기
     access_token = get_access_token(code)
     if not access_token:
         return jsonify({'error': 'Failed to get access token'}), 400
     print("액세스 토큰: ", access_token)
     
-    # 3. 액세스 토큰을 사용하여 사용자 정보 받기
     user_info = get_user_info(access_token)
     if not user_info:
         return jsonify({'error': 'Failed to get user info'}), 400
     print("사용자 정보: ", user_info)
 
-    # 사용자 정보와 토큰 반환
     return jsonify({'token': access_token, 'user': user_info})
 
 @kakao_bp.route('/user/kakao/login', methods=['POST'])
@@ -78,7 +74,6 @@ def kakao_login():
     user_id = data.get('id')
     print(f"User ID received: {user_id}")
 
-    # 데이터베이스 연결
     conn = db_con()
     cursor = conn.cursor()
 
@@ -94,12 +89,22 @@ def kakao_login():
         print(f"User data from DB: {user_data}")
 
         if user_data is None:
-            return jsonify({'success': False})
+            # 신규 회원일 경우 회원가입 처리
+            cursor.execute("""
+                INSERT INTO TB_AUTH (AUTH_ID, AUTH_TYPE)
+                VALUES (%s, 'kakao')
+            """, (user_id,))
+            cursor.execute("""
+                INSERT INTO TB_USER (USER_ID, USER_PW, USER_STATUS)
+                VALUES (%s, %s, 'active')
+            """, (user_id, bcrypt.hashpw(user_id.encode(), bcrypt.gensalt()).decode()))
+            conn.commit()
+            return jsonify({'success': True})
         
-        user_status = user_data[1]  # 저장된 bcrypt 해시 비밀번호와 상태 가져오기
-
+        user_pw, user_status = user_data
+        
         if user_status == 'stop':
-            return jsonify({'message': 'Account is suspended'}), 403  # 계정 사용 정지
+            return jsonify({'message': 'Account is suspended'}), 403
         
         # 로그인 성공
         return jsonify({'success': True})
