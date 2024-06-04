@@ -89,17 +89,8 @@ def kakao_login():
         print(f"User data from DB: {user_data}")
 
         if user_data is None:
-            # 신규 회원일 경우 회원가입 처리
-            cursor.execute("""
-                INSERT INTO TB_AUTH (AUTH_ID, AUTH_TYPE)
-                VALUES (%s, 'kakao')
-            """, (user_id,))
-            cursor.execute("""
-                INSERT INTO TB_USER (USER_ID, USER_PW, USER_STATUS)
-                VALUES (%s, %s, 'active')
-            """, (user_id, bcrypt.hashpw(user_id.encode(), bcrypt.gensalt()).decode()))
-            conn.commit()
-            return jsonify({'success': True})
+            # 신규 회원일 경우 회원가입 처리를 위한 팝업 창 출력
+            return jsonify({'message': '회원정보가 없습니다. 가입하시겠습니까?', 'signup': True})
         
         user_pw, user_status = user_data
         

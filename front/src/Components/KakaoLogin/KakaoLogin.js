@@ -1,9 +1,11 @@
 import axios from "axios";
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const KakaoLogin = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -26,10 +28,10 @@ const KakaoLogin = () => {
           if (loginResponse.data.success) {
             // 로그인 성공 시 메인 페이지로 이동
             sessionStorage.setItem('userId', user.id);
-            window.location.href = '/';
+            navigate('/');
           } else {
-            // 비회원일 경우 회원가입 페이지로 이동
-            window.location.href = '/signup';
+            // 비회원일 경우 팝업 창 출력
+            setShowPopup(true);
           }
         }
       } catch (e) {
@@ -37,9 +39,34 @@ const KakaoLogin = () => {
       }
     };
     fetchToken();
-  }, [location.search]);
+  }, [location.search, navigate]);
 
-  return null;
+  const handlePopupConfirm = (action) => {
+    if (action === 'confirm') {
+      // 회원가입 페이지로 이동
+      navigate('/signup');
+    } else {
+      // 로그인 페이지로 이동
+      navigate('/login');
+    }
+    setShowPopup(false);
+  };
+
+  return (
+    <>
+      {showPopup && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <h3>회원정보가 없습니다. 가입하시겠습니까?</h3>
+            <div className="popup-buttons">
+              <button onClick={() => handlePopupConfirm('confirm')}>예</button>
+              <button onClick={() => handlePopupConfirm('cancel')}>아니오</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
 };
 
 export default KakaoLogin;
