@@ -3,11 +3,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useEffect, useState } from 'react';
 import MissingKakaoMap from './MissingKakaoMap';
 import SearchBar from './SearchBar';
+import UploadMissingImg from './UploadMissingImg';
+
 
 const SearchMissing = () => {
     const [selectedTxt, setSelectTxt] = useState('');// 인상착의,  상의, 하의, 소지품 
     const [selectBox, setSelectBox] = useState(''); // 인상착의, 상의, 하의, 소지품 구분에따라 나오는 박스
-
 
     // 인적사항 변수
     const [missingName, setMissingName] = useState(''); //실종자 이름
@@ -16,7 +17,6 @@ const SearchMissing = () => {
     const [missingLocation, setMissingLocation] = useState(''); //실종자 마지막 발견 장소
     const [missingLocationLat, setMissingLocationLat] = useState(''); //마지막 발견 장소 위도
     const [missingLocationLng, setMissingLocationKLng] = useState(''); //마지막 발견 장소 경도
-    const [missingImg, setMissingImg] = useState(null); //실종자 얼굴 사진 경로
 
 
     // 인상착의 변수
@@ -26,9 +26,9 @@ const SearchMissing = () => {
     const [selectedBottomColor, setSelectedBottomColor] = useState('');
     const [selectedBelongings, setSelectedBelongings] = useState('');
 
-    const[missingClothesEtc, setMissingClothesEtc] = useState('');
-    const[missingBelongingsEtc, setMissingBelongingsEtc] = useState('');
-
+    const [missingClothesEtc, setMissingClothesEtc] = useState('');
+    const [missingBelongingsEtc, setMissingBelongingsEtc] = useState('');
+    const [missingImg, setMissingImg] = useState([]);
 
     // 인상착의의 라벨(한글)을 받기 위한 변수 설정
     const [selectedTopKor, setSelectedTopKor] = useState('');
@@ -37,14 +37,12 @@ const SearchMissing = () => {
     const [selectedBottomColorKor, setSelectedBottomColorKor] = useState('');
     const [selectedBelongingsKor, setSelectedBelongingsKor] = useState('');
 
-
     /** 자영(240603):주소 받아오는 함수 */
     const getMissingLocation = (address) => {
         console.log('정상적으로 넘어왔습니다. getMissingLocation(address)', address);
         setMissingLocation(address);
 
     };
-
 
     /** 위도, 경도를 받아오는 함수 */
     const getLatLon = (lat, lng) => {
@@ -53,6 +51,8 @@ const SearchMissing = () => {
         setMissingLocationKLng(lng);
 
     };
+
+
 
     const topOptions = [
         { id: 'long_sleeve', label: '긴팔' },
@@ -108,74 +108,94 @@ const SearchMissing = () => {
         { id: 'female', label: '남성' }
     ];
 
+
+    const [missingImgUrl, setMissingImgUrl] = useState(''); //마지막 발견 장소 경도
+
+
     const handle_submit = async (event) => {
         event.preventDefault();
-        // POST request to submit form data
-        axios.post('/SearchMissing', {
-            missing_name: missingName,
-            missing_gender: missingGender,
-            missing_age: missingAge,
-            
-            missing_location: missingLocation,
-            missing_location_lat: missingLocationLat,
-            missing_location_lng: missingLocationLng,
-            missing_img: missingImg,
-            
-            selected_top: selectedTop,
-            selected_top_color: selectedTopColor,
-            selected_bottom: selectedBottom,
-            selected_bottom_color: selectedBottomColor,
-            selected_belongings: selectedBelongings,
+        console.log("무슨파일임", missingImg);
+        if (missingImg) {
+            try {
+                setMissingImgUrl(await UploadMissingImg(missingImg));
+              
+                // missingImgUrl = Url;
+                console.log("업로드된 이미지 URL 제발되라!!!!(얘가 최종):", missingImgUrl); // URL을 로그로 출력
+            } catch (error) {
+                console.error('Failed to upload image');
+            }
 
-            selected_top_kor: selectedTopKor,
-            selected_top_color_kor: selectedTopColorKor,
-            selected_bottom_kor: selectedBottomKor,
-            selected_bottom_color_kor: selectedBottomColorKor,
-            selected_belongings_kor: selectedBelongingsKor,
-            
-            missing_clothes_etc: missingClothesEtc,
-            missing_belongings_etc: missingBelongingsEtc,
+            if (missingImgUrl) {
+                // 백으로 보내기
+                // POST request to submit form data
+                axios.post('/SearchMissing', {
+                    missing_name: missingName,
+                    missing_gender: missingGender,
+                    missing_age: missingAge,
 
-        })
-            .then(response => {
-                console.log('Report submitted successfully:', response.data);
-            })
-            .catch(error => {
-                console.error('Error submitting report:', error);
-                // Handle error
-            });
+                    missing_location: missingLocation,
+                    missing_location_lat: missingLocationLat,
+                    missing_location_lng: missingLocationLng,
+                    missing_img: missingImgUrl,
+
+                    selected_top: selectedTop,
+                    selected_top_color: selectedTopColor,
+                    selected_bottom: selectedBottom,
+                    selected_bottom_color: selectedBottomColor,
+                    selected_belongings: selectedBelongings,
+
+                    selected_top_kor: selectedTopKor,
+                    selected_top_color_kor: selectedTopColorKor,
+                    selected_bottom_kor: selectedBottomKor,
+                    selected_bottom_color_kor: selectedBottomColorKor,
+                    selected_belongings_kor: selectedBelongingsKor,
+
+                    missing_clothes_etc: missingClothesEtc,
+                    missing_belongings_etc: missingBelongingsEtc,
+                })
+                    .then(response => {
+                        console.log('Report submitted successfully:', response.data);
+                    })
+                    .catch(error => {
+                        console.error('Error submitting report:', error);
+                        // Handle error
+                    });
+            } else {
+                console.error('No image to upload');
+            }
+            if (!missingImgUrl) {
+                console.error('이미지를 업로드해주세요.');
+            }
+        };
+    }
+   
+    // // 인적사항 확인
+    // console.log('프론트에서 넘어오는지 확인')
+    // console.log('Missing Name:', missingName);
+    // console.log('Missing Age:', missingAge);
+    // console.log('Missing Gender:', missingGender);
+    // console.log('Missing Location:', missingLocation);
+    // console.log('Missing Location Lat:', missingLocationLat);
+    // console.log('Missing Location Lng:', missingLocationLng);
+    // console.log('Selected Img Url:', missingImgUrl);
+
+    // // 인상착의 확인
+    // console.log('Selected Top:', selectedTop);
+    // console.log('Selected Top Color:', selectedTopColor);
+    // console.log('Selected Bottom:', selectedBottom);
+    // console.log('Selected Bottom Color:', selectedBottomColor);
+    // console.log('Selected Belongings:', selectedBelongings);
+
+    // console.log('Selected Top(Kor):', selectedTopKor);
+    // console.log('Selected Top Color(Kor):', selectedTopColorKor);
+    // console.log('Selected Bottom(Kor):', selectedBottomKor);
+    // console.log('Selected Bottom Color(Kor):', selectedBottomColorKor);
+    // console.log('Selected Belongings(Kor):', selectedBelongingsKor);
+
+    // console.log('missingClothesEtc(인상착의 특이사항):', missingClothesEtc);
+    // console.log('missingBelongingsEtc(소지품 특이사항):', missingBelongingsEtc);
 
 
-        // 인적사항 확인
-        console.log('프론트에서 넘어오는지 확인')
-        console.log('Missing Name:', missingName);
-        console.log('Missing Age:', missingAge);
-        console.log('Missing Gender:', missingGender);
-        console.log('Missing Location:', missingLocation);
-        console.log('Missing Location Lat:', missingLocationLat);
-        console.log('Missing Location Lng:', missingLocationLng);
-        console.log('Selected Img:', missingImg);
-        
-        // 인상착의 확인
-        console.log('Selected Top:', selectedTop);
-        console.log('Selected Top Color:', selectedTopColor);
-        console.log('Selected Bottom:', selectedBottom);
-        console.log('Selected Bottom Color:', selectedBottomColor);
-        console.log('Selected Belongings:', selectedBelongings);
-
-        console.log('Selected Top(Kor):', selectedTopKor);
-        console.log('Selected Top Color(Kor):', selectedTopColorKor);
-        console.log('Selected Bottom(Kor):', selectedBottomKor);
-        console.log('Selected Bottom Color(Kor):', selectedBottomColorKor);
-        console.log('Selected Belongings(Kor):', selectedBelongingsKor);
-
-        console.log('missingClothesEtc(인상착의 특이사항):', missingClothesEtc);
-        console.log('missingBelongingsEtc(소지품 특이사항):', missingBelongingsEtc);
-    };
-
-
-    // 인상착의 변경
-    
     // 각 옵션의 label 값을 찾아서 상태에 저장하는 함수들
     const handleTopChange = (event) => {
         const selectedOption = topOptions.find(option => option.id === event.target.value);
@@ -215,7 +235,7 @@ const SearchMissing = () => {
     const handleAgeChange = (event) => {
         setMissingAge(event.target.value);
     };
-    
+
     const handleClothesEtcChange = (event) => {
         setMissingClothesEtc(event.target.value);
     };
@@ -230,6 +250,7 @@ const SearchMissing = () => {
     const handleImgChange = (event) => {
         setMissingImg(event.target.files[0]);
     };
+
     const handleGenderChange = (event) => {
         setMissingGender(event.target.value);
     };
@@ -292,23 +313,6 @@ const SearchMissing = () => {
                     ))}
                 </div>
 
-                {/* <div className="search_missing_cate_content">
-                    <h2>마지막 발견 장소</h2>
-                    <div className="input-group mb-3">
-                        <span className="input-group-text" id="missing_location">마지막 발견 장소</span>
-                        <input
-                            type="text"
-                            className="form-control"
-                            aria-label="Sizing example input"
-                            aria-describedby="missing_location"
-                            value={missingLocation}
-                            onChange={handleLocationChange}
-                        />
-                    </div>
-
-                    
-                </div> */}
-
 
                 <div className="search_missing_cate_content">
                     <h2>마지막 발견장소</h2>
@@ -325,6 +329,7 @@ const SearchMissing = () => {
                         onChange={handleImgChange}
                     />
                     <label className="input-group-text" htmlFor="missing_img">업로드</label>
+
                 </div>
             </div>
         );
@@ -377,7 +382,7 @@ const SearchMissing = () => {
                     </div>
                 </div>
 
-                
+
 
             </div>
         );
