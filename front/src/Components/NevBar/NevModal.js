@@ -4,7 +4,6 @@ import axios from 'axios';
 
 const NevModal = ({ onClose }) => {
     const [notifications, setNotifications] = useState([]);
-    const [selectedNotification, setSelectedNotification] = useState(null);
     const navigate = useNavigate();
     useEffect(() => {
         // 알림 가져오기
@@ -33,16 +32,10 @@ const NevModal = ({ onClose }) => {
         fetchNotifications();
     }, []);
     const showDetail = (notification) => {
-        setSelectedNotification(notification);
+        navigate('/ReportNotificationPage', { state: { notification, notifications } });
     };
 
-    const handleCloseModal = () => {
-        setSelectedNotification(null);
-    };
-
-    const handleGoToReportPage = () => {
-        navigate.push('/ReportNotificationPage', { notifications });
-    };
+   
     return (
         <div className="modal">
             <button onClick={onClose}>Close Modal</button>
@@ -56,22 +49,8 @@ const NevModal = ({ onClose }) => {
                     </div>
                 ))}
             </div>
-            {selectedNotification && (
-                <div className="modal-content">
-                    <div>
-                        <p>REPORT_TIME: {selectedNotification.REPORT_TIME}</p>
-                        <p>REPORT_SIGHTING_TIME: {selectedNotification.REPORT_SIGHTING_TIME}</p>
-                        <p>REPORT_SIGHTING_PLACE: {selectedNotification.REPORT_SIGHTING_PLACE}</p>
-                        <p>REPORT_ETC: {selectedNotification.REPORT_ETC}</p>
-                    </div>
-                    <button onClick={handleCloseModal}>Close</button>
-                    <button onClick={handleGoToReportPage}>Go to Report Page</button>
                 </div>
-            )}
-
-
-
-        </div>
+          
     );
 };
 
