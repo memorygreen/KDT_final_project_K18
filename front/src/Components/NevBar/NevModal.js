@@ -1,11 +1,11 @@
 import React,{useState,useEffect} from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const NevModal = ({ onClose }) => {
     const [notifications, setNotifications] = useState([]);
     const [selectedNotification, setSelectedNotification] = useState(null);
-    const history = useHistory();
+    const navigate = useNavigate();
     useEffect(() => {
         // 알림 가져오기
         const fetchNotifications = async () => {
@@ -41,7 +41,7 @@ const NevModal = ({ onClose }) => {
     };
 
     const handleGoToReportPage = () => {
-        history.push('/ReportNotificationPage', { notifications });
+        navigate.push('/ReportNotificationPage', { notifications });
     };
     return (
         <div className="modal">
