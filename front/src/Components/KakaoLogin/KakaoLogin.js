@@ -1,10 +1,9 @@
 import axios from "axios";
 import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const KakaoLogin = () => {
     const location = useLocation();
-    const navigate = useNavigate();
 
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
@@ -43,7 +42,7 @@ const KakaoLogin = () => {
             }
         };
         fetchToken();
-    }, [location.search, navigate]);
+    }, [location.search]);
 
     return null; // 해당 컴포넌트는 화면에 아무것도 렌더링하지 않으므로 null 반환
 };

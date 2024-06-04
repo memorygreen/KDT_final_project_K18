@@ -3,6 +3,7 @@ import os
 import pymysql
 from flask import Blueprint, request, jsonify
 from dotenv import load_dotenv
+import bcrypt
 
 # 환경 변수 로드
 load_dotenv()
@@ -83,15 +84,26 @@ def kakao_login():
 
     try:
         # 사용자 ID 확인
-        cursor.execute("SELECT COUNT(*) FROM TB_AUTH WHERE AUTH_ID = %s", (user_id,))
-        count = cursor.fetchone()[0]
+        cursor.execute("""
+            SELECT u.USER_PW, u.USER_STATUS
+            FROM TB_AUTH a
+            JOIN TB_USER u ON a.USER_ID = u.USER_ID
+            WHERE a.AUTH_ID = %s
+        """, (user_id,))
+        user_data = cursor.fetchone()
+        print(f"User data from DB: {user_data}")
 
-        if count > 0:
-            # 사용자 ID가 존재하면 로그인 성공
-            return jsonify({'success': True})
-        else:
-            # 사용자 ID가 없으면 회원가입 필요
+        if user_data is None:
             return jsonify({'success': False})
+        
+        user_status = user_data[1]  # 저장된 bcrypt 해시 비밀번호와 상태 가져오기
+
+        if user_status == 'stop':
+            return jsonify({'message': 'Account is suspended'}), 403  # 계정 사용 정지
+        
+        # 로그인 성공
+        return jsonify({'success': True})
+        
     except Exception as e:
         print(f"Database error: {e}")
         return jsonify({'error': 'Database error'}), 500
