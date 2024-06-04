@@ -1,25 +1,20 @@
+import bcrypt
 from flask import Blueprint, request, jsonify
-import jwt
-import datetime
 from db import db_con
-import os  # os 모듈 추가
+import os
 
 # .env 파일에서 SECRET_KEY 불러오기
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 signup_bp = Blueprint('signup', __name__)
 
-# 비밀번호를 JWT로 인코딩하는 함수
-def encode_password(password):
-    # JWT payload에 저장할 데이터 설정
-    payload = {
-        'password': password,
-        # 토큰 만료 기간 설정 (예: 1시간)
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)
-    }
-    # JWT 생성
-    encoded_jwt = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-    return encoded_jwt
+# 비밀번호를 bcrypt로 해싱하는 함수
+def hash_password(password):
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
+# 비밀번호 비교 함수
+def check_password(hashed_password, password):
+    return bcrypt.checkpw(password.encode('utf-8'), hashed_password)
 
 @signup_bp.route('/signup', methods=['POST'])
 def signup():
@@ -35,7 +30,7 @@ def signup():
     if user_pw != confirm_pw:
         return jsonify({'message': 'Passwords do not match'}), 400
 
-    # Convert gender to single character
+    # 성별을 한 글자로 변환
     if user_gender.lower() == 'male':
         user_gender = 'M'
     elif user_gender.lower() == 'female':
@@ -44,8 +39,8 @@ def signup():
         return jsonify({'message': 'Invalid gender'}), 400
 
     try:
-        # 비밀번호를 JWT로 인코딩하여 저장
-        encoded_password = encode_password(user_pw)
+        # 비밀번호를 bcrypt로 해싱하여 저장
+        hashed_password = hash_password(user_pw)
 
         connection = db_con()
         with connection.cursor() as cursor:
@@ -53,7 +48,7 @@ def signup():
             INSERT INTO TB_USER (USER_ID, USER_PW, USER_NAME, USER_BRT_DT, USER_GENDER, USER_PHONE) 
             VALUES (%s, %s, %s, %s, %s, %s)
             """
-            cursor.execute(sql, (user_id, encoded_password, user_name, user_brt_dt, user_gender, user_phone))
+            cursor.execute(sql, (user_id, hashed_password, user_name, user_brt_dt, user_gender, user_phone))
             connection.commit()
     except Exception as e:
         return jsonify({'message': str(e)}), 500
@@ -67,6 +62,7 @@ def login():
     data = request.json
     user_id = data.get('id')
     provided_pw = data.get('password')
+    print(provided_pw)
 
     try:
         connection = db_con()
@@ -78,14 +74,16 @@ def login():
             if user_data is None:
                 return jsonify({'message': 'User not found'}), 404
 
-            encoded_password_from_db, user_status = user_data  # 저장된 JWT 비밀번호와 상태 가져오기
-
+            hashed_password_from_db, user_status = user_data  # 저장된 bcrypt 해시 비밀번호와 상태 가져오기
+            print(hashed_password_from_db)
             if user_status == 'stop':
                 return jsonify({'message': 'Account is suspended'}), 403  # 계정 사용 정지
 
-            decoded = jwt.decode(encoded_password_from_db, SECRET_KEY, algorithms=['HS256'])
-            saved_password = decoded['password']
-            if provided_pw == saved_password:
+            # 데이터베이스에서 가져온 해시 비밀번호를 bytes 형식으로 변환
+            if isinstance(hashed_password_from_db, str):
+                hashed_password_from_db = hashed_password_from_db.encode('utf-8')
+
+            if check_password(hashed_password_from_db, provided_pw):
                 # 로그인 성공
                 return jsonify({'message': 'Login successful'}), 200
             else:
