@@ -1,10 +1,8 @@
 import bcrypt
 from flask import Blueprint, request, jsonify
 from db import db_con
-import os
 
-# .env 파일에서 SECRET_KEY 불러오기
-SECRET_KEY = os.getenv('SECRET_KEY')
+
 
 signup_bp = Blueprint('signup', __name__)
 
