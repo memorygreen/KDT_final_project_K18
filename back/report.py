@@ -39,7 +39,7 @@ def report_missing_person():
 
 
 
-#제보 받은 알람 확인
+#제보 받은 알람 목록 보기
 @report_bp.route('/my_report', methods=['POST'])
 def my_notification():
     data = request.get_json()
@@ -97,6 +97,34 @@ def my_notification():
     db.close()
 
     return jsonify(result), 200
+
+
+# 제보 알림  확인
+@report_bp.route('/report_detail')
+def report_detail():
+    data = request.get_json()
+    report_id= data.get('report_id')
+
+    db = db_con()
+    cursor = db.cursor()
+
+    sql_report_update="""
+    UPDATE TB_REPORT
+       SET REPORT_NOTIFICATION=1,REPORT_CK_TIME=(NOW())
+    WHERE REPORT_ID=%s
+    """
+
+    cursor.execute(sql_report_update,(report_id))
+
+    cursor.close()
+    db.close()
+
+
+
+    
+    
+
+
    
 
 

@@ -1,13 +1,13 @@
-import React,{useState,useEffect} from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 
-const NevModal = ({ onClose }) => {
+const ReportNotificationPage = () => {
+    const location = useLocation();
     const [notifications, setNotifications] = useState([]);
     const [selectedNotification, setSelectedNotification] = useState(null);
-    const history = useHistory();
+
     useEffect(() => {
-        // 알림 가져오기
         const fetchNotifications = async () => {
             try {
                 const userId = sessionStorage.getItem('userId');
@@ -16,7 +16,7 @@ const NevModal = ({ onClose }) => {
                     return;
                 }
 
-                const response = await axios.post('http://localhost:5000/my_report', {
+                const response = await axios.post('http://localhost:5000/reportCk', {
                     user_id: userId
                 }, {
                     headers: {
@@ -30,8 +30,13 @@ const NevModal = ({ onClose }) => {
             }
         };
 
-        fetchNotifications();
-    }, []);
+        if (location.state && location.state.notifications) {
+            setNotifications(location.state.notifications);
+        } else {
+            fetchNotifications();
+        }
+    }, [location.state]);
+
     const showDetail = (notification) => {
         setSelectedNotification(notification);
     };
@@ -40,18 +45,15 @@ const NevModal = ({ onClose }) => {
         setSelectedNotification(null);
     };
 
-    const handleGoToReportPage = () => {
-        history.push('/ReportNotificationPage', { notifications });
-    };
     return (
-        <div className="modal">
-            <button onClick={onClose}>Close Modal</button>
+        <div className="report-notification-page">
+            <h1>Report Notifications</h1>
             <div className="notification-container">
                 {notifications.map(notification => (
                     <div key={notification.id} className="notification">
-                        <div className="notification-header">제보 알림</div>
+                        <div className="notification-header">제보알림</div>
                         <div className="notification-content" onClick={() => showDetail(notification)}>
-                            {notification.POSTER_IDX}번째 포스터에대한 제보입니다.
+                            {notification.POSTER_IDX}번째 포스터에 대한 제보입니다.
                         </div>
                     </div>
                 ))}
@@ -65,14 +67,10 @@ const NevModal = ({ onClose }) => {
                         <p>REPORT_ETC: {selectedNotification.REPORT_ETC}</p>
                     </div>
                     <button onClick={handleCloseModal}>Close</button>
-                    <button onClick={handleGoToReportPage}>Go to Report Page</button>
                 </div>
             )}
-
-
-
         </div>
     );
 };
 
-export default NevModal;
+export default ReportNotificationPage;
