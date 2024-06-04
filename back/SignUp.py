@@ -2,8 +2,6 @@ import bcrypt
 from flask import Blueprint, request, jsonify
 from db import db_con
 
-
-
 signup_bp = Blueprint('signup', __name__)
 
 # 비밀번호를 bcrypt로 해싱하는 함수
