@@ -3,21 +3,19 @@ import './NevBar.css'; // Make sure to create and style this CSS file accordingl
 import logo from "./assets/logo.png"
 import { Link, useNavigate } from 'react-router-dom';
 import { createPoster } from '../../Components/Poster/CreatePost'; // CreatePoster 함수 import
-import {reportCk} from '../../Components/ReportCk/ReportCk';
-import Modal from './NevModal';
+
+
 const NevBar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    
     const navigate = useNavigate();
     
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
-    const toggleModal = () => {
-        setIsModalOpen(!isModalOpen);
-    };
+    
     useEffect(() => {
         // 세션 스토리지에서 userId 값을 확인하는 로직으로 변경
         const session = sessionStorage.getItem('userId');
@@ -35,20 +33,7 @@ const NevBar = () => {
         //이미지 경로 받아오는걸로 바꿔야함 
         await createPoster(posterImgPath); 
     };
-    const handleDocsClick = async() => {
-        const userId=sessionStorage.getItem('userId');
-        if (!userId) {
-            console.error('User is not logged in');
-            return;
-        }
-        try {
-            await reportCk(userId);
-            // 모달 열기
-            toggleModal();
-        } catch (error) {
-            console.error('Error handling docs click:', error);
-        }
-    };
+   
     
 
     return (
@@ -185,7 +170,7 @@ const NevBar = () => {
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#docs" title="Docs" onClick={handleDocsClick}>
+                                    <a href="#docs" title="Docs" >
                                         Docs
                                     </a>
                                 </li>
@@ -214,7 +199,7 @@ const NevBar = () => {
                                 Logout
                             </button>
                         )}
-                        {isModalOpen && <Modal onClose={toggleModal} />} {/* 모달 창 표시 */}
+                        
                     </div>
                     <button aria-label="Open menu" className="burger-menu" type="button" onClick={toggleMenu}>
                         <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-menu-2" width="24"

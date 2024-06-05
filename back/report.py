@@ -100,11 +100,10 @@ def my_notification():
 
 
 # 제보 알림  확인
-@report_bp.route('/report_detail')
+@report_bp.route('/report_detail',methods=['POST'])
 def report_detail():
-    data = request.get_json()
-    report_id= data.get('report_id')
-
+    report_id= request.json.get('report_id')
+    print(report_id)
     db = db_con()
     cursor = db.cursor()
 

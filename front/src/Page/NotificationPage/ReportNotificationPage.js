@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import NevBar from '../../Components/NevBar/NevBar';
 
 
 const ReportNotificationPage = () => {
@@ -17,6 +18,7 @@ const ReportNotificationPage = () => {
 
     return (
         <div className="report-notification-page">
+            <NevBar />
             <h1>Report Notifications</h1>
             <div className="notification-container">
                 {notifications.map(notification => (

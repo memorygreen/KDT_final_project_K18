@@ -7,10 +7,12 @@ import Settings from './assets/Settings.png'
 import Dashboard from './assets/Dashboard.png'
 import profile from './assets/profile.jpg'
 import logo from './assets/logo.png'
-
+import {reportCk} from '../../Components/ReportCk/ReportCk';
+import Modal from '../ReportCk/ReportModal';
 const Sidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(true); // 로그인 상태 관리
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const sidebarRef = useRef(null);
     const navigate = useNavigate(); // 네비게이션 함수
 
@@ -27,7 +29,23 @@ const Sidebar = () => {
         setIsLoggedIn(false); // 로그인 상태 업데이트
         navigate('/Login'); // 로그인 페이지로 이동
     };
-
+    const toggleModal = () => {
+        setIsModalOpen(!isModalOpen);
+    };
+    const handleDocsClick = async() => {
+        const userId=sessionStorage.getItem('userId');
+        if (!userId) {
+            console.error('User is not logged in');
+            return;
+        }
+        try {
+            await reportCk(userId);
+            // 모달 열기
+            toggleModal();
+        } catch (error) {
+            console.error('Error handling docs click:', error);
+        }
+    };
     return (<div className="all_sidebar">
         <nav className={`sidebar ${isCollapsed ? 'collapsed' : ''}`} ref={sidebarRef}>
             <div className="sidebar-top-wrapper">
@@ -97,7 +115,7 @@ const Sidebar = () => {
                         </a>
                     </li>
                     <li>
-                        <a href="#notifications" title="Notifications" className="sidebar_tooltip">
+                        <a href="#notifications" title="Notifications" className="sidebar_tooltip" onClick={handleDocsClick}>
                             <img src={Notifications} alt="logout" width="24" height="24" />
                             <span className="link hide">Notifications</span>
                             <span className="tooltip__content">Notifications</span>
@@ -114,6 +132,7 @@ const Sidebar = () => {
                     <div className="user-name">Willy</div>
                     <div className="email">Where's Willy?</div>
                 </div>
+                {isModalOpen && <Modal onClose={toggleModal} />} {/* 모달 창 표시 */}
                 <button onClick={handleLogout} className='logout'> {/* Link 대신 button 사용 */}
                     <img src={logoutIcon} alt="logout" width="40" height="40" />
                 </button>
