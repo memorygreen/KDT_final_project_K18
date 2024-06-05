@@ -8,7 +8,7 @@ def get_user_info():
     db = db_con()
     cursor = db.cursor()
     try:
-        user_sql = "SELECT USER_ID, USER_NAME, USER_BRT_DT, USER_GENDER, USER_PHONE, USER_CATE, USER_STATUS FROM TB_USER WHERE USER_ID != 'test1'"
+        user_sql = "SELECT USER_ID, USER_NAME, USER_BRT_DT, USER_GENDER, USER_PHONE, USER_CATE, USER_STATUS FROM TB_USER WHERE USER_CATE != 'ADM'"
         cursor.execute(user_sql)
         user_sel = cursor.fetchall()
         
