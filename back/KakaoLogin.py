@@ -3,6 +3,7 @@ import os
 import pymysql
 from flask import Blueprint, request, jsonify
 from dotenv import load_dotenv
+import bcrypt
 
 # 환경 변수 로드
 load_dotenv()
@@ -49,26 +50,22 @@ def get_user_info(access_token):
 
 @kakao_bp.route('/user/kakao/callback', methods=['GET', 'POST'])
 def kakao_callback():
-    # 1. 카카오 로그인 인증 코드 받기
     code = request.args.get('code')
     print("카카오 로그인 인증 코드: ", code)
     
     if not code:
         return jsonify({'error': 'Authorization code not found'}), 400
 
-    # 2. 인증 코드를 사용하여 액세스 토큰 받기
     access_token = get_access_token(code)
     if not access_token:
         return jsonify({'error': 'Failed to get access token'}), 400
     print("액세스 토큰: ", access_token)
     
-    # 3. 액세스 토큰을 사용하여 사용자 정보 받기
     user_info = get_user_info(access_token)
     if not user_info:
         return jsonify({'error': 'Failed to get user info'}), 400
     print("사용자 정보: ", user_info)
 
-    # 사용자 정보와 토큰 반환
     return jsonify({'token': access_token, 'user': user_info})
 
 @kakao_bp.route('/user/kakao/login', methods=['POST'])
@@ -77,21 +74,32 @@ def kakao_login():
     user_id = data.get('id')
     print(f"User ID received: {user_id}")
 
-    # 데이터베이스 연결
     conn = db_con()
     cursor = conn.cursor()
 
     try:
         # 사용자 ID 확인
-        cursor.execute("SELECT COUNT(*) FROM TB_AUTH WHERE AUTH_ID = %s", (user_id,))
-        count = cursor.fetchone()[0]
+        cursor.execute("""
+            SELECT u.USER_PW, u.USER_STATUS
+            FROM TB_AUTH a
+            JOIN TB_USER u ON a.USER_ID = u.USER_ID
+            WHERE a.AUTH_ID = %s
+        """, (user_id,))
+        user_data = cursor.fetchone()
+        print(f"User data from DB: {user_data}")
 
-        if count > 0:
-            # 사용자 ID가 존재하면 로그인 성공
-            return jsonify({'success': True})
-        else:
-            # 사용자 ID가 없으면 회원가입 필요
-            return jsonify({'success': False})
+        if user_data is None:
+            # 신규 회원일 경우 회원가입 처리를 위한 팝업 창 출력
+            return jsonify({'message': '회원정보가 없습니다. 가입하시겠습니까?', 'signup': True})
+        
+        user_pw, user_status = user_data
+        
+        if user_status == 'stop':
+            return jsonify({'message': 'Account is suspended'}), 403
+        
+        # 로그인 성공
+        return jsonify({'success': True})
+        
     except Exception as e:
         print(f"Database error: {e}")
         return jsonify({'error': 'Database error'}), 500
