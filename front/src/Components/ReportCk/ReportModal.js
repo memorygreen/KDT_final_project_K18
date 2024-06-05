@@ -36,22 +36,22 @@ const NevModal = ({ onClose }) => {
         navigate('/ReportNotificationPage', { state: { notification, notifications } });
     };
     //제보 상세보기시 조회여부 변경 시간확인 
-    const report_update =async() =>{
-        report_id=notification.report_id
-        try {
-            const response = await axios.post('http://localhost:5000/report_detail', {
-                report_id:report_id 
+    // const report_update =async() =>{
+       
+    //     try {
+    //         const response = await axios.post('http://localhost:5000/report_detail', {
+    //             report_id:report_id 
         
-            });
+    //         });
     
-            console.log('report update successfully:', response.data);
-            return response.data;
-        } catch (error) {
-            console.error('Error update:', error);
-            throw error;
-        }
+    //         console.log('report update successfully:', response.data);
+    //         return response.data;
+    //     } catch (error) {
+    //         console.error('Error update:', error);
+    //         throw error;
+    //     }
 
-    };
+    // };
    
     return (
         <div className="modal">
@@ -60,7 +60,7 @@ const NevModal = ({ onClose }) => {
                 {notifications.map(notification => (
                     <div key={notification.id} className="notification">
                         <div className="notification-header"><b>제보 알림</b></div>
-                        <div className="notification-content" onClick={() => {showDetail(notification); report_update();}}>
+                        <div className="notification-content" onClick={() => {showDetail(notification); }}>
                             {notification.POSTER_IDX}번째 포스터에대한 제보입니다.
                         </div>
                     </div>
