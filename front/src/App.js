@@ -12,8 +12,6 @@ import Adminmanage from './Page/Adminmanage/Adminmanage';
 import Admincctv from './Page/Admincctv/Admincctv';
 import Adminmissing from './Page/Adminmissing/Adminmissing';
 import ReportNotificationPage from './Page/NotificationPage/ReportNotificationPage';
-import UserDelete from './Page/UserDelete/UserDelete';
-
 
 /* Test용 Components */
 import KakaoMap from './Components/Map/KakaoMap';
@@ -22,6 +20,7 @@ import Nevbar from './Components/NevBar/NevBar';
 import KakaoLogin from './Components/KakaoLogin/KakaoLogin';
 import Card from './Components/Cards/Card/Card';
 import OpenAI from './Components/OpenAI/OpenAI';
+import ViewCCTVPage from './Page/ViewCCTVPage/ViewCCTVpage';
 
 
 function App() {
@@ -41,7 +40,7 @@ function App() {
           <Route path="/Admincctv" element={<Admincctv />} />
           <Route path="/Adminmissing" element={<Adminmissing />} />
           <Route path="/ReportNotificationPage" element={<ReportNotificationPage />} />
-          <Route path='/UserDelete' element={<UserDelete />}/>
+          <Route path="/ViewCCTVPage/:cctvId" element={<ViewCCTVPage />} />
 
           {/* Test용 Components */}
           <Route path="/Map" element={<KakaoMap />} />

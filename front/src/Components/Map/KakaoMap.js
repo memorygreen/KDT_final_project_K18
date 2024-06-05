@@ -36,6 +36,9 @@ const KakaoMap = () => {
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
 
+    
+    console.log("디버그(selectedMarker) : ", selectedMarker); //자영(2406605) 선택된 마커(CCTV) 내용 확인
+
     return (
         <Map
             className='KakaoMap'
@@ -75,19 +78,24 @@ const KakaoMap = () => {
                             <div className="body">
                                 <div className="desc">
                                     <div className="ellipsis">
+                                        
                                         {`위치 : ${selectedMarker.CCTV_LOAD_ADDRESS}`}
                                         <br />
                                         {`위도: ${selectedMarker.CCTV_LAT}, 경도: ${selectedMarker.CCTV_LNG}`}
                                     </div>
                                     <div>
+                                        {/**자영(240605) 추가 CCTv 상세보기 페이지로 이동 */}
                                         <a
-                                            href="https://www.kakaocorp.com/main"
+                                            href={`/ViewCCTVPage/${selectedMarker.CCTV_IDX}`}
                                             target="_blank"
                                             className="link"
                                             rel="noreferrer"
                                         >
-                                            홈페이지
+                                            CCTV 상세보기
                                         </a>
+
+                                        
+                                        
                                     </div>
                                 </div>
                             </div>

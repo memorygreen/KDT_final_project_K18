@@ -1,18 +1,21 @@
 import React from 'react';
 import NevBar from '../../Components/NevBar/NevBar';
-import SearchMissing from '../../Components/SearchMissing/SearchMissing'
-const SearchMissingPage = () => {
+import ViewCCTV from '../../Components/ViewCCTV/ViewCCTV';
+
+// 자영 (240605) CCTV 상세보기 페이지 
+const ViewCCTVPage = () => {
+
     return (
 
         <div className="Nev-Card">
             <header className='nevibar_card'> <NevBar /></header>
             
             <div className='Main_start'>
-                    <h1>SearchMissingPage</h1>
+                    <h1>ViewCCTVPage</h1>
             </div>
             
             <div className='Main_card' >
-                <SearchMissing />
+               <ViewCCTV />
             </div>
         </div>
         /** */
@@ -23,4 +26,4 @@ const SearchMissingPage = () => {
     );
 };
 
-export default SearchMissingPage;
+export default ViewCCTVPage;
