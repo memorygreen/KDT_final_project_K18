@@ -5,19 +5,21 @@ const SearchMissingPage = () => {
     return (
 
         <div className="Nev-Card">
-            <NevBar />
+            <header className='nevibar_card'> <NevBar /></header>
             
-            <div>
-                <h1>SearchMissingPage</h1>
+            <div className='Main_start'>
+                    <h1>SearchMissingPage</h1>
             </div>
             
-            <div>
-                <h1>이밑에는 컴포넌트</h1>
-                <SearchMissing />    
-                <h1>이 위까지가 컴포넌트</h1>
+            <div className='Main_card' >
+                <SearchMissing />
             </div>
-
         </div>
+        /** */
+
+
+
+        
     );
 };
 

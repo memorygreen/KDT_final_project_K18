@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, {  useState } from 'react';
+=======
+import React, { useState } from 'react';
+>>>>>>> 1ad8fcd4c2b4a496f4ef896b9c6f392406611683
 import { useLocation } from 'react-router-dom';
 import NevBar from '../../Components/NevBar/NevBar';
 import axios from 'axios';

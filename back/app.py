@@ -13,6 +13,8 @@ from Adminmanage import Adminmanage_bp
 from Admincctv import Admincctv_bp
 from Adminmissing import Adminmissing_bp
 from searchMissing import search_missing_bp
+from UserDelete import UserDelete_bp
+from getCCTV import get_CCTV_bp
 
 # 환경 변수 로드
 load_dotenv()
@@ -31,8 +33,9 @@ app.register_blueprint(Admin_bp)
 app.register_blueprint(Adminmanage_bp)
 app.register_blueprint(Admincctv_bp)
 app.register_blueprint(Adminmissing_bp)
-app.register_blueprint(search_missing_bp)
-
+app.register_blueprint(search_missing_bp)  # 자영 실종자 검색 기능 블루프린트 등록
+app.register_blueprint(UserDelete_bp)
+app.register_blueprint(get_CCTV_bp) # 자영(240605) CCTV 상세보기 기능 블루프린트 등록
 
 
 if __name__ == '__main__':

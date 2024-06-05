@@ -20,6 +20,7 @@ import Nevbar from './Components/NevBar/NevBar';
 import KakaoLogin from './Components/KakaoLogin/KakaoLogin';
 import Card from './Components/Cards/Card/Card';
 import OpenAI from './Components/OpenAI/OpenAI';
+import ViewCCTVPage from './Page/ViewCCTVPage/ViewCCTVpage';
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
           <Route path="/Admincctv" element={<Admincctv />} />
           <Route path="/Adminmissing" element={<Adminmissing />} />
           <Route path="/ReportNotificationPage" element={<ReportNotificationPage />} />
+          <Route path="/ViewCCTVPage/:cctvId" element={<ViewCCTVPage />} />
 
           {/* Test용 Components */}
           <Route path="/Map" element={<KakaoMap />} />
