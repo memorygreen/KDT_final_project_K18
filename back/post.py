@@ -156,9 +156,7 @@ def create_poster():
         if not user_id:
             return jsonify({'error': 'User is not logged in'}), 401
 
-        poster_img_path = request.json.get('POSTER_IMG_PATH')
-        if not poster_img_path:
-            return jsonify({'error': 'POSTER_IMG_PATH is required'}), 400
+        
 
         db = db_con()
         cursor = db.cursor()
@@ -172,12 +170,13 @@ def create_poster():
         """
         cursor.execute(sql_user_missing, (user_id,))
         missing = cursor.fetchone()
-
+        
         if not missing:
             return jsonify({'error': 'No missing person information found for the logged-in user'}), 404
 
         missing_idx = missing[0]
-
+        poster_img_path=missing[5]
+        print(poster_img_path)
         # 포스터 생성 및 삽입
         sql_insert_poster = """
             INSERT INTO TB_POSTER (
@@ -188,7 +187,7 @@ def create_poster():
         cursor.execute(sql_insert_poster, (missing_idx, poster_img_path))
 
         scheduler.add_job(disable_poster, 'date', run_date=datetime.now() + timedelta(minutes=1),
-                          args=[user_id, missing_idx]) #minutes=1 을 
+                          args=[user_id, missing_idx]) # 
 
         db.commit()
 

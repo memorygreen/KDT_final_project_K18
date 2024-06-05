@@ -34,24 +34,19 @@ const NevModal = ({ onClose }) => {
     //제보 상세보기
     const showDetail = (notification) => {
         navigate('/ReportNotificationPage', { state: { notification, notifications } });
-    };
-    //제보 상세보기시 조회여부 변경 시간확인 
-    // const report_update =async() =>{
-       
-    //     try {
-    //         const response = await axios.post('http://localhost:5000/report_detail', {
-    //             report_id:report_id 
         
-    //         });
-    
-    //         console.log('report update successfully:', response.data);
-    //         return response.data;
-    //     } catch (error) {
-    //         console.error('Error update:', error);
-    //         throw error;
-    //     }
-
-    // };
+        // 모달을 먼저 표시한 후 업데이트 요청을 비동기적으로 보냅니다.
+        axios.post('http://localhost:5000/report_detail', {
+            report_id: notification.REPORT_ID
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).catch(error => {
+            console.error('Error updating report detail:', error);
+        });
+    };
+  
    
     return (
         <div className="modal">
@@ -59,9 +54,9 @@ const NevModal = ({ onClose }) => {
             <div className="notification-container">
                 {notifications.map(notification => (
                     <div key={notification.id} className="notification">
-                        <div className="notification-header"><b>제보 알림</b></div>
-                        <div className="notification-content" onClick={() => {showDetail(notification); }}>
-                            {notification.POSTER_IDX}번째 포스터에대한 제보입니다.
+                        <div className="notification-header"><b>{notification.POSTER_IDX} 포스터 제보 알림</b></div>
+                        <div className="notification-content" onClick={() => showDetail(notification)}>
+                        {notification.REPORT_TIME}에 온 제보입니다
                         </div>
                     </div>
                 ))}
