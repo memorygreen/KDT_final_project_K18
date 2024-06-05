@@ -13,6 +13,7 @@ from Adminmanage import Adminmanage_bp
 from Admincctv import Admincctv_bp
 from Adminmissing import Adminmissing_bp
 from searchMissing import search_missing_bp
+from UserDelete import UserDelete_bp
 
 # 환경 변수 로드
 load_dotenv()
@@ -32,6 +33,7 @@ app.register_blueprint(Adminmanage_bp)
 app.register_blueprint(Admincctv_bp)
 app.register_blueprint(Adminmissing_bp)
 app.register_blueprint(search_missing_bp)
+app.register_blueprint(UserDelete_bp)
 
 
 
