@@ -106,3 +106,4 @@ def kakao_login():
     finally:
         cursor.close()
         conn.close()
+    
