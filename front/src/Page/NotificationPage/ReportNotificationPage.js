@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import NevBar from '../../Components/NevBar/NevBar';
-
+import axios from 'axios';
 
 const ReportNotificationPage = () => {
     const location = useLocation();
@@ -10,6 +10,16 @@ const ReportNotificationPage = () => {
 
     const showDetail = (notification) => {
         setSelectedNotification(notification);
+
+        axios.post('http://localhost:5000/report_detail', {
+            report_id: notification.REPORT_ID
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).catch(error => {
+            console.error('Error updating report detail:', error);
+        });
     };
 
     const handleCloseModal = () => {
@@ -33,10 +43,10 @@ const ReportNotificationPage = () => {
             {selectedNotification && (
                 <div className="modal-content">
                     <div>
-                        <p>REPORT_TIME: {selectedNotification.REPORT_TIME}</p>
-                        <p>REPORT_SIGHTING_TIME: {selectedNotification.REPORT_SIGHTING_TIME}</p>
-                        <p>REPORT_SIGHTING_PLACE: {selectedNotification.REPORT_SIGHTING_PLACE}</p>
-                        <p>REPORT_ETC: {selectedNotification.REPORT_ETC}</p>
+                        <p>제보 시간: {selectedNotification.REPORT_TIME}</p>
+                        <p>발견 시간: {selectedNotification.REPORT_SIGHTING_TIME}</p>
+                        <p>발견 장소: {selectedNotification.REPORT_SIGHTING_PLACE}</p>
+                        <p>특이사항: {selectedNotification.REPORT_ETC}</p>
                     </div>
                     <button onClick={handleCloseModal}>Close</button>
                 </div>

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import MissingKakaoMap from './MissingKakaoMap';
 import SearchBar from './SearchBar';
 import UploadMissingImg from './UploadMissingImg';
-
+import { createPoster } from '../Poster/CreatePost';
 
 const SearchMissing = () => {
     const [selectedTxt, setSelectTxt] = useState('');// 인상착의,  상의, 하의, 소지품 
@@ -18,7 +18,7 @@ const SearchMissing = () => {
     const [missingLocationLat, setMissingLocationLat] = useState(''); //마지막 발견 장소 위도
     const [missingLocationLng, setMissingLocationKLng] = useState(''); //마지막 발견 장소 경도
     const [missingImgUrl, setMissingImgUrl] = useState(''); //마지막 발견 장소 경도
-
+    
 
     // 인상착의 변수
     const [selectedTop, setSelectedTop] = useState('');
@@ -110,19 +110,17 @@ const SearchMissing = () => {
         { id: 'female', label: '남성' }
     ];
 
+    // 포스터 생성기능
+    const [posterGenerating,setPosterGenerating] = useState(false);
+   
 
-    // 포스터 생성 유무 
-    const [posterGenerating, setPosterGenerating] = useState(false);
-
-    const handlePosterToggle = () => {
-        setPosterGenerating(!posterGenerating);
-    };
-
+    
 
     
 
     const handle_submit = async (event) => {
         event.preventDefault();
+       
         if (missingImg) {
             try {
                 setMissingImgUrl(await UploadMissingImg(missingImg));
@@ -174,8 +172,23 @@ const SearchMissing = () => {
             if (!missingImgUrl) {
                 console.error('실종자 이미지 url을 업로드해주세요.');
             }
-        };
-    }
+            
+        
+  }
+                if (posterGenerating) {
+                    try {
+                        setTimeout(async () => {
+                             await createPoster(); // createPoster 함수 실행
+                            }, 5000);  //db값 저장되고 실행하도록 시간텀을 줌
+                        } catch (error) {
+                    // createPoster 함수 실행 중 오류가 발생한 경우 처리
+                        console.error('Error creating poster:', error);
+                            }
+                    }
+
+ 
+
+    };
    
     // // 인적사항 확인
     // console.log('프론트에서 넘어오는지 확인')
@@ -349,7 +362,7 @@ const SearchMissing = () => {
                             className='poster_check_box'
                             aria-label="포스터 생성 유무"
                             checked={posterGenerating} // 이 상태는 useState를 사용하여 관리해야 합니다.
-                            onChange={handlePosterToggle} // 적절한 이벤트 핸들러 함수로 변경
+                            onChange={(event) => setPosterGenerating(event.target.checked)}
                         />
                     </div>
                 </div>
