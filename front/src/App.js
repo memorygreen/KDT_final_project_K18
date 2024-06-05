@@ -42,12 +42,10 @@ function App() {
           <Route path="/Admincctv" element={<Admincctv />} />
           <Route path="/Adminmissing" element={<Adminmissing />} />
           <Route path="/ReportNotificationPage" element={<ReportNotificationPage />} />
-<<<<<<< HEAD
           <Route path='/UserDelete' element={<UserDelete />}/>
           <Route path="/UserUpdate" element={<UserUpdate />} /> {/* UserUpdate 컴포넌트를 호출하는 경로 추가 */}
-=======
           <Route path="/ViewCCTVPage/:cctvId" element={<ViewCCTVPage />} />
->>>>>>> e44b1e9351c8508048adb6bfc3fed8fcd5557a95
+
 
           {/* Test용 Components */}
           <Route path="/Map" element={<KakaoMap />} />
