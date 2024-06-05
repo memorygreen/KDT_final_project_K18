@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './UserUpdate.css';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 function UserUpdate() {
@@ -14,7 +14,7 @@ function UserUpdate() {
 
   useEffect(() => {
     // 초기 사용자 정보 가져오기
-    axios.get('/api/users/1')
+    axios.get('http://localhost:5000/api/users/1')
       .then(response => {
         const userData = response.data;
         setUser(userData);
@@ -28,7 +28,7 @@ function UserUpdate() {
 
   const updateUser = () => {
     // 사용자 정보 업데이트
-    axios.put(`/api/users/${user.id}`, { name, dob, gender, phone })
+    axios.put(`http://localhost:5000/api/users/${user.id}`, { name, dob, gender, phone })
       .then(response => setMessage(response.data.message))
       .catch(error => console.error('Error updating user:', error));
   };
@@ -39,7 +39,7 @@ function UserUpdate() {
       setMessage('Passwords do not match');
       return;
     }
-    axios.put(`/api/users/${user.id}`, { password })
+    axios.put(`http://localhost:5000/api/users/${user.id}`, { password })
       .then(response => setMessage(response.data.message))
       .catch(error => console.error('Error updating password:', error));
   };
@@ -85,6 +85,7 @@ function UserUpdate() {
         <button type="button" onClick={updateUser}>Update User Info</button>
         {message && <p className="error-message">{message}</p>}
       </form>
+      <Link to="/" className="Link">Go back to Home</Link>
     </div>
   );
 }
