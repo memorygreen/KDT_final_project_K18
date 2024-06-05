@@ -14,7 +14,7 @@ function UserUpdate() {
 
   useEffect(() => {
     // 초기 사용자 정보 가져오기
-    axios.get('http://localhost:5000/api/users/1')
+    axios.get('/api/users/1')
       .then(response => {
         const userData = response.data;
         setUser(userData);
@@ -25,6 +25,7 @@ function UserUpdate() {
       })
       .catch(error => console.error('Error fetching user:', error));
   }, []);
+
 
   const updateUser = () => {
     // 사용자 정보 업데이트
