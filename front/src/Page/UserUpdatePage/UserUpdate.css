@@ -1,6 +1,7 @@
+/* 기존 스타일 유지 */
 .container {
     max-width: 600px;
-    margin: 0 auto;
+    margin: 0 auto; /* 중앙 정렬을 위해 왼쪽과 오른쪽의 margin을 자동으로 설정 */
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -11,13 +12,17 @@ h1 {
     text-align: center;
 }
 
+/* form 스타일 수정 */
 form {
     display: flex;
     flex-direction: column;
+    align-items: center; /* 추가: 폼 요소들을 중앙으로 정렬 */
 }
 
 label {
     margin-bottom: 5px;
+    width: 100%; /* 추가: label의 넓이를 100%로 설정하여 중앙 정렬 유지 */
+    text-align: left; /* 추가: label의 텍스트를 왼쪽 정렬 */
 }
 
 input[type="text"],
@@ -28,6 +33,8 @@ select {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    width: 100%; /* 추가: input과 select 요소의 넓이를 100%로 설정 */
+    box-sizing: border-box; /* 추가: padding과 border를 포함하여 width를 계산 */
 }
 
 button {
@@ -38,6 +45,8 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    width: 100%; /* 추가: 버튼의 넓이를 100%로 설정 */
+    box-sizing: border-box; /* 추가: padding과 border를 포함하여 width를 계산 */
 }
 
 button:hover {
@@ -47,6 +56,7 @@ button:hover {
 .error-message {
     color: red;
     margin-top: 5px;
+    text-align: center; /* 추가: 에러 메시지를 중앙 정렬 */
 }
 
 span {

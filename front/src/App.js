@@ -12,7 +12,7 @@ import Adminmanage from './Page/Adminmanage/Adminmanage';
 import Admincctv from './Page/Admincctv/Admincctv';
 import Adminmissing from './Page/Adminmissing/Adminmissing';
 import ReportNotificationPage from './Page/NotificationPage/ReportNotificationPage';
-import UserDelete from './Page/UserDelete/UserDelete';
+// import UserDelete from './Page/UserDelete/UserDelete';
 import UserUpdate from './Page/UserUpdatePage/UserUpdate'; // UserUpdate 컴포넌트 파일 경로 수정
 
 /* Test용 Components */
@@ -42,7 +42,7 @@ function App() {
           <Route path="/Admincctv" element={<Admincctv />} />
           <Route path="/Adminmissing" element={<Adminmissing />} />
           <Route path="/ReportNotificationPage" element={<ReportNotificationPage />} />
-          <Route path='/UserDelete' element={<UserDelete />}/>
+          {/* <Route path='/UserDelete' element={<UserDelete />}/> */}
           <Route path="/UserUpdate" element={<UserUpdate />} /> {/* UserUpdate 컴포넌트를 호출하는 경로 추가 */}
           <Route path="/ViewCCTVPage/:cctvId" element={<ViewCCTVPage />} />
 

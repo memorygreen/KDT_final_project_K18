@@ -28,21 +28,29 @@ const KakaoLogin = () => {
             // 로그인 성공 시 메인 페이지로 이동
             sessionStorage.setItem('userId', user.id);
             navigate('/');
-          } else {
-            // 비회원일 경우 confirm 창 출력
-            const proceedToSignup = window.confirm("회원정보가 존재하지 않습니다. 가입하시겠습니까?");
-            if (proceedToSignup) {
-              navigate('/signup'); // 회원가입 페이지로 이동
+          } else if (loginResponse.data.signup) {
+            // 회원가입이 필요한 경우 확인을 요청하는 창 띄우기
+            const shouldSignUp = window.confirm('추가적인 정보 입력이 필요합니다. 회원가입을 진행하시겠습니까?');
+            if (shouldSignUp) {
+              sessionStorage.setItem('userId', user.id);
+              navigate('/signup');
             } else {
-              navigate('/login'); // 로그인 페이지로 이동
+              navigate('/login');
             }
+          } else {
+            // 기타 오류 처리
+            console.error('Error during login:', loginResponse.data.message);
           }
         }
       } catch (e) {
         console.error(e);
       }
     };
-    fetchToken();
+    
+    // 현재 URL에 코드가 포함되어 있는 경우에만 fetchToken 함수 실행
+    if (code) {
+      fetchToken();
+    }
   }, [location.search, navigate]);
 
   return null; // 해당 컴포넌트는 화면에 아무것도 렌더링하지 않으므로 null 반환
