@@ -6,7 +6,10 @@ import SearchBar from './SearchBar';
 import UploadMissingImg from './UploadMissingImg';
 import { createPoster } from '../Poster/CreatePost';
 
-const SearchMissing = () => {
+const SearchMissing = ({ initialData }) => {
+                    
+    const sessionId = sessionStorage.getItem('userId') // session에 있는 id 값 
+
     const [selectedTxt, setSelectTxt] = useState('');// 인상착의,  상의, 하의, 소지품 
     const [selectBox, setSelectBox] = useState(''); // 인상착의, 상의, 하의, 소지품 구분에따라 나오는 박스
 
@@ -37,8 +40,7 @@ const SearchMissing = () => {
     const [selectedBottomKor, setSelectedBottomKor] = useState('');
     const [selectedBottomColorKor, setSelectedBottomColorKor] = useState('');
     const [selectedBelongingsKor, setSelectedBelongingsKor] = useState('');
-
-
+    
     /** 자영(240603):주소 받아오는 함수 */
     const getMissingLocation = (address) => {
         console.log('정상적으로 넘어왔습니다. getMissingLocation(address)', address);
@@ -134,7 +136,9 @@ const SearchMissing = () => {
             if (missingImgUrl) {
                 // 백으로 보내기
                 // POST request to submit form data
-                axios.post('/SearchMissing', {
+                axios.post('/SearchMissing', {                    
+                    session_id : sessionId,
+
                     missing_name: missingName,
                     missing_gender: missingGender,
                     missing_age: missingAge,
@@ -185,9 +189,6 @@ const SearchMissing = () => {
                         console.error('Error creating poster:', error);
                             }
                     }
-
- 
-
     };
    
     // // 인적사항 확인
@@ -280,6 +281,8 @@ const SearchMissing = () => {
         setSelectBox(selectedTxt.item);
     }, [selectedTxt]);
 
+
+    // 인적사항 구분
     const missing_info_box = () => {
         return (
             <div className="search_missing_cate_group">
@@ -350,6 +353,21 @@ const SearchMissing = () => {
                         onChange={handleImgChange}
                     />
                     <label className="input-group-text" htmlFor="missing_img">업로드</label>
+                    {missingImg && (
+                        <div>
+                            <div className="uploaded-file-name">업로드된 파일: {missingImg.name}</div>
+                            {missingImg instanceof File && (
+                                <img src={URL.createObjectURL(missingImg)} alt="Uploaded" style={{ width: '100px', height: '100px' }} />
+                            )}
+                        </div>
+                    )}
+
+
+
+
+
+
+                    
 
                 </div>
 

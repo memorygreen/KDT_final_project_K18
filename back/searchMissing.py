@@ -8,6 +8,10 @@ def search_missing():
     try:
         data = request.json  # JSON 형식으로 데이터를 받음
         print(data)
+        
+        #세션에 담긴 id 
+        session_id = data.get('session_id')
+        
         # 인적사항
         missing_name = data.get('missing_name')
         missing_gender = data.get('missing_gender')
@@ -30,7 +34,7 @@ def search_missing():
         missing_location_lng = data.get('missing_location_lng')
         
         
-        image_url = data.get('missing_img') # null일듯
+        missing_img = data.get('missing_img')
         
         selected_top = data.get('selected_top')
         selected_top_color = data.get('selected_top_color')
@@ -58,7 +62,7 @@ def search_missing():
         print(f"missing_location: {missing_location}")
         print(f"missing_location_lat: {missing_location_lat}")
         print(f"missing_location_lng: {missing_location_lng}")
-        print(f"image_url: {image_url}")
+        print(f"image_url: {missing_img}")
         
         print(f"selected_top: {selected_top}")
         print(f"selected_top_color: {selected_top_color}")
@@ -96,7 +100,7 @@ def search_missing():
                                 MISSING_IMG, MISSING_LOCATION_LAT, MISSING_LOCATION_LON, MISSING_LOCATION)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """
-        cursor.execute(sql_missing, ('test1', missing_name, missing_gender, missing_age_cate, image_url, missing_location_lat, missing_location_lng, missing_location))
+        cursor.execute(sql_missing, (session_id, missing_name, missing_gender, missing_age_cate, missing_img, missing_location_lat, missing_location_lng, missing_location))
 
         missing_id = cursor.lastrowid
         print('확인용)실종자 테이블 삽입 후')
@@ -132,6 +136,8 @@ def search_missing():
         response = {
             'status': 'success',
             'data': {
+                'session_id' : session_id,
+                
                 'missing_name': missing_name,
                 'missing_age': missing_age_cate,
                 'missing_gender': missing_gender,
@@ -140,7 +146,7 @@ def search_missing():
                 'missing_location_lat': missing_location_lat,
                 'missing_location_lng': missing_location_lng,
                 
-                'image_url': image_url,
+                'image_url': missing_img,
                 
                 'selected_top': selected_top,
                 'selected_top_color': selected_top_color,
