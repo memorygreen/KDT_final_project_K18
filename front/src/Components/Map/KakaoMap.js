@@ -87,7 +87,6 @@ const KakaoMap = () => {
                                         {/**자영(240605) 추가 CCTv 상세보기 페이지로 이동 */}
                                         <a
                                             href={`/ViewCCTVPage/${selectedMarker.CCTV_IDX}`}
-                                            target="_blank"
                                             className="link"
                                             rel="noreferrer"
                                         >

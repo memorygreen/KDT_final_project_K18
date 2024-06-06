@@ -12,7 +12,7 @@ const SearchMissingPage = () => {
             </div>
             
             <div className='Main_card' >
-                <SearchMissing />
+                <SearchMissing initialData={null}/>
             </div>
         </div>
         /** */
