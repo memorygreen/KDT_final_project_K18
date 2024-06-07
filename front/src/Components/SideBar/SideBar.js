@@ -36,7 +36,7 @@ const Sidebar = () => {
     
     
 
-    const handleDashboardClick = async () => {
+    const handleNotificationsClick = async () => {
         const userId = sessionStorage.getItem('userId');
         if (!userId) {
             console.error('User is not logged in');
@@ -118,7 +118,7 @@ const Sidebar = () => {
                         </a>
                     </li>
                     <li>
-                        <a href="#notifications" title="Notifications" className="sidebar_tooltip" onClick={handleDashboardClick}>
+                        <a href="#notifications" title="Notifications" className="sidebar_tooltip" onClick={handleNotificationsClick}>
                             <img src={Notifications} alt="logout" width="24" height="24" />
                             <span className="link hide">Notifications</span>
                             <span className="tooltip__content">Notifications</span>

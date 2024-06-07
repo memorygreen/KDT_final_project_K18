@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Ck } from './Ck';
-import { reportCk } from './ReportCk';
+
 const NotificationModal = ({ onClose }) => {
     const [notifications, setNotifications] = useState([]);
     const [cctvAddresses, setCctvAddresses] = useState({});
@@ -18,20 +17,32 @@ const NotificationModal = ({ onClose }) => {
                 }
 
                 const [captureResponse, reportResponse] = await Promise.all([
-                    Ck(userId),
-                    reportCk(userId)
+                    axios.post('http://localhost:5000/my_capture', {
+                        user_id: userId
+                    }, {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }),
+                    axios.post('http://localhost:5000/my_report', {
+                        user_id: userId
+                    }, {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
                 ]);
 
                 const combinedNotifications = [
-                    ...(captureResponse.data||[]).map(notification => ({ ...notification, type: 'capture' })),
-                    ...(reportResponse.data||[]).map(notification => ({ ...notification, type: 'report' }))
+                    ...captureResponse.data.map(notification => ({ ...notification, type: 'capture' })),
+                    ...reportResponse.data.map(notification => ({ ...notification, type: 'report' }))
                 ];
 
                 combinedNotifications.sort((a, b) => new Date(b.CAPTURE_FIRST_TIME || b.REPORT_TIME) - new Date(a.CAPTURE_FIRST_TIME || a.REPORT_TIME));
 
                 setNotifications(combinedNotifications);
 
-                for (const notification of captureResponse || [] ) {
+                for (const notification of captureResponse.data) {
                     const cctvResponse = await axios.post('http://localhost:5000/capture_address', {
                         cctv_idx: notification.CCTV_IDX
                     }, {
