@@ -191,7 +191,7 @@ def my_capture():
 
 # 캡처 조회  및 확인
 @report_bp.route('/capture_detail',methods=['POST'])
-def report_detail():
+def capture_detail():
     try:
         capture_idx = request.json.get('capture_idx')
         if not capture_idx:

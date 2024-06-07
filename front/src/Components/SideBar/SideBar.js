@@ -7,15 +7,11 @@ import Settings from './assets/Settings.png'
 import Dashboard from './assets/Dashboard.png'
 import profile from './assets/profile.jpg'
 import logo from './assets/logo.png'
-import {reportCk} from '../../Components/ReportCk/ReportCk';
-import Modal from '../ReportCk/ReportModal';
-import { Ck } from '../ReportCk/Ck';
-import CkModal from '../ReportCk/CkModal';
+import NotificationModal from '../ReportCk/NotificationModal';
 const Sidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(true); // 로그인 상태 관리
-    const [isReportModalOpen, setIsReportModalOpen] = useState(false);
-    const [isCkModalOpen, setIsCkModalOpen] = useState(false);
+    const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
     const sidebarRef = useRef(null);
     const navigate = useNavigate(); // 네비게이션 함수
 
@@ -32,40 +28,25 @@ const Sidebar = () => {
         setIsLoggedIn(false); // 로그인 상태 업데이트
         navigate('/Login'); // 로그인 페이지로 이동
     };
-    const toggleReportModal = () => {
-        setIsReportModalOpen(!isReportModalOpen);
-    };
-
-    const toggleCkModal = () => {
-        setIsCkModalOpen(!isCkModalOpen);
+   
+    const toggleNotificationModal = () => {
+        setIsNotificationModalOpen(!isNotificationModalOpen);
     };
     
-    const handleDocsClick = async() => {
-        const userId=sessionStorage.getItem('userId');
+    
+    
+
+    const handleDashboardClick = async () => {
+        const userId = sessionStorage.getItem('userId');
         if (!userId) {
             console.error('User is not logged in');
             return;
         }
         try {
-            await reportCk(userId);
             // 모달 열기
-            toggleReportModal();
+            toggleNotificationModal();
         } catch (error) {
-            console.error('Error handling docs click:', error);
-        }
-    };
-    const handleClick = async() => {
-        const userId=sessionStorage.getItem('userId');
-        if (!userId) {
-            console.error('User is not logged in');
-            return;
-        }
-        try {
-            await Ck(userId);
-            // 모달 열기
-            toggleCkModal();
-        } catch (error) {
-            console.error('Error handling docs click:', error);
+            console.error('Error handling dashboard click:', error);
         }
     };
     return (<div className="all_sidebar">
@@ -123,21 +104,21 @@ const Sidebar = () => {
             <div className="sidebar-links">
                 <ul>
                     <li>
-                        <a href="#dashboard" title="Dashboard" className="sidebar_tooltip">
+                        <a href="#dashboard" title="Dashboard" className="sidebar_tooltip" >
                             <img src={Dashboard} alt="logout" width="24" height="24" />
                             <span className="link hide">Dashboard</span>
                             <span className="tooltip__content">Dashboard</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#settings" title="Settings" className="sidebar_tooltip" onClick={handleClick}>
+                        <a href="#settings" title="Settings" className="sidebar_tooltip" >
                             <img src={Settings} alt="logout" width="24" height="24" />
                             <span className="link hide">Settings</span>
                             <span className="tooltip__content">Settings</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#notifications" title="Notifications" className="sidebar_tooltip" onClick={handleDocsClick}>
+                        <a href="#notifications" title="Notifications" className="sidebar_tooltip" onClick={handleDashboardClick}>
                             <img src={Notifications} alt="logout" width="24" height="24" />
                             <span className="link hide">Notifications</span>
                             <span className="tooltip__content">Notifications</span>
@@ -154,8 +135,7 @@ const Sidebar = () => {
                     <div className="user-name">Willy</div>
                     <div className="email">Where's Willy?</div>
                 </div>
-                {isReportModalOpen && <Modal onClose={toggleReportModal} />} {/* ReportModal 표시 */}
-                    {isCkModalOpen && <CkModal onClose={toggleCkModal} />} {/* CkModal 표시 */}
+                    {isNotificationModalOpen && <NotificationModal onClose={toggleNotificationModal} />}
                 <button onClick={handleLogout} className='logout'> {/* Link 대신 button 사용 */}
                     <img src={logoutIcon} alt="logout" width="40" height="40" />
                 </button>

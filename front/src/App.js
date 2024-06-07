@@ -12,6 +12,7 @@ import Adminmanage from './Page/Adminmanage/Adminmanage';
 import Admincctv from './Page/Admincctv/Admincctv';
 import Adminmissing from './Page/Adminmissing/Adminmissing';
 import ReportNotificationPage from './Page/NotificationPage/ReportNotificationPage';
+import CaptureNotificationPage from './Page/NotificationPage/CaptureNotificationPage';
 
 /* Test용 Components */
 import KakaoMap from './Components/Map/KakaoMap';
@@ -47,6 +48,7 @@ function App() {
           <Route path="/MyPage" element={<MyPage/>} />
           <Route path="/ViewMissingListPage/:userId" element={<ViewMissingListPage />} />
           <Route path="/SearchMissingUpdatePage/:missingIdx" element={<SearchMissingUpdatePage />} />
+          <Route path="/CaptureNotificationPage" element={<CaptureNotificationPage/>} />
           
           
 
