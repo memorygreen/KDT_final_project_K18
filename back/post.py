@@ -176,7 +176,8 @@ def create_poster():
 
         missing_idx = missing[0]
         poster_img_path=missing[5]
-        print(poster_img_path)
+        print(missing[0])
+        print(missing[5])
         # 포스터 생성 및 삽입
         sql_insert_poster = """
             INSERT INTO TB_POSTER (

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './NevBar.css'; // Make sure to create and style this CSS file accordingly
-import logo from "./assets/logo.png"
+import logo from "./assets/logo.jpg"
 import { Link, useNavigate } from 'react-router-dom';
 
 

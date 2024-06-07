@@ -1,6 +1,8 @@
 import bcrypt
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, Flask, session
 from db import db_con
+import os
+from dotenv import load_dotenv
 
 signup_bp = Blueprint('signup', __name__)
 
@@ -11,6 +13,17 @@ def hash_password(password):
 # 비밀번호 비교 함수
 def check_password(hashed_password, password):
     return bcrypt.checkpw(password.encode('utf-8'), hashed_password)
+
+app = Flask(__name__)
+
+# .env 파일에서 환경 변수 로드
+load_dotenv()
+
+# SECRET_KEY 가져오기
+SECRET_KEY = os.getenv('SECRET_KEY')
+
+# Flask 애플리케이션에 SECRET_KEY 설정
+app.secret_key = SECRET_KEY
 
 @signup_bp.route('/signup', methods=['POST'])
 def signup():
@@ -46,19 +59,23 @@ def signup():
             """
             cursor.execute(sql, (user_id, hashed_password, user_name, user_brt_dt, user_gender, user_phone))
             connection.commit()
+
+            # 사용자 정보의 id값을 세션에 저장 후 회원가입 페이지로 이동
+            session['user_id'] = user_id
+
+            # 회원가입 성공 응답
+            return jsonify({'message': 'User registered successfully', 'signup': True}), 201
     except Exception as e:
+        # 오류 메시지를 반환
         return jsonify({'message': str(e)}), 500
     finally:
         connection.close()
-
-    return jsonify({'message': 'User registered successfully'}), 201
 
 @signup_bp.route('/login', methods=['POST'])
 def login():
     data = request.json
     user_id = data.get('id')
     provided_pw = data.get('password')
-    print(provided_pw)
 
     try:
         connection = db_con()
@@ -71,7 +88,6 @@ def login():
                 return jsonify({'message': 'User not found'}), 404
 
             hashed_password_from_db, user_status = user_data  # 저장된 bcrypt 해시 비밀번호와 상태 가져오기
-            print(hashed_password_from_db)
             if user_status == 'stop':
                 return jsonify({'message': 'Account is suspended'}), 403  # 계정 사용 정지
 
@@ -90,7 +106,6 @@ def login():
     finally:
         connection.close()
 
-
-@signup_bp.route('/Klogin', methods=['POST'])
-def kakaosignup():
-    return 
+if __name__ == '__main__':
+    app.register_blueprint(signup_bp)
+    app.run(debug=True)

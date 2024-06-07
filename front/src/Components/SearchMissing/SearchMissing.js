@@ -6,6 +6,11 @@ import SearchBar from './SearchBar';
 import UploadMissingImg from './UploadMissingImg';
 import { createPoster } from '../Poster/CreatePost';
 
+import avatar from "./assets/avatar.png"
+import { MissingAvatar } from './MissingAvatar';
+
+
+
 const SearchMissing = ({ initialData }) => {
                     
     const sessionId = sessionStorage.getItem('userId') // session에 있는 id 값 
@@ -105,6 +110,8 @@ const SearchMissing = ({ initialData }) => {
         { id: 'hat', label: '모자' },
         { id: 'glasses', label: '안경' },
         { id: 'acc_none', label: '해당없음' },
+        { id: 'back_pack', label: '배낭' },
+        { id: 'shoulder_bag', label: '숄더백' },
     ];
 
     const genderOptions = [
@@ -572,6 +579,19 @@ const SearchMissing = ({ initialData }) => {
 
     return (
         <div>
+            <div>
+                < MissingAvatar 
+                selectedTop ={selectedTop}
+                selectedTopColor= {selectedTopColor}
+                selectedBottom = {selectedBottom}
+                selectedBottomColor = {selectedBottomColor}
+                selectedBelongings = {selectedBelongings}
+
+                />
+            </div>
+
+
+            <div>
             <SearchBar setSelectTxt={setSelectTxt} />
 
             <button className='search_missing_submit_btn' onClick={handle_submit}>
@@ -581,6 +601,7 @@ const SearchMissing = ({ initialData }) => {
             </button>
 
             <div>{selectedComponent}</div>
+            </div>
         </div>
     );
 };

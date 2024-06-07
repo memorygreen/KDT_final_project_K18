@@ -171,3 +171,5 @@ def search_missing():
             'message': str(e)
         }
         return jsonify(response), 500
+    
+

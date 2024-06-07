@@ -12,6 +12,7 @@ const SearchMissingPage = () => {
             </div>
             
             <div className='Main_card' >
+                
                 <SearchMissing initialData={null}/>
             </div>
         </div>
