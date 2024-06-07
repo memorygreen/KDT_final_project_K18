@@ -36,7 +36,8 @@ const NevBar = () => {
             <header className="header_class">
                 <div className="menu__wrapper">
                     <div className="menu__bar">
-                        <Link to="/Mappage" className="logo_nev">
+                        
+                        <Link to="/" className="logo_nev">
                             <img src={logo} alt="logo" />
                         </Link>
                         <nav>
@@ -155,19 +156,20 @@ const NevBar = () => {
                                     </div>
                                 </li>
                                 <li>
-                                    <Link to='/'>
-                                        Developers
+                                    <Link to='/Mappage'>
+                                        Map
                                     </Link>
                                 </li>
                                 <li>
-                                    <a href="#pricing" title="Pricing">
-                                        Pricing
-                                    </a>
+                                    <Link to='/MyPage'>
+                                        MyPage
+                                    </Link>
+                                    
                                 </li>
                                 <li>
-                                    <a href="#docs" title="Docs" >
-                                        Docs
-                                    </a>
+                                    <Link to='/SearchMissingPage'>
+                                        실종자검색
+                                    </Link>
                                 </li>
                                 <li>
                                     <a href="#blog" title="Blog" > 
