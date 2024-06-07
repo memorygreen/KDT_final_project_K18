@@ -105,7 +105,7 @@ const NotificationModal = ({ onClose }) => {
                             {notification.type === 'capture' ?
                                 <>
                                     {cctvAddresses[notification.CCTV_IDX] || 'Loading address...'} 의 CCTV {notification.CCTV_IDX} 에서
-                                    <div>{notification.CAPTURE_FIRST_TIME}에 온 캡쳐 입니다.</div>
+                                    <div>{notification.CAPTURE_FIRST_TIME}에 온 캡쳐입니다.</div>
                                 </>
                                 :
                                 <div>{notification.REPORT_TIME}에 온 제보입니다</div>
