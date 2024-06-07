@@ -1,10 +1,11 @@
+// src/components/Card/Card.js
+
 import React, { useEffect, useState } from 'react';
 import './Card.css';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import Slider from 'react-slick';
 import CardModal from '../CardModal/CardModal'; // Modal 컴포넌트 임포트
 import axios from 'axios';
+import CardSlider from '../CardSlider/CardSlider'; // CardSlider 컴포넌트 임포트
+import Article from './Article'; // Article 컴포넌트 임포트
 
 const Card = () => {
     const [posters, setPosters] = useState([]);
@@ -40,23 +41,6 @@ const Card = () => {
         setSelectedArticle(null);
     };
 
-    // 개별 포스터 사진
-    const Article = ({ article }) => {
-        if (!article.POSTER_INFO.POSTER_IMG_PATH) return null; // 이미지 경로가 없으면 렌더링하지 않음
-
-        return (
-            <article onClick={(event) => handleImageClick(article, event)} className='card_art'>
-                <figure>
-                    <img src={article.POSTER_INFO.POSTER_IMG_PATH} alt="Poster" onClick={(event) => handleImageClick(article, event)} />
-                </figure>
-                <div className="article-preview">
-                    <h2>{article.MISSING_NAME}</h2>
-                    <p>{article.description}</p>
-                </div>
-            </article>
-        );
-    };
-
     // 전체 포스터 리스트
     const Articles = ({ posters }) => (
         <div className="Card_articles">
@@ -64,63 +48,17 @@ const Card = () => {
                 <Article
                     key={index}
                     article={poster}
+                    handleImageClick={handleImageClick}
                 />
             ))}
         </div>
     );
 
-    // 슬라이더 세팅값
-    const settings = {
-        dots: true,
-        speed: 500,
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        autoplay: true,
-        centerMode: true,
-        infinite: true,
-        arrows: true,
-        centerPadding: '50px',
-        autoplaySpeed: 2000,
-        swipeToSlide: true,
-        draggable: true,
-        responsive: [
-            {
-                breakpoint: 1140,
-                settings: {
-                    slidesToShow: 2,
-                    slidesToScroll: 1,
-                    centerPadding: '30px',
-                },
-            },
-            {
-                breakpoint: 750,
-                settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1,
-                    centerPadding: '30px',
-                },
-            },
-        ],
-    };
-
-    // 슬라이더 
-    const SliderComponent = ({ posters }) => (
-        <Slider {...settings}>
-            {posters.filter(poster => poster.POSTER_INFO && poster.POSTER_INFO.POSTER_IMG_PATH).map((poster, index) => (
-                <div key={index} className='Acard'>
-                    <Article
-                        article={poster}
-                    />
-                </div>
-            ))}
-        </Slider>
-    );
-
     return (
         <div className='Card_body'>
-            <div className='Slider_size'>
-                <SliderComponent posters={posters} />
-            </div>
+            {/* <div className='Slider_size'>
+                <CardSlider posters={posters} handleImageClick={handleImageClick} />
+            </div> */}
             <div className='Wanted_size'>
                 <Articles posters={posters} />
             </div>
