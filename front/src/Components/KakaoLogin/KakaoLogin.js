@@ -15,31 +15,19 @@ const KakaoLogin = () => {
         if (code) {
           const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/user/kakao/callback?code=${code}`);
           const { token, user } = response.data;
-          console.log('Token:', token);
-          console.log('User:', user);
 
           sessionStorage.setItem('token', token);
+          sessionStorage.setItem('userId', user.id);
+          sessionStorage.setItem('userName', user.name);
 
-          const loginResponse = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/user/kakao/login`, {
-            id: user.id
-          });
-
-          if (loginResponse.data.success) {
-            // 로그인 성공 시 메인 페이지로 이동
-            sessionStorage.setItem('userId', user.id);
-            navigate('/');
-          } else {
-            // 기타 오류 처리
-            console.error('Error during login:', loginResponse.data.message);
-          }
+          navigate('/'); // 메인 페이지로 이동
         }
       } catch (e) {
         console.error(e);
       }
     };
-    
-    // 현재 URL에 코드가 포함되어 있는 경우에만 fetchToken 함수 실행
-    if (code) {      
+
+    if (code) {
       fetchToken();
     }
   }, [location.search, navigate]);
