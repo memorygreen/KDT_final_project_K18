@@ -18,6 +18,7 @@ from UserDelete import UserDelete_bp
 from getCCTV import get_CCTV_bp
 from getSearchMissing import get_search_missing_bp
 from getAllMissing import get_all_missing_bp
+
 # 환경 변수 로드
 load_dotenv()
 

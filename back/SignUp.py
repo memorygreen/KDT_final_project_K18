@@ -62,20 +62,20 @@ def signup():
 
             # 사용자 정보의 id값을 세션에 저장 후 회원가입 페이지로 이동
             session['user_id'] = user_id
-            
+
+            # 회원가입 성공 응답
+            return jsonify({'message': 'User registered successfully', 'signup': True}), 201
     except Exception as e:
+        # 오류 메시지를 반환
         return jsonify({'message': str(e)}), 500
     finally:
         connection.close()
-
-    return jsonify({'message': 'User registered successfully', 'signup': True}), 201
 
 @signup_bp.route('/login', methods=['POST'])
 def login():
     data = request.json
     user_id = data.get('id')
     provided_pw = data.get('password')
-    print(provided_pw)
 
     try:
         connection = db_con()
@@ -88,7 +88,6 @@ def login():
                 return jsonify({'message': 'User not found'}), 404
 
             hashed_password_from_db, user_status = user_data  # 저장된 bcrypt 해시 비밀번호와 상태 가져오기
-            print(hashed_password_from_db)
             if user_status == 'stop':
                 return jsonify({'message': 'Account is suspended'}), 403  # 계정 사용 정지
 
@@ -106,55 +105,6 @@ def login():
         return jsonify({'message': str(e)}), 500
     finally:
         connection.close()
-
-
-@signup_bp.route('/Klogin', methods=['POST'])
-def kakaosignup():
-    data = request.get_json()
-    auth_id = data.get('auth_id')  # 카카오에서 발급받은 사용자 ID
-
-    user_id = session.get('user_id')
-    if not user_id:
-        # 세션에 사용자 정보의 ID가 없는 경우에는 회원가입 프로세스를 진행합니다.
-        try:
-            user_name = data.get('name')
-
-            connection = db_con()
-            with connection.cursor() as cursor:
-                sql = """
-                INSERT INTO TB_USER (USER_NAME) 
-                VALUES (%s)
-                """
-                cursor.execute(sql, (user_name,))
-                connection.commit()
-
-                # 새로 생성된 USER_ID 가져오기
-                cursor.execute("SELECT LAST_INSERT_ID()")
-                new_user_id = cursor.fetchone()[0]
-
-                # 새로 생성된 USER_ID를 세션에 저장
-                session['user_id'] = new_user_id
-
-                # 새로운 사용자 ID를 `user_id`에 저장
-                user_id = new_user_id
-        except Exception as e:
-            return jsonify({'message': str(e)}), 500
-        finally:
-            connection.close()
-
-    # TB_AUTH 테이블에 사용자 정보 추가
-    try:
-        connection = db_con()
-        with connection.cursor() as cursor:
-            sql = "INSERT INTO TB_AUTH (AUTH_ID, SNS_PROVIDER, USER_ID) VALUES (%s, %s, %s)"
-            cursor.execute(sql, (auth_id, 'KAKAO', user_id))
-            connection.commit()
-    except Exception as e:
-        return jsonify({'message': str(e)}), 500
-    finally:
-        connection.close()
-
-    return jsonify({'message': 'Kakao user registered successfully'}), 201
 
 if __name__ == '__main__':
     app.register_blueprint(signup_bp)
