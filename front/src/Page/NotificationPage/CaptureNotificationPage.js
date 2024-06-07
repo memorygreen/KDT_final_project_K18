@@ -63,10 +63,10 @@ const CaptureNotificationPage = () => {
             <div className="notification-container">
                 {notifications.map(notification => (
                     <div key={notification.CAPTURE_IDX} className="notification">
-                        <div className="notification-header"><b>{notification.CAPTURE_IDX} 캡쳐 알림</b></div>
+                        <div className="notification-header"><b>{notification.MISSING_NAME} 추정 캡쳐 알림</b></div>
                         <div className="notification-content" onClick={() => captureDetail(notification)}>
                             {cctvAddresses[notification.CCTV_IDX] || 'Loading address...'} 의 CCTV {notification.CCTV_IDX} 에서
-                            <div>{notification.CAPTURE_FIRST_TIME}에 저장된 알림 입니다.</div>
+                            <div>{notification.CAPTURE_FIRST_TIME}에 온 캡쳐입니다.</div>
                         </div>
                     </div>
                 ))}
