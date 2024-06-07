@@ -130,6 +130,66 @@ def report_detail():
         return jsonify({"message": "Report updated successfully"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+
+
+#cctv 캡처 알람
+@report_bp.route('/my_capture',methods=['POST'])
+def my_capture():
+    data = request.get_json()
+    user_id = data.get('user_id')
+    if not user_id:
+        return jsonify({'error': 'User is not logged in'}), 401
+
+    db = db_con()
+    cursor = db.cursor()
+
+    sql_my_capture="""
+    SELECT `CAPTURE_IDX`
+    FROM `TB_CAPTURE`
+    WHERE `MISSING_IDX` IN(
+    SELECT `MISSING_IDX`
+    FROM `TB_MISSING`
+    WHERE `USER_ID` = %s
+    );
+    
+    """
+    cursor.execute(sql_my_capture, (user_id,))
+
+    captures = cursor.fetchall()
+
+    cresult = []
+    for capture in captures:
+        capture_idx = capture[0]
+
+    # 캡처정보 
+        sql_capture_notification = """
+        SELECT * 
+        FROM TB_CAPTURE
+        WHERE CAPTURE_IDX=%s
+        """
+        cursor.execute(sql_capture_notification,(capture_idx,))
+        cpt = cursor.fetchone()
+
+        if cpt:
+            report_info = {
+                'CAPTURE_IDX': cpt[0],
+                'MISSING_IDX': cpt[1],
+                'CCTV_IDX': cpt[2],
+                'CAPTURE_FIRST_TIME': cpt[3].strftime('%Y-%m-%d %H:%M:%S'),
+                'CAPTURE_PATH': cpt[4],
+                'CAPTURE_ALARM_CK': cpt[5],
+                'CAPTURE_ALARM_CK_TIME': cpt[6],
+            }
+            cresult.append(report_info)
+
+    cursor.close()
+    db.close()
+
+    return jsonify(cresult), 200
+
+
+
 
 
 

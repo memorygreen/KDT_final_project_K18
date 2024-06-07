@@ -9,10 +9,13 @@ import profile from './assets/profile.jpg'
 import logo from './assets/logo.png'
 import {reportCk} from '../../Components/ReportCk/ReportCk';
 import Modal from '../ReportCk/ReportModal';
+import { Ck } from '../ReportCk/Ck';
+import CkModal from '../ReportCk/CkModal';
 const Sidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(true); // 로그인 상태 관리
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+    const [isCkModalOpen, setIsCkModalOpen] = useState(false);
     const sidebarRef = useRef(null);
     const navigate = useNavigate(); // 네비게이션 함수
 
@@ -29,9 +32,14 @@ const Sidebar = () => {
         setIsLoggedIn(false); // 로그인 상태 업데이트
         navigate('/Login'); // 로그인 페이지로 이동
     };
-    const toggleModal = () => {
-        setIsModalOpen(!isModalOpen);
+    const toggleReportModal = () => {
+        setIsReportModalOpen(!isReportModalOpen);
     };
+
+    const toggleCkModal = () => {
+        setIsCkModalOpen(!isCkModalOpen);
+    };
+    
     const handleDocsClick = async() => {
         const userId=sessionStorage.getItem('userId');
         if (!userId) {
@@ -41,7 +49,21 @@ const Sidebar = () => {
         try {
             await reportCk(userId);
             // 모달 열기
-            toggleModal();
+            toggleReportModal();
+        } catch (error) {
+            console.error('Error handling docs click:', error);
+        }
+    };
+    const handleClick = async() => {
+        const userId=sessionStorage.getItem('userId');
+        if (!userId) {
+            console.error('User is not logged in');
+            return;
+        }
+        try {
+            await Ck(userId);
+            // 모달 열기
+            toggleCkModal();
         } catch (error) {
             console.error('Error handling docs click:', error);
         }
@@ -108,7 +130,7 @@ const Sidebar = () => {
                         </a>
                     </li>
                     <li>
-                        <a href="#settings" title="Settings" className="sidebar_tooltip">
+                        <a href="#settings" title="Settings" className="sidebar_tooltip" onClick={handleClick}>
                             <img src={Settings} alt="logout" width="24" height="24" />
                             <span className="link hide">Settings</span>
                             <span className="tooltip__content">Settings</span>
@@ -132,7 +154,8 @@ const Sidebar = () => {
                     <div className="user-name">Willy</div>
                     <div className="email">Where's Willy?</div>
                 </div>
-                {isModalOpen && <Modal onClose={toggleModal} />} {/* 모달 창 표시 */}
+                {isReportModalOpen && <Modal onClose={toggleReportModal} />} {/* ReportModal 표시 */}
+                    {isCkModalOpen && <CkModal onClose={toggleCkModal} />} {/* CkModal 표시 */}
                 <button onClick={handleLogout} className='logout'> {/* Link 대신 button 사용 */}
                     <img src={logoutIcon} alt="logout" width="40" height="40" />
                 </button>
