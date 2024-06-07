@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from db import db_con
 
-print("왜 안나와")
+
 get_all_missing_bp = Blueprint("getAllMissing", __name__)
 
 # 자영(240605) 세션에 담긴 userid가 등록한 모든 실종자 가져오기
@@ -12,19 +12,19 @@ def get_all_missing():
     # user id 받아오기
     
     try:
-        print("백으로 넘어오나?????")# 디버깅
+        print('getAllMissing.py로 넘어옴')
         data = request.json  # JSON 형식으로 데이터를 받음
-        print("백에서 데이터 받아져오나??", data) # 디버깅
+        print("백에서 데이터 수신 확인: ", data) # 디버깅
 
         # 세션에 담긴 id
         user_id = data.get('user_id')
-        print("세션 값 받아와지나?", user_id)# 디버깅
+        print("백으로 받은 세션 값:", user_id)# 디버깅
         
         # user id 가 등록한 missing 전체 select
         db = db_con()
         cursor = db.cursor()
         
-        print("db 연결은 되셨나용 ", db, cursor) # 디버깅
+        print("db 연결 확인 : ", db, cursor) # 디버깅
         
         missing_spl = """
             SELECT 
@@ -56,8 +56,6 @@ def get_all_missing():
         cursor.execute(missing_spl, (user_id))
         
         
-        print("실행은 되셨나요") # 디버깅
-        
         missing_sel = cursor.fetchall()
         print("select 결과 ", missing_sel) # 디버깅
         
@@ -84,7 +82,7 @@ def get_all_missing():
             })
         
         
-        print("배열에는 담으셨나요(완)", missing)
+        print("missing 배열에 담기 (완):", missing)
         cursor.close()
         db.close()
         

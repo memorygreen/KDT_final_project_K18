@@ -1,5 +1,9 @@
 
+.searchBar{
+    border-radius: 50px;
+    background-color: rgb(255, 255, 255);
 
+}
 
 /*4가지 항목들 기본 상태*/
 .search_bar_btn{
