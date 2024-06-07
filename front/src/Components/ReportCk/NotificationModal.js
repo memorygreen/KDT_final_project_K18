@@ -99,13 +99,13 @@ const NotificationModal = ({ onClose }) => {
                 {notifications.map(notification => (
                     <div key={notification.id} className="notification" onClick={() => handleDetailClick(notification)}>
                         <div className="notification-header">
-                            <b>{notification.type === 'capture' ? `${notification.CAPTURE_IDX} 캡쳐 알림` : `${notification.POSTER_IDX} 포스터 제보 알림`}</b>
+                        <b>{notification.type === 'capture' ? `${notification.MISSING_NAME} 추정 캡쳐 알림` : `${notification.MISSING_NAME} 추정 제보 알림`}</b>
                         </div>
                         <div className="notification-content">
                             {notification.type === 'capture' ?
                                 <>
                                     {cctvAddresses[notification.CCTV_IDX] || 'Loading address...'} 의 CCTV {notification.CCTV_IDX} 에서
-                                    <div>{notification.CAPTURE_FIRST_TIME} 저장된 알림 입니다.</div>
+                                    <div>{notification.CAPTURE_FIRST_TIME}에 온 캡쳐 입니다.</div>
                                 </>
                                 :
                                 <div>{notification.REPORT_TIME}에 온 제보입니다</div>

@@ -51,52 +51,42 @@ def my_notification():
     cursor = db.cursor()
 
     sql_my_report="""
-    SELECT `REPORT_ID`
-    FROM `TB_REPORT`
-    WHERE `POSTER_IDX` IN (
-    SELECT `POSTER_IDX`
-    FROM `TB_POSTER`
-    WHERE `MISSING_IDX` IN (
-        SELECT `MISSING_IDX`
-        FROM `TB_MISSING`
-        WHERE `USER_ID` = %s
-        )
-    );
+    SELECT r.REPORT_ID, r.POSTER_IDX, m.MISSING_IDX, m.MISSING_NAME, r.REPORT_TIME, r.REPORT_SIGHTING_TIME, r.REPORT_SIGHTING_PLACE, r.REPORT_ETC, r.REPORT_NOTIFICATION, r.REPORT_CK_TIME
+    FROM TB_REPORT r
+    JOIN TB_POSTER p ON r.POSTER_IDX = p.POSTER_IDX
+    JOIN TB_MISSING m ON p.MISSING_IDX = m.MISSING_IDX
+    WHERE m.USER_ID = %s
     """
-    cursor.execute(sql_my_report, (user_id))
+    cursor.execute(sql_my_report, (user_id,))
 
     reports = cursor.fetchall()
 
     result = []
     for report in reports:
-        report_id = report[0]
-
-    # 포스터 제보 정보 가져오기
-        sql_poster_notification = """
-        SELECT * 
-        FROM TB_REPORT 
-        WHERE REPORT_ID=%s
-        """
-        cursor.execute(sql_poster_notification,(report_id))
-        poster = cursor.fetchone()
-
-        if poster:
-            report_info = {
-                'REPORT_ID': poster[0],
-                'POSTER_IDX': poster[1],
-                'REPORT_TIME': poster[2].strftime('%Y-%m-%d %H:%M:%S'),
-                'REPORT_SIGHTING_TIME': poster[3].strftime('%Y-%m-%d %H:%M:%S'),
-                'REPORT_SIGHTING_PLACE': poster[4],
-                'REPORT_ETC': poster[5],
-                'REPORT_NOTIFICATION': poster[6],
-                'REPORT_CK_TIME': poster[7],
-            }
-            result.append(report_info)
+        report_info = {
+            'REPORT_ID': report[0],
+            'POSTER_IDX': report[1],
+            'MISSING_IDX': report[2],
+            'MISSING_NAME': report[3],
+            'REPORT_TIME': report[4].strftime('%Y-%m-%d %H:%M:%S'),
+            'REPORT_SIGHTING_TIME': report[5].strftime('%Y-%m-%d %H:%M:%S'),
+            'REPORT_SIGHTING_PLACE': report[6],
+            'REPORT_ETC': report[7],
+            'REPORT_NOTIFICATION': report[8],
+            'REPORT_CK_TIME': report[9],
+        }
+        result.append(report_info)
 
     cursor.close()
     db.close()
 
     return jsonify(result), 200
+        
+
+    #
+
+        
+            
 
 
 # 제보 조회 및  확인
@@ -145,14 +135,10 @@ def my_capture():
     cursor = db.cursor()
 
     sql_my_capture="""
-    SELECT `CAPTURE_IDX`
-    FROM `TB_CAPTURE`
-    WHERE `MISSING_IDX` IN(
-    SELECT `MISSING_IDX`
-    FROM `TB_MISSING`
-    WHERE `USER_ID` = %s
-    );
-    
+    SELECT c.CAPTURE_IDX, m.MISSING_IDX, m.MISSING_NAME, c.CCTV_IDX, c.CAPTURE_FIRST_TIME, c.CAPTURE_PATH, c.CAPTURE_ALARM_CK, c.CAPTURE_ALARM_CK_TIME
+    FROM TB_CAPTURE c
+    JOIN TB_MISSING m ON c.MISSING_IDX = m.MISSING_IDX
+    WHERE m.USER_ID = %s
     """
     cursor.execute(sql_my_capture, (user_id,))
 
@@ -160,33 +146,27 @@ def my_capture():
 
     cresult = []
     for capture in captures:
-        capture_idx = capture[0]
-
-    # 캡처정보 
-        sql_capture_notification = """
-        SELECT * 
-        FROM TB_CAPTURE
-        WHERE CAPTURE_IDX=%s
-        """
-        cursor.execute(sql_capture_notification,(capture_idx,))
-        cpt = cursor.fetchone()
-
-        if cpt:
-            report_info = {
-                'CAPTURE_IDX': cpt[0],
-                'MISSING_IDX': cpt[1],
-                'CCTV_IDX': cpt[2],
-                'CAPTURE_FIRST_TIME': cpt[3].strftime('%Y-%m-%d %H:%M:%S'),
-                'CAPTURE_PATH': cpt[4],
-                'CAPTURE_ALARM_CK': cpt[5],
-                'CAPTURE_ALARM_CK_TIME': cpt[6],
-            }
-            cresult.append(report_info)
+        capture_info = {
+            'CAPTURE_IDX': capture[0],
+            'MISSING_IDX': capture[1],
+            'MISSING_NAME': capture[2],
+            'CCTV_IDX': capture[3],
+            'CAPTURE_FIRST_TIME': capture[4].strftime('%Y-%m-%d %H:%M:%S'),
+            'CAPTURE_PATH': capture[5],
+            'CAPTURE_ALARM_CK': capture[6],
+            'CAPTURE_ALARM_CK_TIME': capture[7],
+        }
+        cresult.append(capture_info)
 
     cursor.close()
     db.close()
 
     return jsonify(cresult), 200
+        
+        
+
+    #
+            
 
 
 # 캡처 조회  및 확인
