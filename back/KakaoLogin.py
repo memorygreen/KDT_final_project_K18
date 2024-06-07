@@ -31,6 +31,7 @@ def get_user_info(access_token):
     if response.status_code != 200:
         return None
     user_info = response.json()
+    print("사용자 정보:", user_info)  # 사용자 정보 출력
     return user_info
 
 @kakao_bp.route('/user/kakao/callback', methods=['GET'])
@@ -46,6 +47,8 @@ def kakao_callback():
     user_info = get_user_info(access_token)
     if not user_info:
         return jsonify({'error': 'Failed to get user info'}), 400
+
+    print("사용자 정보:", user_info)  # 사용자 정보 출력
 
     session['user_id'] = user_info['id']
     session['user_name'] = user_info['properties']['nickname']

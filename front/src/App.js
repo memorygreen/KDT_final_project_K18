@@ -54,9 +54,6 @@ function App() {
           <Route path="/ViewMissingListPage/:userId" element={<ViewMissingListPage />} />
           <Route path="/SearchMissingUpdatePage/:missingIdx" element={<SearchMissingUpdatePage />} />
           <Route path="/CaptureNotificationPage" element={<CaptureNotificationPage/>} />
-          
-          
-
 
           {/* Test용 Components */}
           <Route path="/Map" element={<KakaoMap />} />
