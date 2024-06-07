@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import NevBar from '../../Components/NevBar/NevBar';
 
 export const ViewMissingListPage = () => {
     const user_id = sessionStorage.getItem('userId');
@@ -20,8 +21,16 @@ export const ViewMissingListPage = () => {
     }, [user_id]);
 
     return (
-        <div>
-            <h1>View Missing List Page</h1>
+
+
+        <div className="Nev-Card">
+            <header className='nevibar_card'> <NevBar /></header>
+
+
+
+            <div className='Main_start'>
+                <h1>View Missing List Page</h1>
+            </div>
             <table border="1">
                 <thead>
                     <tr>
@@ -49,14 +58,14 @@ export const ViewMissingListPage = () => {
                     {allMissingData.map((missing, index) => (
                         <tr key={index}>
                             <td>
-                            
-                            <button 
-                                onClick={() => window.location.href=`/SearchMissingUpdatePage/${missing.MISSING_IDX}`}>
-                            수정</button>
-                                
+
+                                <button
+                                    onClick={() => window.location.href = `/SearchMissingUpdatePage/${missing.MISSING_IDX}`}>
+                                    수정</button>
+
                                 <button>삭제</button>
-                                
-                                </td>
+
+                            </td>
                             <td>{missing.USER_ID}</td>
                             <td>{missing.MISSING_IDX}</td>
                             <td><a href='#'>{missing.MISSING_NAME}</a></td>
@@ -77,7 +86,7 @@ export const ViewMissingListPage = () => {
                     ))}
                 </tbody>
             </table>
-            <a href='#'>실종자 상세보기</a>
+            
         </div>
     );
 };
