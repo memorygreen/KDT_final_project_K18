@@ -18,7 +18,7 @@ function UserUpdate() {
     const userId = sessionStorage.getItem('userId');
     const userName = sessionStorage.getItem('userName');
     const userDob = sessionStorage.getItem('userDob');
-    const userGender = sessionStorage.getItem('userGender');
+    const userGender = sessionStorage.getItem('userGender') || 'male'; // 성별 값이 없는 경우 기본값으로 'male' 설정
     const userPhone = sessionStorage.getItem('userPhone');
 
     setUserId(userId);
@@ -28,9 +28,26 @@ function UserUpdate() {
     setPhone(userPhone);
   }, []);
 
+  const formatPhoneNumber = (phoneNumber) => {
+    // 숫자만 남기고 나머지 문자 제거
+    const cleaned = ('' + phoneNumber).replace(/\D/g, '');
+    // 숫자가 11자리를 넘어가면 자르고, 숫자 3자-4자-4자 형식으로 변환
+    const match = cleaned.slice(0, 11).match(/^(\d{3})(\d{4})(\d{4})$/);
+    if (match) {
+      return match[1] + '-' + match[2] + '-' + match[3];
+    }
+    return phoneNumber;
+  };
+
+  const handlePhoneChange = (e) => {
+    // 입력된 전화번호 형식을 변환하여 state 업데이트
+    const formattedPhoneNumber = formatPhoneNumber(e.target.value);
+    setPhone(formattedPhoneNumber);
+  };
+
   const handleUpdate = async () => {
     if (!password || !name || !dob || !gender || !phone) {
-      setMessage('모든 항목을 입력해주세요');
+      alert('모든 항목을 입력해주세요');
       return;
     }
 
@@ -38,6 +55,12 @@ function UserUpdate() {
       await axios.put(`/api/users/${userId}`, {
         name, dob, gender, phone, password
       });
+
+      // 회원 정보 업데이트 후 세션에 저장
+      sessionStorage.setItem('userName', name);
+      sessionStorage.setItem('userDob', dob);
+      sessionStorage.setItem('userGender', gender);
+      sessionStorage.setItem('userPhone', phone);
 
       setMessage('회원정보가 성공적으로 수정되었습니다');
     } catch (error) {
@@ -78,7 +101,8 @@ function UserUpdate() {
           </div>
           <div>
             <label>연락처:</label>
-            <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} />
+            <input type="tel" value={phone} onChange={handlePhoneChange} maxLength="13" />
+            {/* maxLength 속성을 사용하여 최대 입력 가능한 길이를 13으로 설정 */}
           </div>
           <button type="button" onClick={handleUpdate}>확인</button>
           <button type="button" onClick={() => navigate('/')}>취소</button>
