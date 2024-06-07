@@ -1,12 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import NevBar from '../../Components/NevBar/NevBar';
 import axios from 'axios';
 
 const ReportNotificationPage = () => {
     const location = useLocation();
-    const [notifications] = useState(location.state.notifications || []);
-    const [selectedNotification, setSelectedNotification] = useState(location.state.notification || null);
+    const [notifications, setNotifications] = useState(location.state.notifications || []);
+    const [selectedNotification, setSelectedNotification] = useState(null);
+
+    useEffect(() => {
+        const fetchNotifications = async () => {
+            try {
+                const userId = sessionStorage.getItem('userId');
+                if (!userId) {
+                    console.error('User is not logged in');
+                    return;
+                }
+
+                const response = await axios.post('http://localhost:5000/my_report', {
+                    user_id: userId
+                });
+
+                setNotifications(response.data);
+            } catch (error) {
+                console.error('Error fetching notifications:', error);
+            }
+        };
+
+        fetchNotifications();
+    }, []);
 
     const showDetail = (notification) => {
         setSelectedNotification(notification);
