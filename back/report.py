@@ -99,7 +99,7 @@ def my_notification():
     return jsonify(result), 200
 
 
-# 제보 알림  확인
+# 제보 조회 및  확인
 @report_bp.route('/report_detail',methods=['POST'])
 def report_detail():
     try:
@@ -189,7 +189,37 @@ def my_capture():
     return jsonify(cresult), 200
 
 
+# 캡처 조회  및 확인
+@report_bp.route('/capture_detail',methods=['POST'])
+def report_detail():
+    try:
+        capture_idx = request.json.get('capture_idx')
+        if not capture_idx:
+            return jsonify({"error": "capture IDX is missing"}), 400
+        
+        db = db_con()
+        cursor = db.cursor()
 
+        # 현재  CAPTURE_ALARM_CK값을 확인
+        cursor.execute("SELECT CAPTURE_ALARM_CK FROM TB_CAPTURE WHERE CAPTURE_IDX = %s", (capture_idx,))
+        current_notification = cursor.fetchone()
+
+        if current_notification and current_notification[0] == 0:
+            # REPORT_NOTIFICATION이 0인 경우에만 업데이트
+            sql_capture_update = """
+            UPDATE TB_CAPTURE
+            SET CAPTURE_ALARM_CK = 1, CAPTURE_ALARM_CK_TIME = NOW()
+            WHERE CAPTURE_IDX = %s
+            """
+            cursor.execute(sql_capture_update, (capture_idx,))
+            db.commit()
+        
+        cursor.close()
+        db.close()
+
+        return jsonify({"message": "capture updated successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 
