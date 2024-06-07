@@ -89,3 +89,8 @@ def login():
         return jsonify({'message': str(e)}), 500
     finally:
         connection.close()
+
+
+@signup_bp.route('/Klogin', methods=['POST'])
+def kakaosignup():
+    return 

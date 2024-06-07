@@ -39,7 +39,7 @@ def report_missing_person():
 
 
 
-#제보 받은 알람 확인
+#제보 받은 알람 목록 보기
 @report_bp.route('/my_report', methods=['POST'])
 def my_notification():
     data = request.get_json()
@@ -84,8 +84,8 @@ def my_notification():
             report_info = {
                 'REPORT_ID': poster[0],
                 'POSTER_IDX': poster[1],
-                'REPORT_TIME': poster[2],
-                'REPORT_SIGHTING_TIME': poster[3],
+                'REPORT_TIME': poster[2].strftime('%Y-%m-%d %H:%M:%S'),
+                'REPORT_SIGHTING_TIME': poster[3].strftime('%Y-%m-%d %H:%M:%S'),
                 'REPORT_SIGHTING_PLACE': poster[4],
                 'REPORT_ETC': poster[5],
                 'REPORT_NOTIFICATION': poster[6],
@@ -97,6 +97,46 @@ def my_notification():
     db.close()
 
     return jsonify(result), 200
+
+
+# 제보 알림  확인
+@report_bp.route('/report_detail',methods=['POST'])
+def report_detail():
+    try:
+        report_id = request.json.get('report_id')
+        if not report_id:
+            return jsonify({"error": "Report ID is missing"}), 400
+        
+        db = db_con()
+        cursor = db.cursor()
+
+        # 현재 REPORT_NOTIFICATION 값을 확인
+        cursor.execute("SELECT REPORT_NOTIFICATION FROM TB_REPORT WHERE REPORT_ID = %s", (report_id,))
+        current_notification = cursor.fetchone()
+
+        if current_notification and current_notification[0] == 0:
+            # REPORT_NOTIFICATION이 0인 경우에만 업데이트
+            sql_report_update = """
+            UPDATE TB_REPORT
+            SET REPORT_NOTIFICATION = 1, REPORT_CK_TIME = NOW()
+            WHERE REPORT_ID = %s
+            """
+            cursor.execute(sql_report_update, (report_id,))
+            db.commit()
+        
+        cursor.close()
+        db.close()
+
+        return jsonify({"message": "Report updated successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+
+    
+    
+
+
    
 
 

@@ -4,9 +4,12 @@ import React, { useEffect, useState } from 'react';
 import MissingKakaoMap from './MissingKakaoMap';
 import SearchBar from './SearchBar';
 import UploadMissingImg from './UploadMissingImg';
+import { createPoster } from '../Poster/CreatePost';
 
+const SearchMissing = ({ initialData }) => {
+                    
+    const sessionId = sessionStorage.getItem('userId') // session에 있는 id 값 
 
-const SearchMissing = () => {
     const [selectedTxt, setSelectTxt] = useState('');// 인상착의,  상의, 하의, 소지품 
     const [selectBox, setSelectBox] = useState(''); // 인상착의, 상의, 하의, 소지품 구분에따라 나오는 박스
 
@@ -17,7 +20,8 @@ const SearchMissing = () => {
     const [missingLocation, setMissingLocation] = useState(''); //실종자 마지막 발견 장소
     const [missingLocationLat, setMissingLocationLat] = useState(''); //마지막 발견 장소 위도
     const [missingLocationLng, setMissingLocationKLng] = useState(''); //마지막 발견 장소 경도
-
+    const [missingImgUrl, setMissingImgUrl] = useState(''); //마지막 발견 장소 경도
+    
 
     // 인상착의 변수
     const [selectedTop, setSelectedTop] = useState('');
@@ -36,7 +40,7 @@ const SearchMissing = () => {
     const [selectedBottomKor, setSelectedBottomKor] = useState('');
     const [selectedBottomColorKor, setSelectedBottomColorKor] = useState('');
     const [selectedBelongingsKor, setSelectedBelongingsKor] = useState('');
-
+    
     /** 자영(240603):주소 받아오는 함수 */
     const getMissingLocation = (address) => {
         console.log('정상적으로 넘어왔습니다. getMissingLocation(address)', address);
@@ -108,27 +112,33 @@ const SearchMissing = () => {
         { id: 'female', label: '남성' }
     ];
 
+    // 포스터 생성기능
+    const [posterGenerating,setPosterGenerating] = useState(false);
+   
 
-    const [missingImgUrl, setMissingImgUrl] = useState(''); //마지막 발견 장소 경도
+    
 
+    
 
     const handle_submit = async (event) => {
         event.preventDefault();
-        console.log("무슨파일임", missingImg);
+       
         if (missingImg) {
             try {
                 setMissingImgUrl(await UploadMissingImg(missingImg));
               
                 // missingImgUrl = Url;
-                console.log("업로드된 이미지 URL 제발되라!!!!(얘가 최종):", missingImgUrl); // URL을 로그로 출력
+                console.log("업로드된 이미지 URL (확인)):", missingImgUrl); // URL을 로그로 출력
             } catch (error) {
-                console.error('Failed to upload image');
+                console.error('실종자 이미지 업로드 실패 Failed to upload image');
             }
 
             if (missingImgUrl) {
                 // 백으로 보내기
                 // POST request to submit form data
-                axios.post('/SearchMissing', {
+                axios.post('/SearchMissing', {                    
+                    session_id : sessionId,
+
                     missing_name: missingName,
                     missing_gender: missingGender,
                     missing_age: missingAge,
@@ -161,13 +171,25 @@ const SearchMissing = () => {
                         // Handle error
                     });
             } else {
-                console.error('No image to upload');
+                console.error('실종자 이미지 url 업로드 실패 No image to upload');
             }
             if (!missingImgUrl) {
-                console.error('이미지를 업로드해주세요.');
+                console.error('실종자 이미지 url을 업로드해주세요.');
             }
-        };
-    }
+            
+        
+  }
+                if (posterGenerating) {
+                    try {
+                        setTimeout(async () => {
+                             await createPoster(); // createPoster 함수 실행
+                            }, 5000);  //db값 저장되고 실행하도록 시간텀을 줌
+                        } catch (error) {
+                    // createPoster 함수 실행 중 오류가 발생한 경우 처리
+                        console.error('Error creating poster:', error);
+                            }
+                    }
+    };
    
     // // 인적사항 확인
     // console.log('프론트에서 넘어오는지 확인')
@@ -259,6 +281,8 @@ const SearchMissing = () => {
         setSelectBox(selectedTxt.item);
     }, [selectedTxt]);
 
+
+    // 인적사항 구분
     const missing_info_box = () => {
         return (
             <div className="search_missing_cate_group">
@@ -329,8 +353,41 @@ const SearchMissing = () => {
                         onChange={handleImgChange}
                     />
                     <label className="input-group-text" htmlFor="missing_img">업로드</label>
+                    {missingImg && (
+                        <div>
+                            <div className="uploaded-file-name">업로드된 파일: {missingImg.name}</div>
+                            {missingImg instanceof File && (
+                                <img src={URL.createObjectURL(missingImg)} alt="Uploaded" style={{ width: '100px', height: '100px' }} />
+                            )}
+                        </div>
+                    )}
+
+
+
+
+
+
+                    
 
                 </div>
+
+                <div className="search_missing_cate_content">
+                    <h2>포스터 생성 유무</h2>
+                    <div className="input-group mb-3">
+                        
+                        <input
+                            type="checkbox"
+                            className='poster_check_box'
+                            aria-label="포스터 생성 유무"
+                            checked={posterGenerating} // 이 상태는 useState를 사용하여 관리해야 합니다.
+                            onChange={(event) => setPosterGenerating(event.target.checked)}
+                        />
+                    </div>
+                </div>
+                
+
+
+
             </div>
         );
     };

@@ -11,6 +11,7 @@ import Adminpage from './Page/Adminpage/Adminpage';
 import Adminmanage from './Page/Adminmanage/Adminmanage';
 import Admincctv from './Page/Admincctv/Admincctv';
 import Adminmissing from './Page/Adminmissing/Adminmissing';
+import ReportNotificationPage from './Page/NotificationPage/ReportNotificationPage';
 
 /* Test용 Components */
 import KakaoMap from './Components/Map/KakaoMap';
@@ -19,6 +20,10 @@ import Nevbar from './Components/NevBar/NevBar';
 import KakaoLogin from './Components/KakaoLogin/KakaoLogin';
 import Card from './Components/Cards/Card/Card';
 import OpenAI from './Components/OpenAI/OpenAI';
+import ViewCCTVPage from './Page/ViewCCTVPage/ViewCCTVpage';
+import { ViewMissingListPage } from './Page/ViewMissingListPage/ViewMissingListPage';
+import { MyPage } from './Page/MyPage/Mypage';
+import SearchMissingUpdatePage from './Page/SearchMissingUpdatePage/SearchMissingUpdatePage';
 
 
 function App() {
@@ -37,6 +42,13 @@ function App() {
           <Route path="/Adminmanage" element={<Adminmanage />} />
           <Route path="/Admincctv" element={<Admincctv />} />
           <Route path="/Adminmissing" element={<Adminmissing />} />
+          <Route path="/ReportNotificationPage" element={<ReportNotificationPage />} />
+          <Route path="/ViewCCTVPage/:cctvId" element={<ViewCCTVPage />} />
+          <Route path="/MyPage" element={<MyPage/>} />
+          <Route path="/ViewMissingListPage/:userId" element={<ViewMissingListPage />} />
+          <Route path="/SearchMissingUpdatePage/:missingIdx" element={<SearchMissingUpdatePage />} />
+          
+          
 
           {/* Test용 Components */}
           <Route path="/Map" element={<KakaoMap />} />
