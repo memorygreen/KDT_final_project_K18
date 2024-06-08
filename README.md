@@ -6,7 +6,7 @@
 ## Git 설치 및 사용자 등록
 
 ### Git 설치
-1. <a href="https://git-scm.com/" target="_blank">Git 공식 사이트</a>에서 Git을 다운로드하여 설치합니다.
+1. <a href="https://git-scm.com/download/win/" target="_blank">Git 공식 사이트</a>에서 Git을 다운로드하여 설치합니다.
 
 ### Git 사용자 등록
 1. 터미널을 열고 다음 명령어를 실행합니다.
