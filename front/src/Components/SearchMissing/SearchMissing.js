@@ -121,7 +121,7 @@ const SearchMissing = ({ initialData }) => {
     ];
 
     // 포스터 생성기능
-    const [posterGenerating,setPosterGenerating] = useState(false);
+    const [posterGenerating,setPosterGenerating] = useState('');
    
 
     
@@ -296,7 +296,7 @@ const SearchMissing = ({ initialData }) => {
             <div className="search_missing_cate_group">
                 <div className="search_missing_cate_content">
                     <h2>실종자 이름</h2>
-                    <div className="input-group mb-3">
+                    
                         <input
                             type="text"
                             className="input_etc"
@@ -306,13 +306,11 @@ const SearchMissing = ({ initialData }) => {
                             onChange={handleNameChange}
                             placeholder = "실종자 이름 입력"
                         />
-                    </div>
+                    
                 </div>
-
 
                 <div className="search_missing_cate_content">
                     <h2>나이</h2>
-                    <div className="input-group mb-3">
                         <input
                             type="number"
                             className="input_etc"
@@ -322,12 +320,11 @@ const SearchMissing = ({ initialData }) => {
                             onChange={handleAgeChange}
                             placeholder = "실종자 나이 입력"
                         />
-                    </div>
                 </div>
-
 
                 <div className="search_missing_cate_content">
                     <h2>성별</h2>
+                    <div className='search_missing_cate_content_buttons'>
                     {genderOptions.map(option => (
                         <React.Fragment key={option.id}>
                             <input
@@ -343,54 +340,76 @@ const SearchMissing = ({ initialData }) => {
                             <label className="radio_btn_label" htmlFor={option.id}>{option.label}</label>
                         </React.Fragment>
                     ))}
+                    </div>
                 </div>
-
 
                 <div className="search_missing_cate_content">
                     <h2>마지막 발견장소</h2>
                     <MissingKakaoMap getLatLon={getLatLon} getMissingLocation={getMissingLocation} />
                 </div>
 
-
                 <div className="search_missing_cate_content">
                     <h2>실종자 이미지 업로드</h2>
-                    <input
-                        type="file"
-                        className="input_etc"
-                        id="missing_img"
-                        onChange={handleImgChange}
-                    />
-                    <label className="input_etc_file" htmlFor="missing_img">업로드</label>
+                    <div className="input_etc_file_wrap">
+                        <label className="input_etc_file_label" htmlFor="missing_img">
+                            <span className="file_name">업로드</span>
+                        </label>
+                        <input
+                            type="text"
+                            className="input_etc"
+                            aria-label="Sizing example input"
+                            aria-describedby="missing_name"
+                            value={missingName}
+                            onChange={handleNameChange}
+                            placeholder = {missingImg ? missingImg.name : '선택된 파일이 없습니다.'}
+                            readOnly='true'
+                        />
+                        <input
+                            type="file"
+                            className="input_etc_file"
+                            id="missing_img"
+                            onChange={handleImgChange}
+                        />
+                    </div>
+                    {/** 미리보기 */}
                     {missingImg && (
                         <div>
-                            <div className="uploaded-file-name">업로드된 파일: {missingImg.name}</div>
+                            {/* <div className="uploaded-file-name">업로드된 파일: {missingImg.name}</div> */}
                             {missingImg instanceof File && (
                                 <img src={URL.createObjectURL(missingImg)} alt="Uploaded" style={{ width: '100px', height: '100px' }} />
                             )}
                         </div>
                     )}
-
-
-
-
-
-
-                    
-
                 </div>
 
                 <div className="search_missing_cate_content">
-                    <h2>포스터 생성 유무</h2>
-                    <div className="input-group mb-3">
-                        
+                    <h2>포스터 생성 유무 체크</h2>
+
+                    <div className='search_missing_cate_content_poster'>
                         <input
                             type="checkbox"
-                            className='poster_check_box'
+                            className='radio_btn_poster'
+                            id ='poster_check_box'
                             aria-label="포스터 생성 유무"
                             checked={posterGenerating} // 이 상태는 useState를 사용하여 관리해야 합니다.
                             onChange={(event) => setPosterGenerating(event.target.checked)}
                         />
+                        <label className="radio_btn_label_poster" htmlFor='poster_check_box' >포스터 생성</label>
+                        
+                        
+                        <input
+                            type="text"
+                            className="input_etc_poster_notice"
+                            aria-label="Sizing example input"
+                            aria-describedby="missing_name"
+                            value={missingName}
+                            onChange={handleNameChange}
+                            placeholder = {posterGenerating ? '실종자인상착의 검색&실종자 찾기 포스터 생성':'실종자인상착의 검색만 실행'}
+                            readOnly='true'
+                        />
                     </div>
+                        
+                    
                 </div>
                 
 
@@ -504,7 +523,6 @@ const SearchMissing = ({ initialData }) => {
 
                 <div className="search_missing_cate_content">
                     <h2>인상착의 특이사항</h2>
-                    <div className="input-group mb-3">
                         <input
                             type="text"
                             className="input_etc"
@@ -514,8 +532,6 @@ const SearchMissing = ({ initialData }) => {
                             onChange={handleClothesEtcChange}
                             placeholder = "인상착의 특이사항 입력"
                         />
-                        
-                    </div>
                 </div>
 
             </div>
@@ -548,7 +564,7 @@ const SearchMissing = ({ initialData }) => {
 
                 <div className="search_missing_cate_content">
                     <h2>소지품 특이사항</h2>
-                    <div className="input-group mb-3">
+                    
                         <input
                             type="text"
                             className="input_etc"
@@ -559,7 +575,7 @@ const SearchMissing = ({ initialData }) => {
                             placeholder = "소지품 특이사항 입력"
                         />
                         
-                    </div>
+                    
                 </div>
 
             </div>

@@ -1,6 +1,13 @@
 /*자영(240529) : 검색기능 css*/
 
-
+/*항목 내용 나올 박스 전체 */
+.search_missing_cate_group{
+  border-radius: 25px;
+  border: solid 1px rgb(213, 213, 213);
+  width: 95%;
+  margin: 10px auto; /*수평 가운데 정렬*/
+  background-color: rgb(255, 255, 255);
+}
 
 /* 각 항목 안의 내용 */
 .search_missing_cate_content{
@@ -8,7 +15,7 @@
    border-radius: 0.5rem;
 }
   
-/* 라이오 버튼 들의 묶음 */
+/* 라디오 버튼 들의 묶음 */
 .search_missing_cate_content_buttons{
   display: flex;
   flex-wrap: wrap; /* 줄 바꿈을 허용하지 않음 */
@@ -41,7 +48,7 @@
   .radio_btn_label:hover{
     border: solid 1px rgb(0, 0, 0);/*마우스 가져다댔을 때 테두리 */
     }
-    
+
   .radio_btn:checked + .radio_btn_label {
     background: #f7f7f7; /* 선택 됐을 때 배경 색*/
     color: #000000;
@@ -49,7 +56,35 @@
 }
 
 
+/*포스터 체크 박스*/
+.radio_btn_label_poster {
+  
+  font-size: 15px;
+  color: #000000; /*글자색 */
+  background: #ffffff; /*안 눌렀을 때 배경 색 */
+  width: 90px;
+  height: 40px;
+  border-radius: 50px;
+  border: solid 1px rgb(213, 213, 213);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-right: 10px; /* Add some spacing between radio buttons */
+}
 
+.radio_btn_poster{
+  display: none;
+}
+.radio_btn_label_poster:hover{
+  border: solid 1px rgb(0, 0, 0);/*마우스 가져다댔을 때 테두리 */
+  }
+
+.radio_btn_poster:checked + .radio_btn_label_poster {
+  background: #f7f7f7; /* 선택 됐을 때 배경 색*/
+  color: #000000;
+  border: solid 1px rgb(0, 0, 0);/*클릭했을 때 테두리 */  
+}
   
 
 /* 특이사항 입력하는 input 태그*/
@@ -69,12 +104,55 @@
 }
 
 
-.search_missing_cate_group{
-  border-radius: 25px;
-  border: solid 1px rgb(213, 213, 213);
-  width: 95%;
-  margin: 10px auto; /*수평 가운데 정렬*/
-  background-color: rgb(255, 255, 255);
 
-  
+.input_etc_poster_notice{
+  width: 95%;
+  height: 40px;
+  font-size: 15px;
+  border-radius: 50px;
+  border: solid 1px rgb(213, 213, 213);
+  outline: none;
+  padding-left: 10px;
+  background-color: rgb(255, 255, 255);
+}
+
+
+/*실종자 이미지 파일 업로드 */
+
+/*파일 업로드 정렬*/
+.input_etc_file_wrap{
+  display: flex;
+}
+
+
+/*파일 업로드 버튼*/
+.input_etc_file_label{
+  font-size: 15px;
+  color: #000000; /*글자색 */
+  background: #ffffff; /*안 눌렀을 때 배경 색 */
+  width: 90px;
+  height: 40px;
+  border-radius: 50px;
+  border: solid 1px rgb(213, 213, 213);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-right: 10px; /* Add some spacing between radio buttons */
+}
+
+.input_etc_file_label:hover{
+  border: solid 1px rgb(0, 0, 0);/*마우스 가져다댔을 때 테두리 */
+}
+
+.input_etc_file{
+  display: none;
+}
+
+/*실종자 찾기 포스터 관련*/
+.search_missing_cate_content_poster{
+
+  display: flex; 
+  align-items: center; 
+  /* justify-content: flex-start; /* 왼쪽 정렬 */
 }

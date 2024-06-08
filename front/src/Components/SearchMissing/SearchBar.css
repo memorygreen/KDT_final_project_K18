@@ -12,6 +12,7 @@
     justify-content: center; /* 내부 요소들 가운데 정렬 */
     
     width: 95%;
+    height: auto;
     margin: auto; /*수평 가운데 정렬 */
     
 }
@@ -56,10 +57,9 @@
 /* 제출 버튼 기본 상태 */
 .search_missing_submit_btn{
     border-radius: 50%; /* 픽셀(px)로 지정 */
-    margin: 1%;
     padding: 10px;
-    width: 50px;
-    height: 50px;
+    width: 35px;
+    height: 35px;
     align-items: center;
     background-color: rgb(213, 213, 213);
     border: none;
@@ -70,8 +70,8 @@
 .search_missing_submit_btn:hover{
     border-radius: 50%; /* 픽셀(px)로 지정 */
     padding: 10px;
-    width: 50px;
-    height: 50px;
+    width: 35px;
+    height: 35px;
     align-items: center;
     border: none;
     background-color: rgb(160, 158, 158);
