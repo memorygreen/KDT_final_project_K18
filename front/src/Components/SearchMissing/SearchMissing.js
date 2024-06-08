@@ -405,8 +405,7 @@ const SearchMissing = ({ initialData }) => {
             <div className="search_missing_cate_group">
                 <div className="search_missing_cate_content">
                     <h2>상의 구분</h2>
-                    <div>
-                        <ul>
+                    <div className='search_missing_cate_content_buttons'>
                             {topOptions.map(option => (
                                 <React.Fragment key={option.id}>
                                     <input
@@ -422,13 +421,13 @@ const SearchMissing = ({ initialData }) => {
                                     <label className="radio_btn_label" htmlFor={option.id}>{option.label}</label>
                                 </React.Fragment>
                             ))}
-                        </ul>
+                        
                     </div>
                 </div>
 
                 <div className="search_missing_cate_content">
                     <h2>상의 색상</h2>
-                    <div>
+                    <div className='search_missing_cate_content_buttons'>
                         {topColorOptions.map(option => (
                             <React.Fragment key={option.id}>
                                 <input
@@ -483,7 +482,7 @@ const SearchMissing = ({ initialData }) => {
 
                 <div className="search_missing_cate_content">
                     <h2>하의 색상</h2>
-                    <div>
+                    <div className='search_missing_cate_content_buttons'>
                         {bottomColorOptions.map(option => (
                             <React.Fragment key={option.id}>
                                 <input
@@ -528,7 +527,7 @@ const SearchMissing = ({ initialData }) => {
             <div className="search_missing_cate_group">
                 <div className="search_missing_cate_content">
                     <h2>소지품 선택</h2>
-                    <div>
+                    <div className='search_missing_cate_content_buttons'>
                         {belongingsOptions.map(option => (
                             <React.Fragment key={option.id}>
                                 <input
@@ -580,7 +579,7 @@ const SearchMissing = ({ initialData }) => {
     } else {
         selectedComponent = null;
     }
-
+    console.log('selectBox 값:', selectBox);
     
 
 
@@ -598,16 +597,9 @@ const SearchMissing = ({ initialData }) => {
             </div>
 
 
-            <div>
-            <SearchBar setSelectTxt={setSelectTxt} />
-
-            <button className='search_missing_submit_btn' onClick={handle_submit}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
-                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-                </svg>
-            </button>
-
-            <div>{selectedComponent}</div>
+            <div className='searchBarAll'>
+                <SearchBar setSelectTxt={setSelectTxt} handleSubmit={handle_submit}/>
+                {selectedComponent}
             </div>
         </div>
     );
