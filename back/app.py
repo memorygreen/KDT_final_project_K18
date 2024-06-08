@@ -13,11 +13,11 @@ from Admin import Admin_bp
 from Adminmanage import Adminmanage_bp
 from Admincctv import Admincctv_bp
 from Adminmissing import Adminmissing_bp
-from searchMissing import search_missing_bp
+from SearchMissing.searchMissing import search_missing_bp # 자영(240407) 실종자 검색 등록 ->경로 변경
 from UserDelete import UserDelete_bp
 from getCCTV import get_CCTV_bp
-from getSearchMissing import get_search_missing_bp
-from getAllMissing import get_all_missing_bp
+from SearchMissing.getSearchMissing import get_search_missing_bp
+from SearchMissing.getAllMissing import get_all_missing_bp
 
 # 환경 변수 로드
 load_dotenv()

@@ -8,6 +8,8 @@ import { createPoster } from '../Poster/CreatePost';
 import avatar from "./assets/avatar.png"
 import { MissingAvatar } from './MissingAvatar';
 
+import './SearchMissing.css';
+
 
 
 const SearchMissing = ({ initialData }) => {
@@ -295,14 +297,14 @@ const SearchMissing = ({ initialData }) => {
                 <div className="search_missing_cate_content">
                     <h2>실종자 이름</h2>
                     <div className="input-group mb-3">
-                        <span className="input-group-text" id="missing_name">실종자 이름</span>
                         <input
                             type="text"
-                            className="form-control"
+                            className="input_etc"
                             aria-label="Sizing example input"
                             aria-describedby="missing_name"
                             value={missingName}
                             onChange={handleNameChange}
+                            placeholder = "실종자 이름 입력"
                         />
                     </div>
                 </div>
@@ -311,14 +313,14 @@ const SearchMissing = ({ initialData }) => {
                 <div className="search_missing_cate_content">
                     <h2>나이</h2>
                     <div className="input-group mb-3">
-                        <span className="input-group-text" id="missing_age">나이</span>
                         <input
                             type="number"
-                            className="form-control"
+                            className="input_etc"
                             aria-label="Sizing example input"
                             aria-describedby="missing_age"
                             value={missingAge}
                             onChange={handleAgeChange}
+                            placeholder = "실종자 나이 입력"
                         />
                     </div>
                 </div>
@@ -330,7 +332,7 @@ const SearchMissing = ({ initialData }) => {
                         <React.Fragment key={option.id}>
                             <input
                                 type="radio"
-                                className="btn-check"
+                                className="radio_btn"
                                 name="MISSING_GENDER"
                                 id={option.id}
                                 value={option.id}
@@ -338,7 +340,7 @@ const SearchMissing = ({ initialData }) => {
                                 checked={missingGender === option.id}
                                 onChange={handleGenderChange}
                             />
-                            <label className="btn btn-outline-secondary" htmlFor={option.id}>{option.label}</label>
+                            <label className="radio_btn_label" htmlFor={option.id}>{option.label}</label>
                         </React.Fragment>
                     ))}
                 </div>
@@ -354,11 +356,11 @@ const SearchMissing = ({ initialData }) => {
                     <h2>실종자 이미지 업로드</h2>
                     <input
                         type="file"
-                        className="form-control"
+                        className="input_etc"
                         id="missing_img"
                         onChange={handleImgChange}
                     />
-                    <label className="input-group-text" htmlFor="missing_img">업로드</label>
+                    <label className="input_etc_file" htmlFor="missing_img">업로드</label>
                     {missingImg && (
                         <div>
                             <div className="uploaded-file-name">업로드된 파일: {missingImg.name}</div>
@@ -409,7 +411,7 @@ const SearchMissing = ({ initialData }) => {
                                 <React.Fragment key={option.id}>
                                     <input
                                         type="radio"
-                                        className="btn-check"
+                                        className="radio_btn"
                                         name="MISSING_TOP"
                                         id={option.id}
                                         value={option.id}
@@ -417,7 +419,7 @@ const SearchMissing = ({ initialData }) => {
                                         checked={selectedTop === option.id}
                                         onChange={handleTopChange}
                                     />
-                                    <label className="btn" htmlFor={option.id}>{option.label}</label>
+                                    <label className="radio_btn_label" htmlFor={option.id}>{option.label}</label>
                                 </React.Fragment>
                             ))}
                         </ul>
@@ -431,7 +433,7 @@ const SearchMissing = ({ initialData }) => {
                             <React.Fragment key={option.id}>
                                 <input
                                     type="radio"
-                                    className="btn-check"
+                                    className="radio_btn"
                                     name="MISSING_TOP_COLOR"
                                     id={option.id}
                                     value={option.id}
@@ -439,7 +441,7 @@ const SearchMissing = ({ initialData }) => {
                                     checked={selectedTopColor === option.id}
                                     onChange={handleTopColorChange}
                                 />
-                                <label className="btn" htmlFor={option.id}>{option.label}</label>
+                                <label className="radio_btn_label" htmlFor={option.id}>{option.label}</label>
                             </React.Fragment>
                         ))}
                     </div>
@@ -456,13 +458,14 @@ const SearchMissing = ({ initialData }) => {
             <div className="search_missing_cate_group">
                 <div className="search_missing_cate_content">
                     <h2>하의 구분</h2>
-                    <div>
+                    <div className='search_missing_cate_content_buttons'>
 
                         {bottomOptions.map(option => (
                             <React.Fragment key={option.id}>
+                               
                                 <input
                                     type="radio"
-                                    className="btn-check"
+                                    className="radio_btn"
                                     name="MISSING_BOTTOMS"
                                     id={option.id}
                                     value={option.id}
@@ -470,7 +473,7 @@ const SearchMissing = ({ initialData }) => {
                                     checked={selectedBottom === option.id}
                                     onChange={handleBottomChange}
                                 />
-                                <label className="btn" htmlFor={option.id}>{option.label}</label>
+                                 <label className="radio_btn_label" htmlFor={option.id}>{option.label}</label>
                             </React.Fragment>
                         ))}
 
@@ -485,7 +488,7 @@ const SearchMissing = ({ initialData }) => {
                             <React.Fragment key={option.id}>
                                 <input
                                     type="radio"
-                                    className="btn-check"
+                                    className="radio_btn"
                                     name="MISSING_BOTTOMS_COLOR"
                                     id={option.id}
                                     value={option.id}
@@ -493,7 +496,7 @@ const SearchMissing = ({ initialData }) => {
                                     checked={selectedBottomColor === option.id}
                                     onChange={handleBottomColorChange}
                                 />
-                                <label className="btn" htmlFor={option.id}>{option.label}</label>
+                                <label className="radio_btn_label" htmlFor={option.id}>{option.label}</label>
                             </React.Fragment>
                         ))}
                     </div>
@@ -503,15 +506,16 @@ const SearchMissing = ({ initialData }) => {
                 <div className="search_missing_cate_content">
                     <h2>인상착의 특이사항</h2>
                     <div className="input-group mb-3">
-                        <span className="input-group-text" id="missing_clothes_etc ">인상착의 특이사항</span>
                         <input
                             type="text"
-                            className="form-control"
+                            className="input_etc"
                             aria-label="Sizing example input"
                             aria-describedby="missing_clothes_etc"
                             value={missingClothesEtc}
                             onChange={handleClothesEtcChange}
+                            placeholder = "인상착의 특이사항 입력"
                         />
+                        
                     </div>
                 </div>
 
@@ -529,7 +533,7 @@ const SearchMissing = ({ initialData }) => {
                             <React.Fragment key={option.id}>
                                 <input
                                     type="radio"
-                                    className="btn-check"
+                                    className="radio_btn"
                                     name="BELONGINGS"
                                     id={option.id}
                                     value={option.id}
@@ -537,7 +541,7 @@ const SearchMissing = ({ initialData }) => {
                                     checked={selectedBelongings === option.id}
                                     onChange={handleBelongingsChange}
                                 />
-                                <label className="btn btn-outline-secondary" htmlFor={option.id}>{option.label}</label>
+                                <label className="radio_btn_label" htmlFor={option.id}>{option.label}</label>
                             </React.Fragment>
                         ))}
                     </div>
@@ -546,15 +550,16 @@ const SearchMissing = ({ initialData }) => {
                 <div className="search_missing_cate_content">
                     <h2>소지품 특이사항</h2>
                     <div className="input-group mb-3">
-                        <span className="input-group-text" id="missing_belongings_etc ">소지품 특이사항</span>
                         <input
                             type="text"
-                            className="form-control"
+                            className="input_etc"
                             aria-label="Sizing example input"
                             aria-describedby="missing_belongings_etc"
                             value={missingBelongingsEtc}
                             onChange={handleBelongingsEtcChange}
+                            placeholder = "소지품 특이사항 입력"
                         />
+                        
                     </div>
                 </div>
 
@@ -575,6 +580,9 @@ const SearchMissing = ({ initialData }) => {
     } else {
         selectedComponent = null;
     }
+
+    
+
 
     return (
         <div>
