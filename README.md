@@ -66,3 +66,14 @@
     - 문제가 해결되지 않으면 컴퓨터를 재부팅합니다.
 
 </details>
+
+<details>
+<summary><strong>초기 파일 세팅 </strong></summary>
+
+1. front 폴더 안에 .env 파일을 생성한다
+2. back 폴더 안에 .env 파일을 생성한다
+3. back 폴더 안에 db.py 파일을 생성한다.
+
+</details>
+
+
