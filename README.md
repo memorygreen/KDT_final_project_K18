@@ -39,12 +39,12 @@
 1. <a href="https://www.python.org/downloads/" target="_blank">Python 공식 사이트</a>에서 Python을 다운로드하여 설치합니다.
 
 ## 프로젝트 설정
-1. VSCode 실행 합니다.
+1.  VSCode에서 `final_project_K18` 폴더를 엽니다.
 2. `Ctrl + Shift + P`를 누르고 `>Python: Select Interpreter`를 선택합니다.
 3. 파이썬 버전을 선택합니다.
 4. 터미널에서 다음 명령어를 실행합니다
     ```sh
-    cd final_project_K18/back
+    cd back
     pip install -r requirements.txt
     python app.py
     ```
@@ -56,10 +56,10 @@
         ```sh
         C:\Users\{사용자이름}\AppData\Local\Programs\Python\Python312\Scripts
         ```  
-    - VSCode를 재실행합니다.
+    - VSCode 재실행 하고 `final_project_K18` 폴더를 엽니다.
     - 터미널에서 해당 명령어를 다시 실행합니다.
         ```sh
-        cd final_project_K18/back
+        cd back
         pip install -r requirements.txt
         python app.py
         ```
