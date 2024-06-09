@@ -172,6 +172,10 @@ export const MissingAvatar = ({
   const [top_img_src, set_top_img_src] = useState(top_long_white)
   const [bottom_img_src, set_bottom_img_src] = useState(bottom_long_white)
   const [belongings_img_src, set_belongings_img_src] = useState('')
+  
+  // 이미지 클래스명 다르게 먹이기
+  const [top_img_class, set_top_img_class] = useState('')
+  const [bottom_img_class, set_bottom_img_class] = useState('')
 
   // 상의 선택
   useEffect(() => {
@@ -179,11 +183,13 @@ export const MissingAvatar = ({
       const colorIndex = top_color_ids.indexOf(selectedTopColor);
       if (colorIndex !== -1) {
         set_top_img_src(top_long_colors[colorIndex]);
+        set_top_img_class('img_avatar_top_long'); // 클래스 이름 설정
       }
     } else if (selectedTop === 'short_sleeve') {
       const colorIndex = top_color_ids.indexOf(selectedTopColor);
       if (colorIndex !== -1) {
         set_top_img_src(top_short_colors[colorIndex]);
+        set_top_img_class('img_avatar_top_short'); // 클래스 이름 설정
       }
     }
   }, [selectedTop, selectedTopColor]); // 의존성 배열에 selectedTop과 selectedTopColor 추가
@@ -194,16 +200,19 @@ export const MissingAvatar = ({
       const colorIndex = bottom_color_ids.indexOf(selectedBottomColor);
       if (colorIndex !== -1) {
         set_bottom_img_src(bottom_long_colors[colorIndex]);
+        set_bottom_img_class('img_avatar_bottom_long'); // 클래스 이름 설정
       }
     } else if (selectedBottom === 'short_pants') {
       const colorIndex = bottom_color_ids.indexOf(selectedBottomColor);
       if (colorIndex !== -1) {
         set_bottom_img_src(bottom_short_colors[colorIndex]);
+        set_bottom_img_class('img_avatar_bottom_short'); // 클래스 이름 설정
       }
     } else if (selectedBottom === 'skirt') {
       const colorIndex = bottom_color_ids.indexOf(selectedBottomColor);
       if (colorIndex !== -1) {
         set_bottom_img_src(bottom_skirt_colors[colorIndex]);
+        set_bottom_img_class('img_avatar_bottom_skirt'); // 클래스 이름 설정
       }
     }
   }, [selectedBottom, selectedBottomColor]);
@@ -223,23 +232,18 @@ export const MissingAvatar = ({
     <div>
 
       <h2>아바타 들어올 공간</h2>
-      <div>
-        <img className='avatarSetting' src={avatar} alt="avatar" />
+      <div className='avatart_div'>
+        <img className='avatar_setting' src={avatar} alt="avatar_setting" />
 
-        <div className='avatarClothes'>
-
-          <img className='img_avatar_top' src={top_img_src} alt="top" />
-
-
-
-          <img className='img_avatar_bottom' src={bottom_img_src} alt="bottom" />
-
+        
+          <img className={top_img_class} src={top_img_src} alt="img_avatar_top" />
+          <img className={bottom_img_class} src={bottom_img_src} alt="img_avatar_bottom" />
+        
+        
+        <img className='img_avatar_belonging' src={belongings_img_src} alt="img_avatar_belonging" />
 
 
-          <img className='img_avatar_belonging' src={belongings_img_src} alt="top" />
-
-
-        </div>
+        
       </div>
     </div>
   )

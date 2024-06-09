@@ -7,6 +7,12 @@ import axios from 'axios';
 import CardSlider from '../CardSlider/CardSlider'; // CardSlider 컴포넌트 임포트
 import Article from './Article'; // Article 컴포넌트 임포트
 
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import imagesLoaded from 'imagesloaded';
+
+gsap.registerPlugin(ScrollTrigger);
+
 const Card = () => {
     const [posters, setPosters] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -16,16 +22,13 @@ const Card = () => {
         // 포스터 데이터 가져오기
         axios.get('/missing_info')
             .then(response => {
-                // 성공적으로 데이터를 받았을 때 처리
                 console.log(response.data);
-                // "MISSING_FINDING"이 "finding"인 데이터만 필터링
-                const filteredData = response.data.filter(item => item.MISSING_FINDING === "finding");
-                setPosters(filteredData);
-            })
-            .catch(error => {
+                setPosters(response.data);
+            }).catch(error => {
                 // 에러 처리
                 console.error('There was a problem with the axios operation:', error);
             });
+
     }, []);
 
     // 모달 창 보는 기능
@@ -41,11 +44,35 @@ const Card = () => {
         setSelectedArticle(null);
     };
 
+
+    const Columns = () => {
+        useEffect(() => {
+            imagesLoaded(document.querySelectorAll('.column__item-img'), { background: true }, () => {
+                // 애니메이션 초기화 로직
+            });
+        }, []);
+
+        return (
+            <div className="Poster_columns">
+                {posters.map((poster, index) => (
+                    <Article
+                        className="Poster_column"
+                        key={index}
+                        article={poster}
+                        handleImageClick={handleImageClick}
+                    />
+                ))}
+            </div>
+        );
+    };
+
+
     // 전체 포스터 리스트
     const Articles = ({ posters }) => (
         <div className="Card_articles">
             {posters.map((poster, index) => (
                 <Article
+                    className="Card_article"
                     key={index}
                     article={poster}
                     handleImageClick={handleImageClick}
@@ -61,8 +88,11 @@ const Card = () => {
             </div> */}
             <div className='Wanted_size'>
                 <Articles posters={posters} />
-            </div>
+            </div> 
             <CardModal isOpen={showModal} onClose={handleCloseModal} selectedArticle={selectedArticle} />
+            <div className='Columns_size'>
+                <Columns />
+            </div>
         </div>
     );
 };

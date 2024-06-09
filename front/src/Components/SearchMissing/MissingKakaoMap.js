@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-
+import './SearchMissing.css';
 // useDidMountEffect 훅을 정의. useEffect와 비슷하지만, 이 훅은 첫 번째 렌더링 이후에만 실행
 function useDidMountEffect(func, deps) {
   const didMount = useRef(false); //첫 번째 렌더링인지 여부를 판단
@@ -23,7 +23,7 @@ export default function MissingKakaoMap({ getLatLon, getMissingLocation, missing
   let lng = 0;
   let lat = 0;
 
-  // 카카오맵 및 우편번호 검색 서비스 스크립트 로드
+  // 카카오맵 및 우편번��� 검색 서비스 스크립트 로드
   useEffect(() => {
     const loadKakaoMaps = () => {
       return new Promise((resolve) => {
@@ -78,7 +78,7 @@ export default function MissingKakaoMap({ getLatLon, getMissingLocation, missing
         }
       });
     });
-  }, [address]);
+  }, []); // 빈 의존성 배열을 추가하여 컴포넌트 마운트 시 한 번만 실행되도록 함
 
   // 우편번호 검색 기능
   const onClickAddr = () => {
@@ -130,9 +130,10 @@ export default function MissingKakaoMap({ getLatLon, getMissingLocation, missing
   return (
     <div>
       <div onClick={onClickAddr}>
-        <input id="addr" value={address}  placeholder={address?address:"Click to search address"} />
+        <input id="addr" value={address}  placeholder={address?address:"주소를 클릭하여 선택해주세요"} className='input_etc' />
       </div>
-      <div id="map" style={{ width: "100%", height: "400px" }}></div>
+      <div id="map"  style={{ width: "100%", height: "400px"} }></div>
     </div>
   );
 }
+
