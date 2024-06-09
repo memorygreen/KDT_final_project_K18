@@ -1,4 +1,21 @@
-# Final Project K18
+
+# 1. 프로젝트명(팀명:윌리를 찾아라)
+## 윌리를 찾아라👕👖 - PAR(Pedestrian-Attribute-Recognition)  기반 CCTV 영상 속 인상착의를 통한 실종자 찾기🎥
+
+# 2. 서비스소개
+# 3. 프로젝트기간
+# 4. 주요기능
+# 5. 기술스택
+# 6. 시스템 아키텍처
+#  7. 유스케이스
+# 8. 서비스 흐름도
+# 9. ER 다이어그램
+# 10 .화면구성
+# 11. 팀원역할
+# 12. 트러블슈팅
+
+
+
 
 <details>
 <summary><strong>초기 세팅 </strong></summary>
@@ -75,5 +92,8 @@
 3. back 폴더 안에 db.py 파일을 생성한다.
 
 </details>
+
+
+
 
 
