@@ -1,3 +1,4 @@
+// UserUpdate.js 내용
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NevBar from '../../Components/NevBar/NevBar';
@@ -14,11 +15,10 @@ function UserUpdate() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 사용자 정보 불러오기 (로그인된 상태를 가정)
     const userId = sessionStorage.getItem('userId');
     const userName = sessionStorage.getItem('userName');
     const userDob = sessionStorage.getItem('userDob');
-    const userGender = sessionStorage.getItem('userGender') || 'male'; // 성별 값이 없는 경우 기본값으로 'male' 설정
+    const userGender = sessionStorage.getItem('userGender') || 'male';
     const userPhone = sessionStorage.getItem('userPhone');
 
     setUserId(userId);
@@ -29,9 +29,7 @@ function UserUpdate() {
   }, []);
 
   const formatPhoneNumber = (phoneNumber) => {
-    // 숫자만 남기고 나머지 문자 제거
     const cleaned = ('' + phoneNumber).replace(/\D/g, '');
-    // 숫자가 11자리를 넘어가면 자르고, 숫자 3자-4자-4자 형식으로 변환
     const match = cleaned.slice(0, 11).match(/^(\d{3})(\d{4})(\d{4})$/);
     if (match) {
       return match[1] + '-' + match[2] + '-' + match[3];
@@ -40,7 +38,6 @@ function UserUpdate() {
   };
 
   const handlePhoneChange = (e) => {
-    // 입력된 전화번호 형식을 변환하여 state 업데이트
     const formattedPhoneNumber = formatPhoneNumber(e.target.value);
     setPhone(formattedPhoneNumber);
   };
@@ -52,11 +49,17 @@ function UserUpdate() {
     }
 
     try {
+      const sessionToken = sessionStorage.getItem('sessionToken'); // 로그인 후 세션에 저장된 세션 토큰을 가져옴
+      const config = {
+        headers: {
+          'Authorization': `Bearer ${sessionToken}` // 세션 토큰을 헤더에 넣어서 요청 보냄
+        }
+      };
+
       await axios.put(`/api/users/${userId}`, {
         name, dob, gender, phone, password
-      });
+      }, config); // 수정된 코드
 
-      // 회원 정보 업데이트 후 세션에 저장
       sessionStorage.setItem('userName', name);
       sessionStorage.setItem('userDob', dob);
       sessionStorage.setItem('userGender', gender);
@@ -76,6 +79,12 @@ function UserUpdate() {
         <h1>회원정보 수정</h1>
         {message && <p className="error-message">{message}</p>}
         <form>
+        <div>
+      <NevBar />
+      <div className="container">
+        <h1>회원정보 수정</h1>
+        {message && <p className="error-message">{message}</p>}
+        <form>
           <div>
             <label>회원 아이디:</label>
             <input type="text" value={userId} readOnly />
@@ -86,7 +95,7 @@ function UserUpdate() {
           </div>
           <div>
             <label>사용자 이름:</label>
-            <input type="text" value={name} onChange={e => setName(e.target.value)} />
+            <input type="text" value={name} maxLength="15" onChange={e => setName(e.target.value)} />
           </div>
           <div>
             <label>생년월일:</label>
@@ -102,8 +111,12 @@ function UserUpdate() {
           <div>
             <label>연락처:</label>
             <input type="tel" value={phone} onChange={handlePhoneChange} maxLength="13" />
-            {/* maxLength 속성을 사용하여 최대 입력 가능한 길이를 13으로 설정 */}
           </div>
+          <button type="button" onClick={handleUpdate}>확인</button>
+          <button type="button" onClick={() => navigate('/')}>취소</button>
+        </form>
+      </div>
+    </div>
           <button type="button" onClick={handleUpdate}>확인</button>
           <button type="button" onClick={() => navigate('/')}>취소</button>
         </form>
