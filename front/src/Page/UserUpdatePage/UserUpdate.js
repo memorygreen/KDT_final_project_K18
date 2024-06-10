@@ -1,5 +1,3 @@
-// UserUpdate.js
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NevBar from '../../Components/NevBar/NevBar';
@@ -57,12 +55,9 @@ function UserUpdate() {
         }
       };
 
-      const userId = sessionStorage.getItem('userId'); // 사용자 아이디를 가져옴
-
-      if (userId) { // userId가 빈 문자열("")이거나 null이 아닌 경우에만 요청 보냄
+      if (userId) {
         const userData = { name, dob, gender, phone };
 
-        // 비밀번호가 입력되었을 경우에만 userData에 추가
         if (password) {
           userData.password = password;
         }
@@ -71,7 +66,7 @@ function UserUpdate() {
 
         if (response.status === 200) {
           sessionStorage.setItem('userName', name);
-          sessionStorage.setItem('userDob', dob);
+          sessionStorage.setItem('userBrtDt', dob);
           sessionStorage.setItem('userGender', gender);
           sessionStorage.setItem('userPhone', phone);
           setMessage('회원정보가 성공적으로 수정되었습니다');
@@ -98,29 +93,26 @@ function UserUpdate() {
             <input type="text" value={userId} readOnly />
           </div>
           {password !== undefined && (
-          <div>
-            <label>비밀번호:</label>
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
-          </div>
-        )}
+            <div>
+              <label>비밀번호:</label>
+              <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
+            </div>
+          )}
           <div>
             <label>사용자 이름:</label>
-            <input type="text" value={name} maxLength="15" onChange={e => setName(e.target.value)} />
+            <input type="text" value={name} readOnly maxLength="15" onChange={e => setName(e.target.value)} />
           </div>
           <div>
             <label>생년월일:</label>
-            <input type="date" value={dob} onChange={e => setDob(e.target.value)} />
+            <input type="date" value={dob} readOnly onChange={e => setDob(e.target.value)} />
           </div>
           <div>
             <label>성별:</label>
-            <select value={gender} onChange={e => setGender(e.target.value)}>
-              <option value="male">남성</option>
-              <option value="female">여성</option>
-            </select>
+            <input type='text' value={gender} readOnly onChange={e => setGender(e.target.value)} />
           </div>
           <div>
             <label>연락처:</label>
-            <input type="tel" value={phone} onChange={handlePhoneChange} maxLength="13" />
+            <input type="tel" value={phone} readOnly onChange={handlePhoneChange} maxLength="13" />
           </div>
           <button type="button" onClick={handleUpdate}>확인</button>
           <button type="button" onClick={() => navigate('/')}>취소</button>
