@@ -79,12 +79,6 @@ function UserUpdate() {
         <h1>회원정보 수정</h1>
         {message && <p className="error-message">{message}</p>}
         <form>
-        <div>
-      <NevBar />
-      <div className="container">
-        <h1>회원정보 수정</h1>
-        {message && <p className="error-message">{message}</p>}
-        <form>
           <div>
             <label>회원 아이디:</label>
             <input type="text" value={userId} readOnly />
@@ -112,11 +106,6 @@ function UserUpdate() {
             <label>연락처:</label>
             <input type="tel" value={phone} onChange={handlePhoneChange} maxLength="13" />
           </div>
-          <button type="button" onClick={handleUpdate}>확인</button>
-          <button type="button" onClick={() => navigate('/')}>취소</button>
-        </form>
-      </div>
-    </div>
           <button type="button" onClick={handleUpdate}>확인</button>
           <button type="button" onClick={() => navigate('/')}>취소</button>
         </form>
