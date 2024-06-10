@@ -17,7 +17,7 @@ def db_con():
 
 user_update_bp = Blueprint('user_update', __name__)
 
-@user_update_bp.route('/api/users/<int:user_id>', methods=['PUT'])
+@user_update_bp.route('/api/users/<user_id>', methods=['PUT'])
 def update_user(user_id):
     session_user_id = session.get('user_id')
     if not session_user_id:
@@ -42,10 +42,19 @@ def update_user(user_id):
 
         update_query = """
         UPDATE user 
-        SET user_name = %s, user_dob = %s, user_gender = %s, user_phone = %s, user_pw = %s 
-        WHERE user_id = %s
+        SET user_name = %s, user_dob = %s, user_gender = %s, user_phone = %s
         """
-        cursor.execute(update_query, (name, dob, gender, phone, password, user_id))
+        
+        update_data = [name, dob, gender, phone]
+
+        if password:
+            update_query += ", user_pw = %s"
+            update_data.append(password)
+
+        update_query += " WHERE user_id = %s"
+        update_data.append(user_id)
+
+        cursor.execute(update_query, update_data)
         conn.commit()
 
         cursor.close()

@@ -1,3 +1,5 @@
+// UserUpdate.js
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NevBar from '../../Components/NevBar/NevBar';
@@ -14,11 +16,11 @@ function UserUpdate() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userId = sessionStorage.getItem('userId') || '';
-    const userName = sessionStorage.getItem('userName') || '';
-    const userDob = sessionStorage.getItem('userDob') || '';
+    const userId = sessionStorage.getItem('userId');
+    const userName = sessionStorage.getItem('userName');
+    const userDob = sessionStorage.getItem('userDob');
     const userGender = sessionStorage.getItem('userGender') || 'male';
-    const userPhone = sessionStorage.getItem('userPhone') || '';
+    const userPhone = sessionStorage.getItem('userPhone');
 
     setUserId(userId);
     setName(userName);
@@ -55,12 +57,17 @@ function UserUpdate() {
         }
       };
 
-      const userId = sessionStorage.getItem('userId');
+      const userId = sessionStorage.getItem('userId'); // 사용자 아이디를 가져옴
 
-      if (userId) {
-        const response = await axios.put(`/api/users/${userId}`, {
-          name, dob, gender, phone, password
-        }, config);
+      if (userId) { // userId가 빈 문자열("")이거나 null이 아닌 경우에만 요청 보냄
+        const userData = { name, dob, gender, phone };
+
+        // 비밀번호가 입력되었을 경우에만 userData에 추가
+        if (password) {
+          userData.password = password;
+        }
+
+        const response = await axios.put(`/api/users/${userId}`, userData, config);
 
         if (response.status === 200) {
           sessionStorage.setItem('userName', name);
@@ -77,6 +84,7 @@ function UserUpdate() {
       console.error('Error updating user:', error);
     }
   };
+  
 
   return (
     <div>
@@ -89,10 +97,12 @@ function UserUpdate() {
             <label>회원 아이디:</label>
             <input type="text" value={userId} readOnly />
           </div>
+          {password !== undefined && (
           <div>
             <label>비밀번호:</label>
             <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
           </div>
+        )}
           <div>
             <label>사용자 이름:</label>
             <input type="text" value={name} maxLength="15" onChange={e => setName(e.target.value)} />
