@@ -259,10 +259,8 @@ export const MissingAvatar = ({
 
 
   return (
-    <div>
-
-      <h2>아바타 들어올 공간</h2>
-      <div className='avatart_div'>
+    
+      <div className='avatart_all'>
         <img className='avatar_setting' src={avatar} alt="avatar_setting" />
 
         {top_img_src && <img className={top_img_class} src={top_img_src} alt="img_avatar_top" />}
@@ -270,6 +268,6 @@ export const MissingAvatar = ({
         {belongings_img_src && <img className={belongings_img_class} src={belongings_img_src} alt="img_avatar_belonging" />}
         
       </div>
-    </div>
+    
   )
 }

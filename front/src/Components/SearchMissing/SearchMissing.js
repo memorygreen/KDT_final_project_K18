@@ -13,31 +13,37 @@ import './SearchMissing.css';
 
 
 const SearchMissing = ({ initialData }) => {
-                    
+    console.log('SearchMissing 컴포넌트에서 초기값 있는지 확인 data:', initialData ? initialData.data : 'No initial data')
     const sessionId = sessionStorage.getItem('userId') // session에 있는 id 값 
 
-    const [selectedTxt, setSelectTxt] = useState('');// 인상착의,  상의, 하의, 소지품 
-    const [selectBox, setSelectBox] = useState(''); // 인상착의, 상의, 하의, 소지품 구분에따라 나오는 박스
 
-    // 인적사항 변수
-    const [missingName, setMissingName] = useState(''); //실종자 이름
-    const [missingAge, setMissingAge] = useState(''); // 실종자 나이
-    const [missingGender, setMissingGender] = useState(''); // 실종자 성별
-    const [missingLocation, setMissingLocation] = useState(''); //실종자 마지막 발견 장소
-    const [missingLocationLat, setMissingLocationLat] = useState(''); //마지막 발견 장소 위도
-    const [missingLocationLng, setMissingLocationKLng] = useState(''); //마지막 발견 장소 경도
-    const [missingImgUrl, setMissingImgUrl] = useState(''); //마지막 발견 장소 경도
+    const [selectedTxt, setSelectTxt] = useState('');
+    const [selectBox, setSelectBox] = useState('');
+
+
+
     
 
-    // 인상착의 변수
-    const [selectedTop, setSelectedTop] = useState('');
-    const [selectedTopColor, setSelectedTopColor] = useState('');
-    const [selectedBottom, setSelectedBottom] = useState('');
-    const [selectedBottomColor, setSelectedBottomColor] = useState('');
-    const [selectedBelongings, setSelectedBelongings] = useState('');
+    const [selectedTop, setSelectedTop] = useState(initialData && initialData.data && initialData.data.MISSING_TOP ? initialData.data.MISSING_TOP : '');
+    const [selectedTopColor, setSelectedTopColor] = useState(initialData && initialData.data && initialData.data.MISSING_TOP_COLOR ? initialData.data.MISSING_TOP_COLOR : '');
 
-    const [missingClothesEtc, setMissingClothesEtc] = useState('');
-    const [missingBelongingsEtc, setMissingBelongingsEtc] = useState('');
+    const [selectedBottom, setSelectedBottom] = useState(initialData && initialData.data && initialData.data.MISSING_BOTTOMS ? initialData.data.MISSING_BOTTOMS : '');
+    const [selectedBottomColor, setSelectedBottomColor] = useState(initialData && initialData.data && initialData.data.MISSING_BOTTOMS_COLOR ? initialData.data.MISSING_BOTTOMS_COLOR : '');
+    const [selectedBelongings, setSelectedBelongings] = useState(initialData && initialData.data && initialData.data.BELONGINGS_CATE ? initialData.data.BELONGINGS_CATE : '');
+
+
+
+    const [missingName, setMissingName] = useState(initialData && initialData.length > 0 ? initialData[0].MISSING_NAME : '');
+
+    const [missingAge, setMissingAge] = useState(initialData && initialData.length > 0 ? initialData[0].MISSING_AGE : '');
+    const [missingGender, setMissingGender] = useState(initialData && initialData.length > 0 ? initialData[0].MISSING_GENDER : '');
+    const [missingLocation, setMissingLocation] = useState(initialData && initialData.length > 0 ? initialData[0].MISSING_LOCATION : '');
+    const [missingLocationLat, setMissingLocationLat] = useState(initialData && initialData.length > 0 ? initialData[0].MISSING_LOCATION_LAT : '');
+    const [missingLocationLng, setMissingLocationLng] = useState(initialData && initialData.length > 0 ? initialData[0].MISSING_LOCATION_LON : '');
+    const [missingImgUrl, setMissingImgUrl] = useState(initialData && initialData.length > 0 ? initialData[0].MISSING_IMG : '');
+
+    const [missingClothesEtc, setMissingClothesEtc] = useState(initialData && initialData.length > 0 ? initialData[0].MISSING_CLOTHES_ETC : '');
+    const [missingBelongingsEtc, setMissingBelongingsEtc] = useState(initialData && initialData.length > 0 ? initialData[0].BELONGINGS_ETC : '');
     const [missingImg, setMissingImg] = useState([]);
 
     // 인상착의의 라벨(한글)을 받기 위한 변수 설정
@@ -47,6 +53,9 @@ const SearchMissing = ({ initialData }) => {
     const [selectedBottomColorKor, setSelectedBottomColorKor] = useState('');
     const [selectedBelongingsKor, setSelectedBelongingsKor] = useState('');
     
+
+
+
     /** 자영(240603):주소 받아오는 함수 */
     const getMissingLocation = (address) => {
         console.log('정상적으로 넘어왔습니다. getMissingLocation(address)', address);
@@ -58,7 +67,7 @@ const SearchMissing = ({ initialData }) => {
     const getLatLon = (lat, lng) => {
         console.log('정상적으로 넘어왔습니다. getLatLon function', lat, lng);
         setMissingLocationLat(lat);
-        setMissingLocationKLng(lng);
+        setMissingLocationLng(lng);
 
     };
 
@@ -167,9 +176,11 @@ const SearchMissing = ({ initialData }) => {
                 })
                     .then(response => {
                         console.log('Report submitted successfully:', response.data);
+                        alert("등록 성공")
                     })
                     .catch(error => {
                         console.error('Error submitting report:', error);
+                        alert("등록 실패")
                         // Handle error
                     });
             } else {
@@ -339,7 +350,10 @@ const SearchMissing = ({ initialData }) => {
 
                 <div className="search_missing_cate_content">
                     <h2>마지막 발견장소</h2>
-                    <MissingKakaoMap getLatLon={getLatLon} getMissingLocation={getMissingLocation} />
+                    <MissingKakaoMap getLatLon={getLatLon} getMissingLocation={getMissingLocation} 
+                    initialLat={initialData.length > 0 ? initialData[0].MISSING_LOCATION_LAT : null}
+                    initialLng={initialData.length > 0 ? initialData[0].MISSING_LOCATION_LON : null}
+                    />
                 </div>
 
                 <div className="search_missing_cate_content">
@@ -352,8 +366,8 @@ const SearchMissing = ({ initialData }) => {
                             type="text"
                             className="input_etc"
                             aria-label="Sizing example input"
-                            aria-describedby="missing_name"
-                            value={missingName}
+                            aria-describedby="missing_img"
+                            value={missingImg ? missingImg.name : '선택된 파일이 없습니다.'}
                             onChange={handleNameChange}
                             placeholder = {missingImg ? missingImg.name : '선택된 파일이 없습니다.'}
                             readOnly='true'
@@ -396,7 +410,7 @@ const SearchMissing = ({ initialData }) => {
                             className="input_etc_poster_notice"
                             aria-label="Sizing example input"
                             aria-describedby="missing_name"
-                            value={missingName}
+                            value={posterGenerating ? '실종자인상착의 검색&실종자 찾기 포스터 생성':'실종자인상착의 검색만 실행'}
                             onChange={handleNameChange}
                             placeholder = {posterGenerating ? '실종자인상착의 검색&실종자 찾기 포스터 생성':'실종자인상착의 검색만 실행'}
                             readOnly='true'
@@ -595,7 +609,7 @@ const SearchMissing = ({ initialData }) => {
 
     return (
         <div>
-            <div>
+            <div className='missing_avatar_all'>
                 < MissingAvatar 
                 selectedTop ={selectedTop}
                 selectedTopColor= {selectedTopColor}
@@ -607,7 +621,7 @@ const SearchMissing = ({ initialData }) => {
             </div>
 
 
-            <div className='searchBarAll'>
+            <div className='search_bar_all'>
                 <SearchBar setSelectTxt={setSelectTxt} handleSubmit={handle_submit}/>
                 {selectedComponent}
             </div>

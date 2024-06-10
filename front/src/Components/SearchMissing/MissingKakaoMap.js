@@ -14,7 +14,7 @@ function useDidMountEffect(func, deps) {
 }
 
 // 카카오맵을 로드하고, 마커를 표시, 사용자가 클릭한 위치의 위도와 경도를 부모 컴포넌트에 전달
-export default function MissingKakaoMap({ getLatLon, getMissingLocation, missingLocation }) {
+export default function MissingKakaoMap({ getLatLon, getMissingLocation, missingLocation, initialLat, initialLng }) {
   const [map, setMap] = useState(null); // 카카오맵 객체를 저장하는 상태 변수 
   const [marker, setMarker] = useState(null); // 지도에 표시할 마커 객체를 저장하는 상태 변수
   const [address, setAddress] = useState(missingLocation || ''); // 클릭한 위치나 검색한 주소를 저장하는 상태 변수
@@ -23,7 +23,7 @@ export default function MissingKakaoMap({ getLatLon, getMissingLocation, missing
   let lng = 0;
   let lat = 0;
 
-  // 카카오맵 및 우편번��� 검색 서비스 스크립트 로드
+  // 카카오맵 및 우편번 검색 서비스 스크립트 로드
   useEffect(() => {
     const loadKakaoMaps = () => {
       return new Promise((resolve) => {
@@ -52,13 +52,22 @@ export default function MissingKakaoMap({ getLatLon, getMissingLocation, missing
           window.kakao.maps.load(() => {
             const container = document.getElementById("map");
             const options = {
-              center: new window.kakao.maps.LatLng(35.15049446168165, 126.91616067643518), // 스마트인재개발원 본점 위치 
+              center: new window.kakao.maps.LatLng(
+                initialLat || 35.15049446168165, 
+                initialLng || 126.91616067643518
+              ),
               level: 3,
             };
 
             const newMap = new window.kakao.maps.Map(container, options); // 새로운 지도 변수
-            const newMarker = new window.kakao.maps.Marker(); // 새로운 마커 변수
+            const newMarker = new window.kakao.maps.Marker({
+              position: new window.kakao.maps.LatLng(
+                initialLat || 35.15049446168165, 
+                initialLng || 126.91616067643518
+              )
+            }); // 새로운 마커 변수
 
+            newMarker.setMap(newMap);
             setMap(newMap);
             setMarker(newMarker); // 새로온 마커 변수 값 업데이트(세팅)
 
@@ -78,7 +87,7 @@ export default function MissingKakaoMap({ getLatLon, getMissingLocation, missing
         }
       });
     });
-  }, []); // 빈 의존성 배열을 추가하여 컴포넌트 마운트 시 한 번만 실행되도록 함
+  }, [initialLat, initialLng]); // 의존성 배열에 initialLat와 initialLng 추가
 
   // 우편번호 검색 기능
   const onClickAddr = () => {
@@ -127,6 +136,21 @@ export default function MissingKakaoMap({ getLatLon, getMissingLocation, missing
     }
   }, [map, marker]);
 
+  // address가 변경될 때마다 마커를 업데이트
+  useEffect(() => {
+    if (map && address) {
+      const geocoder = new window.kakao.maps.services.Geocoder();
+      geocoder.addressSearch(address, function (result, status) {
+        if (status === window.kakao.maps.services.Status.OK) {
+          const newPos = new window.kakao.maps.LatLng(result[0].y, result[0].x);
+          marker.setPosition(newPos);
+          marker.setMap(map);
+          map.panTo(newPos);
+        }
+      });
+    }
+  }, [address, map, marker]);
+
   return (
     <div>
       <div onClick={onClickAddr}>
@@ -136,4 +160,3 @@ export default function MissingKakaoMap({ getLatLon, getMissingLocation, missing
     </div>
   );
 }
-
