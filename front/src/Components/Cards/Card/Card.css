@@ -1,10 +1,5 @@
 /* src/components/Card/Card.css */
 
-.Card_body {
-    font-size: 16px;
-    padding: 6rem 2rem;
-}
-
 .Card_articles {
     display: flex;
     flex-wrap: wrap;
@@ -13,11 +8,6 @@
     max-width: 1200px;
     gap: 1.5rem;
 }
-
-.Wanted_size {
-    margin-top: 50px;
-}
-
 .Slider_size {
     flex-wrap: wrap;
     margin: 0 auto;
@@ -26,67 +16,10 @@
     gap: 1.5rem;
 }
 
-.card_art {
-    max-width: 20rem;
-    width: 100%;
-    cursor: pointer;
-    position: relative;
-    display: block;
-    transition: all 0.4s ease-in-out;
-    overflow: hidden;
-    border-radius: 1rem;
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-}
-
-.card_art h2 {
-    margin: 0 0 0.5rem 0;
-    font-size: 1.6rem;
-    color: #2C2C2C;
-    transition: color 0.3s ease-out;
-}
-
-.card_art img {
-    max-width: 100%;
-    transform-origin: center;
-    transition: transform 0.4s ease-in-out;
-    height: 100%;
-    aspect-ratio: 21 / 9;
-    overflow: hidden;
-    object-fit: cover;
-}
-
-.card_art:hover img {
-    transform: scale(1.15);
-}
-
-.article-preview {
-    padding: 1.5rem;
-    background: white;
-}
-
-.card_art figure {
-    width: 100%;
-    height: 24rem;
-    overflow: hidden;
-}
-
-
-.Poster_columns {
-    width: 100%;
-    max-width: 1200px;
-    position: relative;
-    padding: 20vh 0;
-    display: grid;
-    place-items: center;
-    grid-template-columns: repeat(3), 1fr;
-    gap: 10px;
-}
-
-.Poster_column {
-    width: 100%;
-    position: relative;
-    display: grid;
-    gap: 10px;
-    grid-template-columns: 100%;
-    will-change: transform;
+.Card_columns {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* 전체 너비를 사용 */
+    height: 100%; /* 필요한 경우 전체 높이를 사용 */
 }

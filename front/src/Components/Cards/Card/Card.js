@@ -9,7 +9,7 @@ import Article from './Article'; // Article 컴포넌트 임포트
 
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import imagesLoaded from 'imagesloaded';
+import CardColums from '../CardColums/CardColums';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -44,54 +44,34 @@ const Card = () => {
         setSelectedArticle(null);
     };
 
-
-    const Columns = () => {
-        useEffect(() => {
-            imagesLoaded(document.querySelectorAll('.column__item-img'), { background: true }, () => {
-                // 애니메이션 초기화 로직
-            });
-        }, []);
-
-        return (
-            <div className="Poster_columns">
-                {posters.map((poster, index) => (
-                    <Article
-                        className="Poster_column"
-                        key={index}
-                        article={poster}
-                        handleImageClick={handleImageClick}
-                    />
-                ))}
-            </div>
-        );
-    };
-
-
-    // 전체 포스터 리스트
-    const Articles = ({ posters }) => (
-        <div className="Card_articles">
-            {posters.map((poster, index) => (
-                <Article
-                    className="Card_article"
-                    key={index}
-                    article={poster}
-                    handleImageClick={handleImageClick}
-                />
-            ))}
-        </div>
-    );
+    // // 전체 포스터 리스트
+    // const Articles = ({ posters }) => (
+    //     <div className="Card_articles">
+    //         {posters.map((poster, index) => (
+    //             <Article
+    //                 className="Card_article"
+    //                 key={index}
+    //                 article={poster}
+    //                 handleImageClick={handleImageClick}
+    //             />
+    //         ))}
+    //     </div>
+    // );
 
     return (
         <div className='Card_body'>
             {/* <div className='Slider_size'>
                 <CardSlider posters={posters} handleImageClick={handleImageClick} />
             </div> */}
-            <div className='Wanted_size'>
+            {/* <div className='Wanted_size'>
                 <Articles posters={posters} />
-            </div> 
-            <CardModal isOpen={showModal} onClose={handleCloseModal} selectedArticle={selectedArticle} />
-            <div className='Columns_size'>
-                <Columns />
+            </div> */}
+            <div className='Card_columns'>
+                <CardColums posters={posters} handleImageClick={handleImageClick} />
+            </div>
+
+            <div className='Card_modals'>
+                <CardModal isOpen={showModal} onClose={handleCloseModal} selectedArticle={selectedArticle} />
             </div>
         </div>
     );
