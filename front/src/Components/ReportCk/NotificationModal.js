@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate,useLocation } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import axios from 'axios';
+import './NotificationModal.css';
+
+
 
 
 const NotificationModal = ({ onClose }) => {
@@ -73,22 +76,30 @@ const NotificationModal = ({ onClose }) => {
             navigate('/ReportNotificationPage', { state: { notification, notifications } });
         }
     };
+    const isConditionMet = (notification) => {
+        return (notification.REPORT_NOTIFICATION === 1 || notification.CAPTURE_ALARM_CK === 1);
+    };
+    const handleOutsideClick = (e) => {
+        if (e.target.className === 'modal') {
+            onClose();
+        }
+    };
 
     return (
-        <div className="modal">
-            <button className="close-button" onClick={onClose}>Close </button>
+        <div className="modal" onClick={handleOutsideClick}>
+         <div className="modal-content">
             <div className="notification-container">
                 {notifications.map(notification => (
-                    <div key={notification.id} className="notification" onClick={() => handleDetailClick(notification)}>
+                    <div key={notification.id} className={`notification ${notification.REPORT_NOTIFICATION === 1 || notification.CAPTURE_ALARM_CK === 1 ? 'notification-gray' : ''}`} onClick={() => handleDetailClick(notification)}>
                         <div className="notification-header">
                         <b>{notification.type === 'capture' ? `${notification.MISSING_NAME} 추정 캡쳐 알림` : `${notification.MISSING_NAME} 추정 제보 알림`}</b>
                         </div>
-                        <div className="notification-content">
+                        <div className={`notification-content ${notification.REPORT_NOTIFICATION === 1 || notification.CAPTURE_ALARM_CK === 1 ? 'notification-content-gray-text' : ''}`} >
                             {notification.type === 'capture' ?
                                 <>
-                                    {cctvAddresses[notification.CCTV_IDX] || 'Loading address...'} 의 CCTV {notification.CCTV_IDX} 에서
+                                    <div>{cctvAddresses[notification.CCTV_IDX] || 'Loading address...'} 의 CCTV {notification.CCTV_IDX} 에서</div>
                                     <div>
-                                        {notification.CAPTURE_FIRST_TIME}에 온 <img src={notification.CAPTURE_PATH} alt="Capture" style={{ maxWidth: '100%' }} />입니다.
+                                        {notification.CAPTURE_FIRST_TIME}에 온 <img src={notification.CAPTURE_PATH} alt="Capture" style={{maxWidth: '100%' }} />입니다.
                                     </div>
                                 </>
                                 :
@@ -98,6 +109,7 @@ const NotificationModal = ({ onClose }) => {
                     </div>
                 ))}
             </div>
+        </div>
         </div>
     );
 };
