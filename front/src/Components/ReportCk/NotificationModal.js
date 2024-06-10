@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation } from 'react-router-dom';
 import axios from 'axios';
+
 
 const NotificationModal = ({ onClose }) => {
     const [notifications, setNotifications] = useState([]);
@@ -67,6 +68,7 @@ const NotificationModal = ({ onClose }) => {
     const handleDetailClick = (notification) => {
         if (notification.type === 'capture') {
             navigate('/CaptureNotificationPage', { state: { notification, notifications } });
+            
         } else if (notification.type === 'report') {
             navigate('/ReportNotificationPage', { state: { notification, notifications } });
         }
@@ -85,7 +87,9 @@ const NotificationModal = ({ onClose }) => {
                             {notification.type === 'capture' ?
                                 <>
                                     {cctvAddresses[notification.CCTV_IDX] || 'Loading address...'} 의 CCTV {notification.CCTV_IDX} 에서
-                                    <div>{notification.CAPTURE_FIRST_TIME}에 온 캡쳐입니다.</div>
+                                    <div>
+                                        {notification.CAPTURE_FIRST_TIME}에 온 <img src={notification.CAPTURE_PATH} alt="Capture" style={{ maxWidth: '100%' }} />입니다.
+                                    </div>
                                 </>
                                 :
                                 <div>{notification.REPORT_TIME}에 온 제보입니다</div>
