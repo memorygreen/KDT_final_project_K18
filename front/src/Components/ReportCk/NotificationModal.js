@@ -67,34 +67,14 @@ const NotificationModal = ({ onClose }) => {
     const handleDetailClick = (notification) => {
         if (notification.type === 'capture') {
             navigate('/CaptureNotificationPage', { state: { notification, notifications } });
-
-            axios.post('http://localhost:5000/capture_detail', {
-                capture_idx: notification.CAPTURE_IDX
-            }, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).catch(error => {
-                console.error('Error updating capture detail:', error);
-            });
         } else if (notification.type === 'report') {
             navigate('/ReportNotificationPage', { state: { notification, notifications } });
-
-            axios.post('http://localhost:5000/report_detail', {
-                report_id: notification.REPORT_ID
-            }, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).catch(error => {
-                console.error('Error updating report detail:', error);
-            });
         }
     };
 
     return (
         <div className="modal">
-            <button onClick={onClose}>Close Modal</button>
+            <button className="close-button" onClick={onClose}>Close </button>
             <div className="notification-container">
                 {notifications.map(notification => (
                     <div key={notification.id} className="notification" onClick={() => handleDetailClick(notification)}>
