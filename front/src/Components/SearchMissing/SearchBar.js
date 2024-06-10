@@ -3,7 +3,7 @@ import './SearchBar.css';
 const SearchBar = ({ setSelectTxt , handle_submit}) => {
 
   const btnContents = ['인적사항', '상의', '하의', '소지품']
-
+  console.log("서치바 : ", handle_submit);
   return (
 
     <div className='searchBar'>

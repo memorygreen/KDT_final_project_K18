@@ -35,7 +35,7 @@ def search_missing():
         missing_location_lng = data.get('missing_location_lng')
         
         
-        missing_img = data.get('missing_img')
+        missing_img = data.get('missing_img_url')
         
         selected_top = data.get('selected_top')
         selected_top_color = data.get('selected_top_color')
@@ -99,7 +99,7 @@ def search_missing():
         sql_missing = """
         INSERT INTO TB_MISSING (USER_ID, MISSING_NAME, MISSING_GENDER,MISSING_AGE, MISSING_AGE_CATE, 
                                 MISSING_IMG, MISSING_LOCATION_LAT, MISSING_LOCATION_LON, MISSING_LOCATION)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s,  %s)
         """
         cursor.execute(sql_missing, (session_id, missing_name, missing_gender,missing_age,  missing_age_cate, missing_img, missing_location_lat, missing_location_lng, missing_location))
 

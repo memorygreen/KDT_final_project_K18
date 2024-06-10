@@ -116,9 +116,42 @@ const SearchMissing = ({ initialData }) => {
     const [posterGenerating, setPosterGenerating] = useState('');
 
 
+
+
+
+
+        // // 인적사항 확인
+        console.log('프론트에서 넘어오는지 확인')
+        console.log('Missing Name:', missingName);
+        console.log('Missing Age:', missingAge);
+        console.log('Missing Gender:', missingGender);
+        console.log('Missing Location:', missingLocation);
+        console.log('Missing Location Lat:', missingLocationLat);
+        console.log('Missing Location Lng:', missingLocationLng);
+        console.log('Selected Img Url:', missingImgUrl);
+    
+        // // 인상착의 확인
+        console.log('Selected Top:', selectedTop);
+        console.log('Selected Top Color:', selectedTopColor);
+        console.log('Selected Bottom:', selectedBottom);
+        console.log('Selected Bottom Color:', selectedBottomColor);
+        console.log('Selected Belongings:', selectedBelongings);
+    
+        console.log('Selected Top(Kor):', selectedTopKor);
+        console.log('Selected Top Color(Kor):', selectedTopColorKor);
+        console.log('Selected Bottom(Kor):', selectedBottomKor);
+        console.log('Selected Bottom Color(Kor):', selectedBottomColorKor);
+        console.log('Selected Belongings(Kor):', selectedBelongingsKor);
+    
+        console.log('missingClothesEtc(인상착의 특이사항):', missingClothesEtc);
+        console.log('missingBelongingsEtc(소지품 특이사항):', missingBelongingsEtc);
+
+        
+
     const handle_submit = async (event) => {
+        console.log('handle_submit 들어왔는지 확111')
         event.preventDefault();
-        console.log('handle_submit 들어왔는지 확인')
+        console.log('handle_submit 들어왔는지 확인222')
 
         if (missingImg) {
             console.log('missingImg 들어왔는지 확인')
@@ -128,7 +161,7 @@ const SearchMissing = ({ initialData }) => {
                 // missingImgUrl = Url;
                 console.log("업로드된 이미지 URL (확인)):", missingImgUrl); // URL을 로그로 출력
             } catch (error) {
-                console.error('실종자 이미지 업로드 실패 Failed to upload image');
+                console.error('실종자 이미지 aws 업로드 실패 Failed to upload image');
             }
 
             if (missingImgUrl) {
@@ -145,7 +178,7 @@ const SearchMissing = ({ initialData }) => {
                     missing_location: missingLocation,
                     missing_location_lat: missingLocationLat,
                     missing_location_lng: missingLocationLng,
-                    missing_img: missingImgUrl,
+                    missing_img_url: missingImgUrl,
 
                     selected_top: selectedTop,
                     selected_top_color: selectedTopColor,
@@ -188,43 +221,17 @@ const SearchMissing = ({ initialData }) => {
                         // Handle error
                     });
             } else {
-                console.error('실종자 이미지 url 업로드 실패 No image to upload');
-            }
-            
-            if (!missingImgUrl) {
+                console.error('실종자 이미지 url 받은 후 백으로 보내기 실패 No image to upload');
                 console.error('실종자 이미지 url을 업로드해주세요.');
             }
+            
+            
         }
 
         // 포스터 생성
         
     };
 
-    // // 인적사항 확인
-    console.log('프론트에서 넘어오는지 확인')
-    console.log('Missing Name:', missingName);
-    console.log('Missing Age:', missingAge);
-    console.log('Missing Gender:', missingGender);
-    console.log('Missing Location:', missingLocation);
-    console.log('Missing Location Lat:', missingLocationLat);
-    console.log('Missing Location Lng:', missingLocationLng);
-    console.log('Selected Img Url:', missingImgUrl);
-
-    // // 인상착의 확인
-    console.log('Selected Top:', selectedTop);
-    console.log('Selected Top Color:', selectedTopColor);
-    console.log('Selected Bottom:', selectedBottom);
-    console.log('Selected Bottom Color:', selectedBottomColor);
-    console.log('Selected Belongings:', selectedBelongings);
-
-    console.log('Selected Top(Kor):', selectedTopKor);
-    console.log('Selected Top Color(Kor):', selectedTopColorKor);
-    console.log('Selected Bottom(Kor):', selectedBottomKor);
-    console.log('Selected Bottom Color(Kor):', selectedBottomColorKor);
-    console.log('Selected Belongings(Kor):', selectedBelongingsKor);
-
-    console.log('missingClothesEtc(인상착의 특이사항):', missingClothesEtc);
-    console.log('missingBelongingsEtc(소지품 특이사항):', missingBelongingsEtc);
 
 
     // 각 옵션의 label 값을 찾아서 상태에 저장하는 함수들
@@ -598,7 +605,6 @@ const SearchMissing = ({ initialData }) => {
     } else {
         selectedComponent = null;
     }
-    console.log('selectBox 값:', selectBox);
 
 
 
