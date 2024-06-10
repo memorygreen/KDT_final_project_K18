@@ -7,6 +7,7 @@
 .avatar_setting {
   top: 4rem;
 
+
   position: relative; /* 상대적 위치 설정 */
   z-index: 1; /* 다른 요소들보다 앞에 위치 */
   width: 12.6rem;

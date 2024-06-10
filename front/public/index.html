@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
   <!-- 자영 추가(240530): services와 clusterer, drawing 라이브러리 불러오기 -->
@@ -9,14 +10,16 @@
   <!--자영 추가(240531): 다우미 우편번호 검색 api -->
   <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
-
-
   <meta charset="utf-8" />
   <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#000000" />
   <meta name="description" content="Web site created using create-react-app" />
+  <meta name="keywords" content="svg filter, animation, javascript, link effect, hover, line, menu" />
+  <meta name="author" content="Codrops" />
   <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+
+  <script>document.documentElement.className = "js"; var supportsCssVars = function () { var e, t = document.createElement("style"); return t.innerHTML = "root: { --tmp-var: bold; }", document.head.appendChild(t), e = !!(window.CSS && window.CSS.supports && window.CSS.supports("font-weight", "var(--tmp-var)")), t.parentNode.removeChild(t), e }; supportsCssVars() || alert("Please view this demo in a modern browser that supports CSS Variables.");</script>
   <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
@@ -37,16 +40,46 @@
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
-  <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+  <svg class="hidden">
+    <defs>
+      <defs>
+        <filter id="filter-1">
+          <feTurbulence type="fractalNoise" baseFrequency="0" numOctaves="1" result="warp" />
+          <feOffset dx="-90" result="warpOffset" />
+          <feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="30" in="SourceGraphic" in2="warpOffset" />
+        </filter>
+        <filter id="filter-2">
+          <feTurbulence type="fractalNoise" baseFrequency="0" numOctaves="10" result="warp" />
+          <feOffset dx="-90" result="warpOffset" />
+          <feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="60" in="SourceGraphic" in2="warpOffset" />
+        </filter>
+        <filter id="filter-3">
+          <feTurbulence type="fractalNoise" baseFrequency="0.15 0.02" numOctaves="3" result="warp" />
+          <feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="0" in="SourceGraphic" in2="warp" />
+        </filter>
+        <filter id="filter-4">
+          <feTurbulence type="fractalNoise" baseFrequency="0" numOctaves="5" result="warp" />
+          <feOffset dx="-90" result="warpOffset" />
+          <feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="35" in="SourceGraphic" in2="warpOffset" />
+        </filter>
+        <filter id="filter-5">
+          <feTurbulence type="fractalNoise" baseFrequency="0.01 0.7" numOctaves="5" result="warp" />
+          <feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="0" in="SourceGraphic" in2="warp" />
+        </filter>
+        <filter id="filter-6">
+          <feTurbulence type="fractalNoise" baseFrequency="0.01 0.07" numOctaves="5" seed="2" result="noise" />
+          <feDisplacementMap in="SourceGraphic" in2="warp" scale="0" xChannelSelector="R" yChannelSelector="B" />
+        </filter>
+        <filter id="filter-7">
+          <feTurbulence type="fractalNoise" baseFrequency="0" numOctaves="5" result="warp" />
+          <feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="90" in="SourceGraphic" in2="warp" />
+        </filter>
+        <!-- Include other filters as needed -->
+      </defs>
+  </svg>
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+
 </body>
 
 </html>
