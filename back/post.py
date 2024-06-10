@@ -176,8 +176,7 @@ def create_poster():
 
         missing_idx = missing[0]
         poster_img_path=missing[5]
-        print(missing[0])
-        print(missing[5])
+        
         # 포스터 생성 및 삽입
         sql_insert_poster = """
             INSERT INTO TB_POSTER (
@@ -224,6 +223,38 @@ def disable_poster(user_id, missing_idx):
     finally:
         cursor.close()
         db.close()
+
+
+#포스터 비활성화 show 1>0
+@post_bp.route('/post_no_show')
+def post_no_show():
+    try:
+        poster_idx = request.json.get('poster_idx')
+        if not poster_idx:
+            return jsonify({"error": "capture IDX is missing"}), 400
+        db = db_con()
+        cursor = db.cursor()
+
+        
+        cursor.execute("SELECT POSTER_SHOW FROM TB_POSTER WHERE POSTER_IDX = %s", (poster_idx,))
+        current_notification = cursor.fetchone()
+
+        if current_notification and current_notification[0] == 0:
+            # REPORT_NOTIFICATION이 0인 경우에만 업데이트
+            sql_poster_update = """
+            UPDATE TB_POSTER
+            SET POSTER_SHOW =0
+            WHERE POSTER_IDX = %s
+            """
+            cursor.execute(sql_poster_update, (poster_idx,))
+            db.commit()
+        
+        cursor.close()
+        db.close()
+
+        return jsonify({"message": "capture updated successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
     
 
 
