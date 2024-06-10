@@ -30,7 +30,13 @@ const LoginPage = () => {
             } else if (response.ok) {
                 const data = await response.json();
                 console.log('Login successful:', data);
-                sessionStorage.setItem('userId', id);
+                sessionStorage.setItem('userId', data.USER_ID);
+                sessionStorage.setItem('userName', data.USER_NAME);
+                sessionStorage.setItem('userBrtDt', data.USER_BRT_DT);
+                sessionStorage.setItem('userGender', data.USER_GENDER);
+                sessionStorage.setItem('userPhone', data.USER_PHONE);
+                sessionStorage.setItem('userStatus', data.USER_STATUS);
+                sessionStorage.setItem('userCate', data.USER_CATE);
                 window.location.href = '/'; // 메인 페이지로 이동
             } else {
                 alert('로그인에 실패했습니다. 다시 시도해 주세요.');

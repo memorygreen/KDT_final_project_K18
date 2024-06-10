@@ -54,7 +54,7 @@
 }
 
 
-.navigation>li {
+.navigation>li , .admin_button>li {
     display: flex;
     position: relative;
     cursor: pointer;
@@ -62,18 +62,18 @@
     min-height: 2.25rem;
 }
 
-.navigation>li>a {
+.navigation>li>a , .admin_button>li>a {
     color: rgb(255, 255, 255);
     font-size: 14px;
     font-weight: 600;
     text-decoration: none;
 }
 
-.navigation>li>a:hover {
-    color: #fbff00b0;
+.navigation>li>a:hover , .admin_button>li>a:hover {
+    color: #333333b0;
 }
 
-.navigation>li>button {
+.navigation>li>button , .admin_button>li>button {
     color: rgb(255, 255, 255);
     transition: all 0.3s ease;
     text-decoration: none;
@@ -96,22 +96,22 @@
     transition: all 0.2s ease-in-out;
 }
 
-.navigation>li>button>svg {
+.navigation>li>button>svg , .admin_button>li>button>svg {
     margin-top: 2px;
     fill: rgb(255, 255, 255);
     transition: all 0.2s ease-in-out;
 } */
 
-.navigation>li:hover>button svg {
+.navigation>li:hover>button svg , .admin_button>li:hover>button svg {
     fill: #8276ec00;
     transform: rotate(0.5turn);
 }
 
-.navigation>li:hover>button {
+.navigation>li:hover>button , .admin_button>li:hover>button {
     color:#fbff00b0;
 }
 
-.navigation>li:hover .dropdown {
+.navigation>li:hover .dropdown , .admin_button>li:hover .dropdown {
     display: block;
 }
 

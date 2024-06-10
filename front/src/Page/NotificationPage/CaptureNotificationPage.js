@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation,useNavigate } from 'react-router-dom';
 import NevBar from '../../Components/NevBar/NevBar';
 import axios from 'axios';
 
 const CaptureNotificationPage = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const [notifications, setNotifications] = useState(location.state.notifications || []);
     const [selectedNotification, setSelectedNotification] = useState(null);
     const [cctvAddresses, setCctvAddresses] = useState({});
+    
+
+   
 
     useEffect(() => {
         const fetchNotifications = async () => {
@@ -54,7 +58,10 @@ const CaptureNotificationPage = () => {
 
     const handleCloseModal = () => {
         setSelectedNotification(null);
+        navigate(-1);
     };
+
+
 
     return (
         <div className="capture-notification-page">
@@ -62,11 +69,11 @@ const CaptureNotificationPage = () => {
             <h1>Capture Notifications</h1>
             <div className="notification-container">
                 {notifications.map(notification => (
-                    <div key={notification.CAPTURE_IDX} className="notification">
+                    <div key={notification.CAPTURE_IDX} className="notification" onClick={() => captureDetail(notification)}>
                         <div className="notification-header"><b>{notification.MISSING_NAME} 추정 캡쳐 알림</b></div>
-                        <div className="notification-content" onClick={() => captureDetail(notification)}>
+                        <div className="notification-content" >
                             {cctvAddresses[notification.CCTV_IDX] || 'Loading address...'} 의 CCTV {notification.CCTV_IDX} 에서
-                            <div>{notification.CAPTURE_FIRST_TIME}에 온 캡쳐입니다.</div>
+                            <div>{notification.CAPTURE_FIRST_TIME}에 온 <img src={notification.CAPTURE_PATH} alt="Capture" style={{ maxWidth: '100%' }} />입니다.</div>
                         </div>
                     </div>
                 ))}

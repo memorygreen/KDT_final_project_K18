@@ -7,12 +7,17 @@ from dotenv import load_dotenv
 signup_bp = Blueprint('signup', __name__)
 
 # 비밀번호를 bcrypt로 해싱하는 함수
+
+
 def hash_password(password):
     return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
 # 비밀번호 비교 함수
+
+
 def check_password(hashed_password, password):
     return bcrypt.checkpw(password.encode('utf-8'), hashed_password)
+
 
 app = Flask(__name__)
 
@@ -24,6 +29,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 # Flask 애플리케이션에 SECRET_KEY 설정
 app.secret_key = SECRET_KEY
+
 
 @signup_bp.route('/signup', methods=['POST'])
 def signup():
@@ -57,7 +63,8 @@ def signup():
             INSERT INTO TB_USER (USER_ID, USER_PW, USER_NAME, USER_BRT_DT, USER_GENDER, USER_PHONE) 
             VALUES (%s, %s, %s, %s, %s, %s)
             """
-            cursor.execute(sql, (user_id, hashed_password, user_name, user_brt_dt, user_gender, user_phone))
+            cursor.execute(sql, (user_id, hashed_password,
+                           user_name, user_brt_dt, user_gender, user_phone))
             connection.commit()
 
             # 사용자 정보의 id값을 세션에 저장 후 회원가입 페이지로 이동
@@ -71,6 +78,7 @@ def signup():
     finally:
         connection.close()
 
+
 @signup_bp.route('/login', methods=['POST'])
 def login():
     data = request.json
@@ -80,24 +88,35 @@ def login():
     try:
         connection = db_con()
         with connection.cursor() as cursor:
-            sql = "SELECT USER_PW, USER_STATUS FROM TB_USER WHERE USER_ID = %s"
+            sql = "SELECT USER_PW, USER_NAME, USER_BRT_DT, USER_GENDER, USER_PHONE, USER_STATUS, USER_CATE FROM TB_USER WHERE USER_ID = %s"
             cursor.execute(sql, (user_id,))
             user_data = cursor.fetchone()
 
             if user_data is None:
                 return jsonify({'message': 'User not found'}), 404
 
-            hashed_password_from_db, user_status = user_data  # 저장된 bcrypt 해시 비밀번호와 상태 가져오기
+            hashed_password_from_db, user_name, user_brt_dt, user_gender, user_phone, user_status, user_cate = user_data
             if user_status == 'stop':
-                return jsonify({'message': 'Account is suspended'}), 403  # 계정 사용 정지
+                # 계정 사용 정지
+                return jsonify({'message': 'Account is suspended'}), 403
 
             # 데이터베이스에서 가져온 해시 비밀번호를 bytes 형식으로 변환
             if isinstance(hashed_password_from_db, str):
-                hashed_password_from_db = hashed_password_from_db.encode('utf-8')
+                hashed_password_from_db = hashed_password_from_db.encode(
+                    'utf-8')
 
             if check_password(hashed_password_from_db, provided_pw):
-                # 로그인 성공
-                return jsonify({'message': 'Login successful'}), 200
+                # 로그인 성공 시, 이름, 생일, 성별, 전화번호, 상태를 반환
+                return jsonify({
+                    'message': 'Login successful',
+                    'USER_ID': user_id,
+                    'USER_NAME': user_name,
+                    'USER_BRT_DT': user_brt_dt,
+                    'USER_GENDER': user_gender,
+                    'USER_PHONE': user_phone,
+                    'USER_STATUS': user_status,
+                    'USER_CATE': user_cate
+                }), 200
             else:
                 # 비밀번호 불일치
                 return jsonify({'message': 'Invalid password'}), 401
@@ -105,6 +124,7 @@ def login():
         return jsonify({'message': str(e)}), 500
     finally:
         connection.close()
+
 
 if __name__ == '__main__':
     app.register_blueprint(signup_bp)
