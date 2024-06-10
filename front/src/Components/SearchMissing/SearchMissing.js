@@ -67,8 +67,6 @@ const SearchMissing = ({ initialData }) => {
     const topOptions = [
         { id: 'long_sleeve', label: '긴팔' },
         { id: 'short_sleeve', label: '반팔' },
-        { id: 'sleeveless', label: '민소매' },
-        { id: 'onepice', label: '원피스' },
     ];
 
     const topColorOptions = [
@@ -87,7 +85,6 @@ const SearchMissing = ({ initialData }) => {
         { id: 'long_pants', label: '긴바지' },
         { id: 'short_pants', label: '반바지' },
         { id: 'skirt', label: '치마' },
-        { id: 'bottom_type_none', label: '해당없음' },
     ];
 
     const bottomColorOptions = [
@@ -105,14 +102,11 @@ const SearchMissing = ({ initialData }) => {
     ];
 
     const belongingsOptions = [
-        { id: 'carrier', label: '캐리어' },
-        { id: 'umbrella', label: '우산' },
-        { id: 'bag', label: '가방' },
         { id: 'hat', label: '모자' },
-        { id: 'glasses', label: '안경' },
-        { id: 'acc_none', label: '해당없음' },
         { id: 'back_pack', label: '배낭' },
         { id: 'shoulder_bag', label: '숄더백' },
+        { id: 'hand_bag', label: '핸드백' },
+        { id: 'acc_none', label: '해당없음' },
     ];
 
     const genderOptions = [
