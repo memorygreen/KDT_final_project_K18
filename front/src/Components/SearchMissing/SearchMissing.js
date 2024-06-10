@@ -4,47 +4,36 @@ import MissingKakaoMap from './MissingKakaoMap';
 import SearchBar from './SearchBar';
 import UploadMissingImg from './UploadMissingImg';
 import { createPoster } from '../Poster/CreatePost';
-
-import avatar from "./assets/avatar.png"
 import { MissingAvatar } from './MissingAvatar';
-
 import './SearchMissing.css';
 
-
-
 const SearchMissing = ({ initialData }) => {
-    console.log('SearchMissing 컴포넌트에서 초기값 있는지 확인 data:', initialData ? initialData.data : 'No initial data')
     const sessionId = sessionStorage.getItem('userId') // session에 있는 id 값 
-
 
     const [selectedTxt, setSelectTxt] = useState('');
     const [selectBox, setSelectBox] = useState('');
 
+    // console.log('SearchMissing 컴포넌트에서 초기값 있는지 확인 data:', initialData ? initialData : 'No initial data')
 
+    const [missingName, setMissingName] = useState('');
+    const [missingAge, setMissingAge] = useState('');
+    const [missingGender, setMissingGender] = useState('');
+    const [missingLocation, setMissingLocation] = useState('');
+    const [missingLocationLat, setMissingLocationLat] = useState('');
+    const [missingLocationLng, setMissingLocationLng] = useState('');
+    const [missingImgUrl, setMissingImgUrl] = useState('');
 
-    
+    const [selectedTop, setSelectedTop] = useState('');
+    const [selectedTopColor, setSelectedTopColor] = useState('');
+    const [selectedBottom, setSelectedBottom] = useState('');
+    const [selectedBottomColor, setSelectedBottomColor] = useState('');
+    const [missingClothesEtc, setMissingClothesEtc] = useState('');
+    const [selectedBelongings, setSelectedBelongings] = useState('');
+    const [missingBelongingsEtc, setMissingBelongingsEtc] = useState('');
 
-    const [selectedTop, setSelectedTop] = useState(initialData && initialData.data && initialData.data.MISSING_TOP ? initialData.data.MISSING_TOP : '');
-    const [selectedTopColor, setSelectedTopColor] = useState(initialData && initialData.data && initialData.data.MISSING_TOP_COLOR ? initialData.data.MISSING_TOP_COLOR : '');
-
-    const [selectedBottom, setSelectedBottom] = useState(initialData && initialData.data && initialData.data.MISSING_BOTTOMS ? initialData.data.MISSING_BOTTOMS : '');
-    const [selectedBottomColor, setSelectedBottomColor] = useState(initialData && initialData.data && initialData.data.MISSING_BOTTOMS_COLOR ? initialData.data.MISSING_BOTTOMS_COLOR : '');
-    const [selectedBelongings, setSelectedBelongings] = useState(initialData && initialData.data && initialData.data.BELONGINGS_CATE ? initialData.data.BELONGINGS_CATE : '');
-
-
-
-    const [missingName, setMissingName] = useState(initialData && initialData.length > 0 ? initialData[0].MISSING_NAME : '');
-
-    const [missingAge, setMissingAge] = useState(initialData && initialData.length > 0 ? initialData[0].MISSING_AGE : '');
-    const [missingGender, setMissingGender] = useState(initialData && initialData.length > 0 ? initialData[0].MISSING_GENDER : '');
-    const [missingLocation, setMissingLocation] = useState(initialData && initialData.length > 0 ? initialData[0].MISSING_LOCATION : '');
-    const [missingLocationLat, setMissingLocationLat] = useState(initialData && initialData.length > 0 ? initialData[0].MISSING_LOCATION_LAT : '');
-    const [missingLocationLng, setMissingLocationLng] = useState(initialData && initialData.length > 0 ? initialData[0].MISSING_LOCATION_LON : '');
-    const [missingImgUrl, setMissingImgUrl] = useState(initialData && initialData.length > 0 ? initialData[0].MISSING_IMG : '');
-
-    const [missingClothesEtc, setMissingClothesEtc] = useState(initialData && initialData.length > 0 ? initialData[0].MISSING_CLOTHES_ETC : '');
-    const [missingBelongingsEtc, setMissingBelongingsEtc] = useState(initialData && initialData.length > 0 ? initialData[0].BELONGINGS_ETC : '');
+    // 실종자 이미지 
     const [missingImg, setMissingImg] = useState([]);
+
 
     // 인상착의의 라벨(한글)을 받기 위한 변수 설정
     const [selectedTopKor, setSelectedTopKor] = useState('');
@@ -52,7 +41,7 @@ const SearchMissing = ({ initialData }) => {
     const [selectedBottomKor, setSelectedBottomKor] = useState('');
     const [selectedBottomColorKor, setSelectedBottomColorKor] = useState('');
     const [selectedBelongingsKor, setSelectedBelongingsKor] = useState('');
-    
+
 
 
 
@@ -124,20 +113,18 @@ const SearchMissing = ({ initialData }) => {
     ];
 
     // 포스터 생성기능
-    const [posterGenerating,setPosterGenerating] = useState('');
-   
+    const [posterGenerating, setPosterGenerating] = useState('');
 
-    
-
-    
 
     const handle_submit = async (event) => {
         event.preventDefault();
-       
+        console.log('handle_submit 들어왔는지 확인')
+
         if (missingImg) {
+            console.log('missingImg 들어왔는지 확인')
             try {
                 setMissingImgUrl(await UploadMissingImg(missingImg));
-              
+
                 // missingImgUrl = Url;
                 console.log("업로드된 이미지 URL (확인)):", missingImgUrl); // URL을 로그로 출력
             } catch (error) {
@@ -147,8 +134,9 @@ const SearchMissing = ({ initialData }) => {
             if (missingImgUrl) {
                 // 백으로 보내기
                 // POST request to submit form data
-                axios.post('/SearchMissing', {                    
-                    session_id : sessionId,
+                console.log('post 들어왔는지 확인')
+                axios.post('/SearchMissing', {
+                    session_id: sessionId,
 
                     missing_name: missingName,
                     missing_gender: missingGender,
@@ -175,60 +163,68 @@ const SearchMissing = ({ initialData }) => {
                     missing_belongings_etc: missingBelongingsEtc,
                 })
                     .then(response => {
-                        console.log('Report submitted successfully:', response.data);
+                        console.log('실종자 정보 등록 성공 successfully:', response.data);
                         alert("등록 성공")
+
+                    
+                        // 포스터 생성
+                        if (posterGenerating) {
+                            try {
+                                setTimeout(async () => {
+                                    await createPoster(); // createPoster 함수 실행
+                                }, 5000);  //db값 저장되고 실행하도록 시간텀을 줌
+                            } catch (error) {
+                                // createPoster 함수 실행 중 오류가 발생한 경우 처리
+                                console.error('Error creating poster:', error);
+                            }
+                        }
+
+
+
                     })
                     .catch(error => {
-                        console.error('Error submitting report:', error);
+                        console.error('실종자 정보 등록 실패 에러 Error submitting report:', error);
                         alert("등록 실패")
                         // Handle error
                     });
             } else {
                 console.error('실종자 이미지 url 업로드 실패 No image to upload');
             }
+            
             if (!missingImgUrl) {
                 console.error('실종자 이미지 url을 업로드해주세요.');
             }
-            
+        }
+
+        // 포스터 생성
         
-  }
-                if (posterGenerating) {
-                    try {
-                        setTimeout(async () => {
-                             await createPoster(); // createPoster 함수 실행
-                            }, 5000);  //db값 저장되고 실행하도록 시간텀을 줌
-                        } catch (error) {
-                    // createPoster 함수 실행 중 오류가 발생한 경우 처리
-                        console.error('Error creating poster:', error);
-                            }
-                    }
     };
-   
+
     // // 인적사항 확인
-    // console.log('프론트에서 넘어오는지 확인')
-    // console.log('Missing Name:', missingName);
-    // console.log('Missing Age:', missingAge);
-    // console.log('Missing Gender:', missingGender);
-    // console.log('Missing Location:', missingLocation);
-    // console.log('Missing Location Lat:', missingLocationLat);
-    // console.log('Missing Location Lng:', missingLocationLng);
-    // console.log('Selected Img Url:', missingImgUrl);
+    console.log('프론트에서 넘어오는지 확인')
+    console.log('Missing Name:', missingName);
+    console.log('Missing Age:', missingAge);
+    console.log('Missing Gender:', missingGender);
+    console.log('Missing Location:', missingLocation);
+    console.log('Missing Location Lat:', missingLocationLat);
+    console.log('Missing Location Lng:', missingLocationLng);
+    console.log('Selected Img Url:', missingImgUrl);
 
     // // 인상착의 확인
-    // console.log('Selected Top:', selectedTop);
-    // console.log('Selected Top Color:', selectedTopColor);
-    // console.log('Selected Bottom:', selectedBottom);
-    // console.log('Selected Bottom Color:', selectedBottomColor);
-    // console.log('Selected Belongings:', selectedBelongings);
+    console.log('Selected Top:', selectedTop);
+    console.log('Selected Top Color:', selectedTopColor);
+    console.log('Selected Bottom:', selectedBottom);
+    console.log('Selected Bottom Color:', selectedBottomColor);
+    console.log('Selected Belongings:', selectedBelongings);
 
-    // console.log('Selected Top(Kor):', selectedTopKor);
-    // console.log('Selected Top Color(Kor):', selectedTopColorKor);
-    // console.log('Selected Bottom(Kor):', selectedBottomKor);
-    // console.log('Selected Bottom Color(Kor):', selectedBottomColorKor);
-    // console.log('Selected Belongings(Kor):', selectedBelongingsKor);
+    console.log('Selected Top(Kor):', selectedTopKor);
+    console.log('Selected Top Color(Kor):', selectedTopColorKor);
+    console.log('Selected Bottom(Kor):', selectedBottomKor);
+    console.log('Selected Bottom Color(Kor):', selectedBottomColorKor);
+    console.log('Selected Belongings(Kor):', selectedBelongingsKor);
 
-    // console.log('missingClothesEtc(인상착의 특이사항):', missingClothesEtc);
-    // console.log('missingBelongingsEtc(소지품 특이사항):', missingBelongingsEtc);
+    console.log('missingClothesEtc(인상착의 특이사항):', missingClothesEtc);
+    console.log('missingBelongingsEtc(소지품 특이사항):', missingBelongingsEtc);
 
 
     // 각 옵션의 label 값을 찾아서 상태에 저장하는 함수들
@@ -297,63 +293,62 @@ const SearchMissing = ({ initialData }) => {
 
     // 인적사항 구분
     const missing_info_box = () => {
+
+
         return (
             <div className="search_missing_cate_group">
                 <div className="search_missing_cate_content">
                     <h2>실종자 이름</h2>
-                    
-                        <input
-                            type="text"
-                            className="input_etc"
-                            aria-label="Sizing example input"
-                            aria-describedby="missing_name"
-                            value={missingName}
-                            onChange={handleNameChange}
-                            placeholder = "실종자 이름 입력"
-                        />
-                    
+
+                    <input
+                        type="text"
+                        className="input_etc"
+                        aria-label="Sizing example input"
+                        aria-describedby="missing_name"
+                        value={missingName}
+                        onChange={handleNameChange}
+                        placeholder="실종자 이름 입력"
+                    />
+
                 </div>
 
                 <div className="search_missing_cate_content">
                     <h2>나이</h2>
-                        <input
-                            type="number"
-                            className="input_etc"
-                            aria-label="Sizing example input"
-                            aria-describedby="missing_age"
-                            value={missingAge}
-                            onChange={handleAgeChange}
-                            placeholder = "실종자 나이 입력"
-                        />
+                    <input
+                        type="number"
+                        className="input_etc"
+                        aria-label="Sizing example input"
+                        aria-describedby="missing_age"
+                        value={missingAge}
+                        onChange={handleAgeChange}
+                        placeholder="실종자 나이 입력"
+                    />
                 </div>
 
                 <div className="search_missing_cate_content">
                     <h2>성별</h2>
                     <div className='search_missing_cate_content_buttons'>
-                    {genderOptions.map(option => (
-                        <React.Fragment key={option.id}>
-                            <input
-                                type="radio"
-                                className="radio_btn"
-                                name="MISSING_GENDER"
-                                id={option.id}
-                                value={option.id}
-                                autoComplete="off"
-                                checked={missingGender === option.id}
-                                onChange={handleGenderChange}
-                            />
-                            <label className="radio_btn_label" htmlFor={option.id}>{option.label}</label>
-                        </React.Fragment>
-                    ))}
+                        {genderOptions.map(option => (
+                            <React.Fragment key={option.id}>
+                                <input
+                                    type="radio"
+                                    className="radio_btn"
+                                    name="MISSING_GENDER"
+                                    id={option.id}
+                                    value={option.id}
+                                    autoComplete="off"
+                                    checked={missingGender === option.id}
+                                    onChange={handleGenderChange}
+                                />
+                                <label className="radio_btn_label" htmlFor={option.id}>{option.label}</label>
+                            </React.Fragment>
+                        ))}
                     </div>
                 </div>
 
                 <div className="search_missing_cate_content">
                     <h2>마지막 발견장소</h2>
-                    <MissingKakaoMap getLatLon={getLatLon} getMissingLocation={getMissingLocation} 
-                    initialLat={initialData.length > 0 ? initialData[0].MISSING_LOCATION_LAT : null}
-                    initialLng={initialData.length > 0 ? initialData[0].MISSING_LOCATION_LON : null}
-                    />
+                    <MissingKakaoMap getLatLon={getLatLon} getMissingLocation={getMissingLocation} />
                 </div>
 
                 <div className="search_missing_cate_content">
@@ -369,7 +364,7 @@ const SearchMissing = ({ initialData }) => {
                             aria-describedby="missing_img"
                             value={missingImg ? missingImg.name : '선택된 파일이 없습니다.'}
                             onChange={handleNameChange}
-                            placeholder = {missingImg ? missingImg.name : '선택된 파일이 없습니다.'}
+                            placeholder={missingImg ? missingImg.name : '선택된 파일이 없습니다.'}
                             readOnly='true'
                         />
                         <input
@@ -397,29 +392,29 @@ const SearchMissing = ({ initialData }) => {
                         <input
                             type="checkbox"
                             className='radio_btn_poster'
-                            id ='poster_check_box'
+                            id='poster_check_box'
                             aria-label="포스터 생성 유무"
                             checked={posterGenerating} // 이 상태는 useState를 사용하여 관리해야 합니다.
                             onChange={(event) => setPosterGenerating(event.target.checked)}
                         />
                         <label className="radio_btn_label_poster" htmlFor='poster_check_box' >포스터 생성</label>
-                        
-                        
+
+
                         <input
                             type="text"
                             className="input_etc_poster_notice"
                             aria-label="Sizing example input"
                             aria-describedby="missing_name"
-                            value={posterGenerating ? '실종자인상착의 검색&실종자 찾기 포스터 생성':'실종자인상착의 검색만 실행'}
+                            value={posterGenerating ? '실종자인상착의 검색&실종자 찾기 포스터 생성' : '실종자인상착의 검색만 실행'}
                             onChange={handleNameChange}
-                            placeholder = {posterGenerating ? '실종자인상착의 검색&실종자 찾기 포스터 생성':'실종자인상착의 검색만 실행'}
+                            placeholder={posterGenerating ? '실종자인상착의 검색&실종자 찾기 포스터 생성' : '실종자인상착의 검색만 실행'}
                             readOnly='true'
                         />
                     </div>
-                        
-                    
+
+
                 </div>
-                
+
 
 
 
@@ -433,22 +428,22 @@ const SearchMissing = ({ initialData }) => {
                 <div className="search_missing_cate_content">
                     <h2>상의 구분</h2>
                     <div className='search_missing_cate_content_buttons'>
-                            {topOptions.map(option => (
-                                <React.Fragment key={option.id}>
-                                    <input
-                                        type="radio"
-                                        className="radio_btn"
-                                        name="MISSING_TOP"
-                                        id={option.id}
-                                        value={option.id}
-                                        autoComplete="off"
-                                        checked={selectedTop === option.id}
-                                        onChange={handleTopChange}
-                                    />
-                                    <label className="radio_btn_label" htmlFor={option.id}>{option.label}</label>
-                                </React.Fragment>
-                            ))}
-                        
+                        {topOptions.map(option => (
+                            <React.Fragment key={option.id}>
+                                <input
+                                    type="radio"
+                                    className="radio_btn"
+                                    name="MISSING_TOP"
+                                    id={option.id}
+                                    value={option.id}
+                                    autoComplete="off"
+                                    checked={selectedTop === option.id}
+                                    onChange={handleTopChange}
+                                />
+                                <label className="radio_btn_label" htmlFor={option.id}>{option.label}</label>
+                            </React.Fragment>
+                        ))}
+
                     </div>
                 </div>
 
@@ -488,7 +483,7 @@ const SearchMissing = ({ initialData }) => {
 
                         {bottomOptions.map(option => (
                             <React.Fragment key={option.id}>
-                               
+
                                 <input
                                     type="radio"
                                     className="radio_btn"
@@ -499,7 +494,7 @@ const SearchMissing = ({ initialData }) => {
                                     checked={selectedBottom === option.id}
                                     onChange={handleBottomChange}
                                 />
-                                 <label className="radio_btn_label" htmlFor={option.id}>{option.label}</label>
+                                <label className="radio_btn_label" htmlFor={option.id}>{option.label}</label>
                             </React.Fragment>
                         ))}
 
@@ -531,15 +526,15 @@ const SearchMissing = ({ initialData }) => {
 
                 <div className="search_missing_cate_content">
                     <h2>인상착의 특이사항</h2>
-                        <input
-                            type="text"
-                            className="input_etc"
-                            aria-label="Sizing example input"
-                            aria-describedby="missing_clothes_etc"
-                            value={missingClothesEtc}
-                            onChange={handleClothesEtcChange}
-                            placeholder = "인상착의 특이사항 입력"
-                        />
+                    <input
+                        type="text"
+                        className="input_etc"
+                        aria-label="Sizing example input"
+                        aria-describedby="missing_clothes_etc"
+                        value={missingClothesEtc}
+                        onChange={handleClothesEtcChange}
+                        placeholder="인상착의 특이사항 입력"
+                    />
                 </div>
 
             </div>
@@ -572,18 +567,18 @@ const SearchMissing = ({ initialData }) => {
 
                 <div className="search_missing_cate_content">
                     <h2>소지품 특이사항</h2>
-                    
-                        <input
-                            type="text"
-                            className="input_etc"
-                            aria-label="Sizing example input"
-                            aria-describedby="missing_belongings_etc"
-                            value={missingBelongingsEtc}
-                            onChange={handleBelongingsEtcChange}
-                            placeholder = "소지품 특이사항 입력"
-                        />
-                        
-                    
+
+                    <input
+                        type="text"
+                        className="input_etc"
+                        aria-label="Sizing example input"
+                        aria-describedby="missing_belongings_etc"
+                        value={missingBelongingsEtc}
+                        onChange={handleBelongingsEtcChange}
+                        placeholder="소지품 특이사항 입력"
+                    />
+
+
                 </div>
 
             </div>
@@ -604,25 +599,25 @@ const SearchMissing = ({ initialData }) => {
         selectedComponent = null;
     }
     console.log('selectBox 값:', selectBox);
-    
+
 
 
     return (
         <div>
             <div className='missing_avatar_all'>
-                < MissingAvatar 
-                selectedTop ={selectedTop}
-                selectedTopColor= {selectedTopColor}
-                selectedBottom = {selectedBottom}
-                selectedBottomColor = {selectedBottomColor}
-                selectedBelongings = {selectedBelongings}
+                < MissingAvatar
+                    selectedTop={selectedTop}
+                    selectedTopColor={selectedTopColor}
+                    selectedBottom={selectedBottom}
+                    selectedBottomColor={selectedBottomColor}
+                    selectedBelongings={selectedBelongings}
 
                 />
             </div>
 
 
             <div className='search_bar_all'>
-                <SearchBar setSelectTxt={setSelectTxt} handleSubmit={handle_submit}/>
+                <SearchBar setSelectTxt={setSelectTxt} handle_submit={handle_submit} />
                 {selectedComponent}
             </div>
         </div>
