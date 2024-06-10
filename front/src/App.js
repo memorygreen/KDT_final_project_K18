@@ -52,7 +52,7 @@ function App() {
           <Route path="/ViewCCTVPage/:cctvId" element={<ViewCCTVPage />} />
           <Route path="/MyPage" element={<MyPage/>} />
           <Route path="/ViewMissingListPage/:userId" element={<ViewMissingListPage />} />
-          <Route path="/SearchMissingUpdatePage/:missingIdx" element={<SearchMissingUpdatePage />} />
+          <Route path="/SearchMissingUpdatePage/:missing_idx" element={<SearchMissingUpdatePage />} />
           <Route path="/CaptureNotificationPage" element={<CaptureNotificationPage/>} />
 
           {/* Test용 Components */}

@@ -7,7 +7,8 @@ search_missing_bp = Blueprint('SearchMissing', __name__)
 def search_missing():
     try:
         data = request.json  # JSON 형식으로 데이터를 받음
-        print(data)
+        print("SearchMissing..py 백으로 이동함 ")
+        print("넘어온 data" , data)
         
         #세션에 담긴 id 
         session_id = data.get('session_id')
@@ -34,7 +35,7 @@ def search_missing():
         missing_location_lng = data.get('missing_location_lng')
         
         
-        missing_img = data.get('missing_img')
+        missing_img = data.get('missing_img_url')
         
         selected_top = data.get('selected_top')
         selected_top_color = data.get('selected_top_color')
@@ -96,11 +97,11 @@ def search_missing():
         
         # TB_MISSING 테이블에 데이터 삽입
         sql_missing = """
-        INSERT INTO TB_MISSING (USER_ID, MISSING_NAME, MISSING_GENDER, MISSING_AGE, 
+        INSERT INTO TB_MISSING (USER_ID, MISSING_NAME, MISSING_GENDER,MISSING_AGE, MISSING_AGE_CATE, 
                                 MISSING_IMG, MISSING_LOCATION_LAT, MISSING_LOCATION_LON, MISSING_LOCATION)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s,  %s)
         """
-        cursor.execute(sql_missing, (session_id, missing_name, missing_gender, missing_age_cate, missing_img, missing_location_lat, missing_location_lng, missing_location))
+        cursor.execute(sql_missing, (session_id, missing_name, missing_gender,missing_age,  missing_age_cate, missing_img, missing_location_lat, missing_location_lng, missing_location))
 
         missing_id = cursor.lastrowid
         print('확인용)실종자 테이블 삽입 후')
