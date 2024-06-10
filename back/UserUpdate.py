@@ -26,37 +26,32 @@ def update_user(user_id):
     if user_id != session_user_id:
         return jsonify({'error': '본인의 정보만 수정할 수 있습니다'}), 403
 
-    user_data = request.get_json()
+    user_data = request.json
     name = user_data.get('name')
-    password = user_data.get('password')
     dob = user_data.get('dob')
     gender = user_data.get('gender')
     phone = user_data.get('phone')
+    password = user_data.get('password')
 
-    if not name or not dob or not gender or not phone:
-        return jsonify({'error': '모든 필드를 입력해주세요'}), 400
-
-    if len(name) > 15:
-        return jsonify({'error': '이름은 15자 이하로 입력해주세요'}), 400
-
-    connection = db_con()
-    cursor = connection.cursor()
+    if not (name and dob and gender and phone):
+        return jsonify({'error': '모든 필드를 입력해야 합니다'}), 400
 
     try:
-        if password:
-            cursor.execute('UPDATE users SET password = %s WHERE id = %s', (password, user_id))
+        conn = db_con()
+        cursor = conn.cursor()
 
-        cursor.execute('''
-            UPDATE users
-            SET name = %s, dob = %s, gender = %s, phone = %s
-            WHERE id = %s
-        ''', (name, dob, gender, phone, user_id))
+        update_query = """
+        UPDATE user 
+        SET user_name = %s, user_dob = %s, user_gender = %s, user_phone = %s, user_pw = %s 
+        WHERE user_id = %s
+        """
+        cursor.execute(update_query, (name, dob, gender, phone, password, user_id))
+        conn.commit()
 
-        connection.commit()
-        return jsonify({'message': '회원 정보가 성공적으로 수정되었습니다'}), 200
-    except Exception as e:
-        connection.rollback()
-        return jsonify({'error': '회원 정보 수정 중 오류가 발생했습니다', 'details': str(e)}), 500
-    finally:
         cursor.close()
-        connection.close()
+        conn.close()
+
+        return jsonify({'message': '회원정보가 성공적으로 수정되었습니다'}), 200
+
+    except Exception as e:
+        return jsonify({'error': '회원정보 수정 중 오류가 발생했습니다', 'details': str(e)}), 500

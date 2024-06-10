@@ -1,4 +1,3 @@
-// UserUpdate.js 내용
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NevBar from '../../Components/NevBar/NevBar';
@@ -6,8 +5,8 @@ import axios from 'axios';
 
 function UserUpdate() {
   const [userId, setUserId] = useState('');
-  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
   const [dob, setDob] = useState('');
   const [gender, setGender] = useState('');
   const [phone, setPhone] = useState('');
@@ -15,11 +14,11 @@ function UserUpdate() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userId = sessionStorage.getItem('userId');
-    const userName = sessionStorage.getItem('userName');
-    const userDob = sessionStorage.getItem('userDob');
+    const userId = sessionStorage.getItem('userId') || '';
+    const userName = sessionStorage.getItem('userName') || '';
+    const userDob = sessionStorage.getItem('userDob') || '';
     const userGender = sessionStorage.getItem('userGender') || 'male';
-    const userPhone = sessionStorage.getItem('userPhone');
+    const userPhone = sessionStorage.getItem('userPhone') || '';
 
     setUserId(userId);
     setName(userName);
@@ -43,29 +42,36 @@ function UserUpdate() {
   };
 
   const handleUpdate = async () => {
-    if (!password || !name || !dob || !gender || !phone) {
+    if (!name || !dob || !gender || !phone) {
       alert('모든 항목을 입력해주세요');
       return;
     }
 
     try {
-      const sessionToken = sessionStorage.getItem('sessionToken'); // 로그인 후 세션에 저장된 세션 토큰을 가져옴
+      const sessionToken = sessionStorage.getItem('sessionToken');
       const config = {
         headers: {
-          'Authorization': `Bearer ${sessionToken}` // 세션 토큰을 헤더에 넣어서 요청 보냄
+          'Authorization': `Bearer ${sessionToken}`
         }
       };
 
-      await axios.put(`/api/users/${userId}`, {
-        name, dob, gender, phone, password
-      }, config); // 수정된 코드
+      const userId = sessionStorage.getItem('userId');
 
-      sessionStorage.setItem('userName', name);
-      sessionStorage.setItem('userDob', dob);
-      sessionStorage.setItem('userGender', gender);
-      sessionStorage.setItem('userPhone', phone);
+      if (userId) {
+        const response = await axios.put(`/api/users/${userId}`, {
+          name, dob, gender, phone, password
+        }, config);
 
-      setMessage('회원정보가 성공적으로 수정되었습니다');
+        if (response.status === 200) {
+          sessionStorage.setItem('userName', name);
+          sessionStorage.setItem('userDob', dob);
+          sessionStorage.setItem('userGender', gender);
+          sessionStorage.setItem('userPhone', phone);
+          setMessage('회원정보가 성공적으로 수정되었습니다');
+        } else {
+          setMessage('회원정보 수정 중 오류가 발생했습니다');
+        }
+      } 
     } catch (error) {
       setMessage('회원정보 수정 중 오류가 발생했습니다');
       console.error('Error updating user:', error);
