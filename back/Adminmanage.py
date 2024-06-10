@@ -3,6 +3,7 @@ from flask import Blueprint, request, jsonify
 
 Adminmanage_bp = Blueprint('Adminmanage', __name__)
 
+
 @Adminmanage_bp.route('/user_post', methods=['POST'])
 def get_user_post():
     db = db_con()
@@ -70,7 +71,9 @@ def get_user_post():
     return jsonify(result)
 
 # 포스터 상태 변경
-@Adminmanage_bp.route("/delete_poster", methods = ["POST"])
+
+
+@Adminmanage_bp.route("/delete_poster", methods=["POST"])
 def handleDelete():
     poster_idx = request.json['poster_idx']
     print(poster_idx)
@@ -81,10 +84,10 @@ def handleDelete():
         cursor.execute(delete_sql, (poster_idx))
         db.commit()
         return jsonify({"message": "포스터 삭제 완료"})
-    except Exception as e :
+    except Exception as e:
         db.rollback()
-        return jsonify({"error" : str(e)})        
-        
+        return jsonify({"error": str(e)})
+
     finally:
-        cursor.close()    
+        cursor.close()
         db.close()
