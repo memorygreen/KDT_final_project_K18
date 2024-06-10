@@ -67,7 +67,7 @@ const NotificationModal = ({ onClose }) => {
     const handleDetailClick = (notification) => {
         if (notification.type === 'capture') {
             navigate('/CaptureNotificationPage', { state: { notification, notifications } });
-            captureDetail(notification); 
+
             axios.post('http://localhost:5000/capture_detail', {
                 capture_idx: notification.CAPTURE_IDX
             }, {
@@ -79,7 +79,7 @@ const NotificationModal = ({ onClose }) => {
             });
         } else if (notification.type === 'report') {
             navigate('/ReportNotificationPage', { state: { notification, notifications } });
-            reportDetail(notification);
+
             axios.post('http://localhost:5000/report_detail', {
                 report_id: notification.REPORT_ID
             }, {
@@ -91,37 +91,21 @@ const NotificationModal = ({ onClose }) => {
             });
         }
     };
-    const captureDetail = (notification) => {
-        axios.post('http://localhost:5000/capture_detail', {
-            capture_idx: notification.CAPTURE_IDX
-        }).catch(error => {
-            console.error('Error updating capture detail:', error);
-        });
-    };
-    const reportDetail = (notification) => {
-        axios.post('http://localhost:5000/report_detail', {
-            report_id: notification.REPORT_ID
-        }).catch(error => {
-            console.error('Error updating report detail:', error);
-        });
-    };
-
 
     return (
         <div className="modal">
             <button onClick={onClose}>Close Modal</button>
-            <div className="notification-container" >
+            <div className="notification-container">
                 {notifications.map(notification => (
                     <div key={notification.id} className="notification" onClick={() => handleDetailClick(notification)}>
-                        <div className="notification-header" >
-                            <b>{notification.type === 'capture' ? `${notification.MISSING_NAME} 추정 캡쳐 알림` : `${notification.MISSING_NAME} 추정 제보 알림`}</b>
+                        <div className="notification-header">
+                        <b>{notification.type === 'capture' ? `${notification.MISSING_NAME} 추정 캡쳐 알림` : `${notification.MISSING_NAME} 추정 제보 알림`}</b>
                         </div>
-                        <div className="notification-content" >
+                        <div className="notification-content">
                             {notification.type === 'capture' ?
                                 <>
                                     {cctvAddresses[notification.CCTV_IDX] || 'Loading address...'} 의 CCTV {notification.CCTV_IDX} 에서
-                                    <div>{notification.CAPTURE_FIRST_TIME}에 온 <img src={notification.CAPTURE_PATH} alt="Capture" style={{ maxWidth: '100%' }} />입니다.
-                                    </div>
+                                    <div>{notification.CAPTURE_FIRST_TIME}에 온 캡쳐입니다.</div>
                                 </>
                                 :
                                 <div>{notification.REPORT_TIME}에 온 제보입니다</div>

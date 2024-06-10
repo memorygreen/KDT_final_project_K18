@@ -225,7 +225,7 @@ def disable_poster(user_id, missing_idx):
         db.close()
 
 
-#포스터 비활성화 show 1>0
+#포스터 비활성화 poster_show 1>0
 @post_bp.route('/post_no_show')
 def post_no_show():
     try:

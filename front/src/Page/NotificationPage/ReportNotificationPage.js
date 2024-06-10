@@ -54,9 +54,9 @@ const ReportNotificationPage = () => {
             <h1>Report Notifications</h1>
             <div className="notification-container">
                 {notifications.map(notification => (
-                    <div key={notification.id} className="notification" onClick={() => showDetail(notification)}>
+                    <div key={notification.id} className="notification">
                         <div className="notification-header">{notification.MISSING_NAME} 추정 제보 알림</div>
-                        <div className="notification-content" >
+                        <div className="notification-content" onClick={() => showDetail(notification)}>
                             {notification.REPORT_TIME}에 온 제보입니다
                         </div>
                     </div>

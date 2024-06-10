@@ -1,37 +1,84 @@
-@media (min-width: 0px) and (max-width:750px) {
- body{
-  background: greenyellow;
- }
+.avatart_div{
+  width: 10%;
+  display: inline;
 }
 
 
-.avatarSetting {
+.avatar_setting {
+  top: 4rem;
+
   position: relative; /* 상대적 위치 설정 */
   z-index: 1; /* 다른 요소들보다 앞에 위치 */
-  width: 30%;
+  width: 12.6rem;
+  border: solid 1px black;
 }
 
-.img_avatar_top, .img_avatar_bottom, .img_avatar_belonging {
+.img_avatar_top_long,.img_avatar_top_short,
+.img_avatar_bottom_long, .img_avatar_bottom_short,
+.img_avatar_bottom_skirt, .img_avatar_belonging, .img_avatar_belonging_hat {
   position: absolute;
-  display: inline-block; /* 블록 레벨 요소로 설정 */
-  margin: 0 auto; /* 가운데 정렬 */
-  width: 20%;
-  top: 50%; /* 아바타 이미지의 중간 지점보다 아래로 */
+ /* 아바타 이미지의 중간 지점보다 아래로 */
 }
 
 
-.img_avatar_top {
-  top: 45%; /* 아바타 이미지의 중간 지점보다 아래로 */
+.img_avatar_top_long {
+  top: 14.2rem; /* 아바타 이미지의 중간 지점보다 아래로 */
+  left: 0.6rem;
   transform: translateY(-50%); /* 겹치는 정도 조절 */
   z-index: 2;
+  width: 11.5rem;
 
 }
 
-.img_avatar_bottom {
-  transform: translateY(-20%); /* 겹치는 정도 조절 */
-  bottom: 40%; /* 아바타 이미지의 중간 지점보다 위로 */
+.img_avatar_top_short {
+  top: 14.2rem; /* 아바타 이미지의 중간 지점보다 아래로 */
+  left: 2rem;
+  transform: translateY(-50%); /* 겹치는 정도 조절 */
   z-index: 2;
+  width: 8.7rem;
 }
+
+.img_avatar_bottom_long {
+  top: 21.5rem; /* 아바타 이미지의 중간 지점보다 아래로 */
+  left: 2.9rem;
+  transform: translateY(-50%); /* 겹치는 정도 조절 */
+  z-index: 2;
+  width: 6.7rem;
+}
+
+.img_avatar_bottom_short {
+  top: 19rem; /* 아바타 이미지의 중간 지점보다 아래로 */
+  left: 3.1rem;
+  transform: translateY(-50%); /* 겹치는 정도 조절 */
+  z-index: 2;
+  width: 6.5rem;
+}
+
+.img_avatar_bottom_skirt {
+  top: 19.5rem; /* 아바타 이미지의 중간 지점보다 아래로 */
+  left: 3.2rem;
+  transform: translateY(-50%); /* 겹치는 정도 조절 */
+  z-index: 2;
+  width: 6.2rem;
+}
+
+.img_avatar_belonging{
+  top: 15rem; 
+  width: 6.2rem;
+  z-index: 2;
+  left: 10.2rem;
+
+
+}
+
+.img_avatar_belonging_hat{
+  top: 3.2rem; 
+  width: 6.2rem;
+  z-index: 2;
+  left: 3.2rem;
+
+}
+
 
 
 

@@ -1,44 +1,90 @@
+/* 검색 바 */
+.searchBar{
+    border-radius: 50px;
+    background-color: rgb(255, 255, 255);
+    flex-direction: row;
+    height: 60px;
+    border: solid 1px rgb(213, 213, 213);;
 
+    display: flex;
+    flex-wrap: wrap; /* 줄 바꿈을 허용하지 않음 */
+    align-items: center; 
+    justify-content: center; /* 내부 요소들 가운데 정렬 */
+    
+    width: 95%;
+    height: auto;
+    margin: auto; /*수평 가운데 정렬 */
+    
+}
 
+/*4가지 항목*/
+.search_bar_cate_radio{
+    display: none;
+}
+.search_bar_cate_label{
+    font-size: 15px;
+    color: #000000; /*글자색 */
+    background: #ffffff; /*안 눌렀을 때 배경 색 */
+    width: 20%;
+    height: 80%;
+    text-align: center; /*텍스트 수평 가운데 정렬*/
+    align-items: center; /*텍스트 수직 가운데 정렬*/
+    display: inline-block; 
 
-/*4가지 항목들 기본 상태*/
-.search_bar_btn{
+    border-radius: 50px;
+    border: none;
+    margin: 0%;
+    padding: 10px;
+    /* display: flex;
+    justify-content: center;
+    cursor: pointer;
+    margin-right: 10px; */
+}
+.search_bar_cate_label:hover{
     border-radius: 50px; /* 픽셀(px)로 지정 */
-    margin: 1%;
+    padding: 10px;
+    background-color: #EBEBEB;
+}
+
+.search_bar_cate_radio:checked + .search_bar_cate_label{
+    border-radius: 50px; /* 픽셀(px)로 지정 */
     padding: 10px;
     background-color: #ffffff;
-
+    border: solid 1px #EBEBEB;
 }
 
-/*4가지 항목들 마우스 가져다 대면 바뀌는 디자인 */
-.search_bar_btn:hover{
-    border-radius: 50px; /* 픽셀(px)로 지정 */
-    margin: 1%;
+
+/* 제출 버튼 기본 상태 */
+.search_missing_submit_btn{
+    border-radius: 50%; /* 픽셀(px)로 지정 */
     padding: 10px;
-    background-color: #EBEBEB;
-}
+    width: 35px;
+    height: 35px;
+    align-items: center;
+    background-color: rgb(213, 213, 213);
+    border: none;
+    
+    }
 
-
-.search_bar_btn:checked{
-    border-radius: 20px; /* 픽셀(px)로 지정 */
-    margin: 1%;
+/* 제출 버튼 마우스 가져다 댔을 때*/
+.search_missing_submit_btn:hover{
+    border-radius: 50%; /* 픽셀(px)로 지정 */
     padding: 10px;
-    background-color: #EBEBEB;
+    width: 35px;
+    height: 35px;
+    align-items: center;
+    border: none;
+    background-color: rgb(160, 158, 158);
+    
+    }
+
+/* 제출 버튼 클릭 시*/
+.search_missing_submit_btn:checked{
+    border-radius: 50%; /* 픽셀(px)로 지정 */
+    padding: 10px;
+    width: 50px;
+    height: 50px;
+    align-items: center;
+    border: none;
 }
-
-
-
-.search_missing_radio_btn{
-    border-radius: 20px; /* 픽셀(px)로 지정 */
-
-}
-
-
-.search_missing_radio_btn :hover{
-    border-radius: 10px; /* 픽셀(px)로 지정 */
-    background-color: aqua;
-
-}
-
-
-
+    
