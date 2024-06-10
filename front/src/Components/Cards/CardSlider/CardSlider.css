@@ -1,0 +1,58 @@
+/* src/components/CardSlider/Slider.css */
+
+.slick-slide {
+    transition: transform 0.8s ease-in-out !important;
+}
+
+.slick-list {
+    margin: 0 -10px !important;
+    /* Adjusted for narrower gap */
+}
+
+.slick-dots {
+    text-align: center !important;
+    margin-top: 20px !important;
+}
+
+.slick-dots li button:before {
+    font-size: 12px !important;
+    color: #b91212 !important;
+    opacity: 0.5 !important;
+}
+
+.slick-dots li.slick-active button:before {
+    color: #d80909 !important;
+    opacity: 1 !important;
+}
+
+.slick-prev,
+.slick-next {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.slick-prev:before,
+.slick-next:before {
+    font-size: 35px !important;
+    /* 버튼 아이콘 크기 */
+    background-color: #ff000000 !important;
+    color: #0400ff5b !important;
+    /* 버튼 아이콘 색상 */
+}
+
+.slick-prev {
+    left: -40px !important; /* 왼쪽 버튼을 왼쪽으로 이동 */
+}
+
+.Acard {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}

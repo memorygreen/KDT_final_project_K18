@@ -1,0 +1,48 @@
+:root {
+   font-size: 18px;
+   --color-text: #fff;
+   --color-bg: #000;
+   --color-link: #fff;
+   --color-link-hover: #a2a2a2;
+   --perspective: 0px;
+   --grid-item-translate: 0px;
+   --grid-item-ratio: 0.75;
+   --grid-item-radius: 7px;
+   --grid-gap: 4vw;
+   --grid-columns: 3;
+   --grid-width: 100%;
+   --grid-max-width: 1200px;
+}
+
+.columns {
+   width: var(--grid-width);
+   max-width: var(--grid-max-width);
+   position: relative;
+   padding: 5vh 0;
+   display: grid;
+   place-items: center;
+   grid-template-columns: repeat(var(--grid-columns), 1fr);
+   gap: var(--grid-gap);
+   align-items: start; /* 모든 아이템을 상단에서 시작하도록 설정 */
+}
+
+.column {
+   width: 100%;
+   position: relative;
+   display: grid;
+   gap: var(--grid-gap);
+   grid-template-columns: 100%;
+   will-change: transform;
+}
+
+@media screen and (min-width: 53em) {
+   .frame {
+      text-align: center;
+      justify-items: center;
+   }
+
+   .card-wrap {
+      grid-template-columns: repeat(2, 300px);
+   }
+
+}

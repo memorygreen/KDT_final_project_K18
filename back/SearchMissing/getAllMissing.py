@@ -1,7 +1,6 @@
 from flask import Blueprint, request, jsonify
 from db import db_con
 
-
 get_all_missing_bp = Blueprint("getAllMissing", __name__)
 
 # 자영(240605) 세션에 담긴 userid가 등록한 모든 실종자 가져오기
