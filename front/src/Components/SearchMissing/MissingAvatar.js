@@ -66,11 +66,12 @@ import bottom_skirt_yellow from "./assets/bottom/bottom_skirt_yellow.png"
 
 
 import back_pack from "./assets/belongings/backpack.png" // 소지품
-import cap from "./assets/belongings/cap.png"
+// import cap from "./assets/belongings/cap.png"/
 import hand_bag from "./assets/belongings/handbag.png"
 import hat from "./assets/belongings/hat.png"
 import shouler_bag from "./assets/belongings/shoulderbag.png"
 
+let acc_none =''
 // 이미지 변수 명
 const top_long_colors = [
   top_long_red,
@@ -143,21 +144,21 @@ const bottom_skirt_colors = [
 ];
 
 const belongings = [
-  back_pack,
-  cap,
-  hand_bag,
   hat,
-  shouler_bag
+  back_pack,
+  shouler_bag,
+  hand_bag,
+  acc_none
 ];
 
 // 사용자가 선택한 실종자 상의
-const top_type_ids = ['long_sleeve', 'short_sleeve', 'sleeveless', 'onepice'];
+const top_type_ids = ['long_sleeve', 'short_sleeve'];
 const top_color_ids = ['top_red', 'top_orange', 'top_yellow', 'top_green', 'top_blue', 'top_purple', 'top_pink', 'top_brown', 'top_white', 'top_grey', 'top_black'];
 // 사용자가 선택한 실종자  하의
-const bottom_type_ids = ['long_pants', 'short_pants', 'skirt', 'bottom_type_none'];
+const bottom_type_ids = ['long_pants', 'short_pants', 'skirt'];
 const bottom_color_ids = ['bottom_red', 'bottom_orange', 'bottom_yellow', 'bottom_green', 'bottom_blue', 'bottom_purple', 'bottom_pink', 'bottom_brown', 'bottom_white', 'bottom_grey', 'bottom_black'];
 // 사용자가 선택한 실종자 소지품
-const belongings_ids = ['carrier', 'umbrella', 'bag', 'hat', 'glasses', 'acc_none'];
+const belongings_ids = ['hat', 'back_pack', 'shoulder_bag', 'hand_bag', 'acc_none'];
 
 
 export const MissingAvatar = ({
@@ -169,9 +170,10 @@ export const MissingAvatar = ({
 }) => {
 
   // 이미지 상태변수 정의
-  const [top_img_src, set_top_img_src] = useState(top_long_white)
-  const [bottom_img_src, set_bottom_img_src] = useState(bottom_long_white)
+  const [top_img_src, set_top_img_src] = useState('')
+  const [bottom_img_src, set_bottom_img_src] = useState('')
   const [belongings_img_src, set_belongings_img_src] = useState('')
+  const [belongings_img_class, set_belongings_img_class] = useState('')
   
   // 이미지 클래스명 다르게 먹이기
   const [top_img_class, set_top_img_class] = useState('')
@@ -184,13 +186,22 @@ export const MissingAvatar = ({
       if (colorIndex !== -1) {
         set_top_img_src(top_long_colors[colorIndex]);
         set_top_img_class('img_avatar_top_long'); // 클래스 이름 설정
+      } else {
+        set_top_img_src('');
+        set_top_img_class('');
       }
     } else if (selectedTop === 'short_sleeve') {
       const colorIndex = top_color_ids.indexOf(selectedTopColor);
       if (colorIndex !== -1) {
         set_top_img_src(top_short_colors[colorIndex]);
         set_top_img_class('img_avatar_top_short'); // 클래스 이름 설정
+      } else {
+        set_top_img_src('');
+        set_top_img_class('');
       }
+    } else {
+      set_top_img_src('');
+      set_top_img_class('');
     }
   }, [selectedTop, selectedTopColor]); // 의존성 배열에 selectedTop과 selectedTopColor 추가
 
@@ -201,19 +212,31 @@ export const MissingAvatar = ({
       if (colorIndex !== -1) {
         set_bottom_img_src(bottom_long_colors[colorIndex]);
         set_bottom_img_class('img_avatar_bottom_long'); // 클래스 이름 설정
+      } else {
+        set_bottom_img_src('');
+        set_bottom_img_class('');
       }
     } else if (selectedBottom === 'short_pants') {
       const colorIndex = bottom_color_ids.indexOf(selectedBottomColor);
       if (colorIndex !== -1) {
         set_bottom_img_src(bottom_short_colors[colorIndex]);
         set_bottom_img_class('img_avatar_bottom_short'); // 클래스 이름 설정
+      } else {
+        set_bottom_img_src('');
+        set_bottom_img_class('');
       }
     } else if (selectedBottom === 'skirt') {
       const colorIndex = bottom_color_ids.indexOf(selectedBottomColor);
       if (colorIndex !== -1) {
         set_bottom_img_src(bottom_skirt_colors[colorIndex]);
         set_bottom_img_class('img_avatar_bottom_skirt'); // 클래스 이름 설정
+      } else {
+        set_bottom_img_src('');
+        set_bottom_img_class('');
       }
+    } else {
+      set_bottom_img_src('');
+      set_bottom_img_class('');
     }
   }, [selectedBottom, selectedBottomColor]);
 
@@ -222,8 +245,15 @@ export const MissingAvatar = ({
     const index = belongings_ids.indexOf(selectedBelongings);
     if (index !== -1) {
       set_belongings_img_src(belongings[index]);
+      // 'hat' 선택 시 특정 클래스 이름 적용
+      if (selectedBelongings === 'hat') {
+        set_belongings_img_class('img_avatar_belonging_hat');
+      } else {
+        set_belongings_img_class('img_avatar_belonging');
+      }
     } else {
-      set_belongings_img_src(''); // 선택된 소지품이 없는 경우 기본값으로 설정
+      set_belongings_img_src('');
+      set_belongings_img_class('');
     }
   }, [selectedBelongings]);
 
@@ -235,14 +265,9 @@ export const MissingAvatar = ({
       <div className='avatart_div'>
         <img className='avatar_setting' src={avatar} alt="avatar_setting" />
 
-        
-          <img className={top_img_class} src={top_img_src} alt="img_avatar_top" />
-          <img className={bottom_img_class} src={bottom_img_src} alt="img_avatar_bottom" />
-        
-        
-        <img className='img_avatar_belonging' src={belongings_img_src} alt="img_avatar_belonging" />
-
-
+        {top_img_src && <img className={top_img_class} src={top_img_src} alt="img_avatar_top" />}
+        {bottom_img_src && <img className={bottom_img_class} src={bottom_img_src} alt="img_avatar_bottom" />}
+        {belongings_img_src && <img className={belongings_img_class} src={belongings_img_src} alt="img_avatar_belonging" />}
         
       </div>
     </div>
