@@ -58,7 +58,6 @@ const CaptureNotificationPage = () => {
 
     const handleCloseModal = () => {
         setSelectedNotification(null);
-        navigate(-1);
     };
 
 
