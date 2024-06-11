@@ -10,6 +10,7 @@
    schedule
    bcrypt
    boto3
+   matplotlib
 
 # cd back
 # pip install -r requirements.txt

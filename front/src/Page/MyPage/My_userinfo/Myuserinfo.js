@@ -49,6 +49,17 @@ const Myuserinfo = ({ sessionId, onIconClick }) => {
             });
     };
 
+    const handleMissingClick = (missingId) => {
+        axios.post('/getSearchMissing', { session_id: userId, missing_idx: missingId })
+            .then(response => {
+                console.log('Detailed missing info:', response.data);
+                // 여기에 상세 정보를 표시하는 로직을 추가할 수 있습니다.
+            })
+            .catch(error => {
+                console.error('Error fetching detailed missing info:', error);
+            });
+    }
+
     useEffect(() => {
         fetchMissingData();
         fetchUserInfo();
@@ -69,7 +80,9 @@ const Myuserinfo = ({ sessionId, onIconClick }) => {
                 <div className='My_missingList'>
                     <ul>
                         {missingList.map((missing) => (
-                            <li key={missing.MISSING_ID}>{missing.MISSING_NAME}</li>
+                            <li key={missing.MISSING_IDX} onClick={() => handleMissingClick(missing.MISSING_IDX)}>
+                                {missing.MISSING_NAME}
+                            </li>
                         ))}
                     </ul>
                 </div>

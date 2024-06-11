@@ -21,6 +21,7 @@ from getCCTV import get_CCTV_bp
 from SearchMissing.getSearchMissing import get_search_missing_bp
 from SearchMissing.getAllMissing import get_all_missing_bp
 from User.UserUpdate import user_update_bp  # UserUpdate 블루프린트 가져오기
+from SearchCapture import SearchCapture_bp
 
 # 환경 변수 로드
 load_dotenv()
@@ -49,6 +50,8 @@ app.register_blueprint(get_search_missing_bp)  # 자영(240605) 실종자 인상
 # 자영(240605) 세션에 담긴 userid가 등록한 모든 실종자 가져오기
 app.register_blueprint(get_all_missing_bp)
 app.register_blueprint(user_update_bp)  # UserUpdate 블루프린트 등록
+app.register_blueprint(SearchCapture_bp)  # SearchCapture 블루프린트 등록
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
