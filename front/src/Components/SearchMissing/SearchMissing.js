@@ -15,22 +15,25 @@ const SearchMissing = ({ initialData }) => {
 
     // console.log('SearchMissing 컴포넌트에서 초기값 있는지 확인 data:', initialData ? initialData : 'No initial data')
 
-    const [missingName, setMissingName] = useState('');
-    const [missingAge, setMissingAge] = useState('');
-    const [missingGender, setMissingGender] = useState('');
-    const [missingLocation, setMissingLocation] = useState('');
-    const [missingLocationLat, setMissingLocationLat] = useState('');
-    const [missingLocationLng, setMissingLocationLng] = useState('');
-    const [missingImgUrl, setMissingImgUrl] = useState('');
 
-    const [selectedTop, setSelectedTop] = useState('');
-    const [selectedTopColor, setSelectedTopColor] = useState('');
-    const [selectedBottom, setSelectedBottom] = useState('');
-    const [selectedBottomColor, setSelectedBottomColor] = useState('');
-    const [missingClothesEtc, setMissingClothesEtc] = useState('');
-    const [selectedBelongings, setSelectedBelongings] = useState('');
-    const [missingBelongingsEtc, setMissingBelongingsEtc] = useState('');
+    // 인적사항 변수
+    const [missingName, setMissingName] = useState(initialData?.missingName || '');
+    const [missingAge, setMissingAge] = useState(initialData?.missingAge || '');
+    const [missingGender, setMissingGender] = useState(initialData?.missingGender || '');
+    const [missingLocation, setMissingLocation] = useState(initialData?.missingLocation || '');
+    const [missingLocationLat, setMissingLocationLat] = useState(initialData?.missingLocationLat || '');
+    const [missingLocationLng, setMissingLocationLng] = useState(initialData?.missingLocationLng || '');
+    const [missingImgUrl, setMissingImgUrl] = useState(initialData?.missingImgUrl || '');
 
+    // 인상착의 변수
+    const [selectedTop, setSelectedTop] = useState(initialData?.selectedTop || '');
+    const [selectedTopColor, setSelectedTopColor] = useState(initialData?.selectedTopColor || '');
+    const [selectedBottom, setSelectedBottom] = useState(initialData?.selectedBottom || '');
+    const [selectedBottomColor, setSelectedBottomColor] = useState(initialData?.selectedBottomColor || '');
+    const [selectedBelongings, setSelectedBelongings] = useState(initialData?.selectedBelongings || '');
+
+    const [missingClothesEtc, setMissingClothesEtc] = useState(initialData?.missingClothesEtc || '');
+    const [missingBelongingsEtc, setMissingBelongingsEtc] = useState(initialData?.missingBelongingsEtc || '');
     // 실종자 이미지 
     const [missingImg, setMissingImg] = useState([]);
 
