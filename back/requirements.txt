@@ -9,6 +9,7 @@
    apscheduler
    schedule
    bcrypt
+   boto3
 
 # cd back
 # pip install -r requirements.txt
