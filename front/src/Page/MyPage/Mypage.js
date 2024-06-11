@@ -1,7 +1,6 @@
 import React from 'react'
 import NevBar from '../../Components/NevBar/NevBar';
-import Sidebar from '../../Components/SideBar/SideBar';
-import { MyPageCaptureView } from '../../Components/MyPage/MyPageCaptureView';
+
 
 export const MyPage = () => {
 
