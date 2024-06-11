@@ -31,6 +31,7 @@ def get_all_missing_info():
 
         # 포스터 정보 가져오기
         sql_poster = "SELECT * FROM TB_POSTER WHERE MISSING_IDX=%s"
+        # sql_poster = "SELECT * FROM TB_POSTER WHERE MISSING_IDX=%s AND POSTER_SHOW=1" 이렇게 바꾸면 show=1인 포스터만 보임
         cursor.execute(sql_poster, (missing_idx,))
         poster = cursor.fetchone()
 
@@ -70,7 +71,7 @@ def get_all_missing_info():
 
     return jsonify(result)
 
-    return jsonify(result)
+    
 
 #작성한 실종자 정보 가져오기 
 @post_bp.route('/user_missing',methods=['GET'])
@@ -189,9 +190,9 @@ def create_poster():
         """
         cursor.execute(sql_insert_poster, (missing_idx, poster_img_path))
 
-        scheduler.add_job(disable_poster, 'date', run_date=datetime.now() + timedelta(minutes=1),
+        scheduler.add_job(disable_poster, 'date', run_date=datetime.now() + timedelta(days=1),
                           args=[user_id, missing_idx]) # 
-
+        #timedelta(minutes=1) 1분으로 설정
         db.commit()
 
         return jsonify({'message': 'Poster created successfully', 'MISSING_IDX': missing_idx}), 201

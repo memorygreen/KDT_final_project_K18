@@ -26,9 +26,7 @@ export const MyPage = () => {
             </div>
 
 
-            <div>
-                <MyPageCaptureView />
-            </div>
+
 
         </div >
 
