@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NevBar from '../../Components/NevBar/NevBar';
+import NevBar from '../../NevBar/NevBar';
 import axios from 'axios';
 
 function UserUpdate() {
@@ -16,16 +16,25 @@ function UserUpdate() {
   useEffect(() => {
     const userId = sessionStorage.getItem('userId');
     const userName = sessionStorage.getItem('userName');
-    const userDob = sessionStorage.getItem('userDob');
+    const userDob = sessionStorage.getItem('userBrtDt'); // 여기서 userBrtDt를 가져옴
     const userGender = sessionStorage.getItem('userGender') || 'male';
     const userPhone = sessionStorage.getItem('userPhone');
 
     setUserId(userId);
     setName(userName);
-    setDob(userDob);
+    setDob(formatDate(userDob));
     setGender(userGender);
     setPhone(userPhone);
   }, []);
+
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
 
   const formatPhoneNumber = (phoneNumber) => {
     const cleaned = ('' + phoneNumber).replace(/\D/g, '');
@@ -42,44 +51,37 @@ function UserUpdate() {
   };
 
   const handleUpdate = async () => {
-    if (!name || !dob || !gender || !phone) {
-      alert('모든 항목을 입력해주세요');
+    if (!password) {
+      alert('비밀번호를 입력해주세요');
       return;
     }
-
+  
     try {
       const sessionToken = sessionStorage.getItem('sessionToken');
       const config = {
         headers: {
-          'Authorization': `Bearer ${sessionToken}`
+          'Authorization': `Bearer ${sessionToken}`,
+          'Content-Type': 'application/json'
         }
       };
-
+  
       if (userId) {
-        const userData = { name, dob, gender, phone };
-
-        if (password) {
-          userData.password = password;
-        }
-
+        const userData = { password }; // 비밀번호만 포함된 객체
+        console.log('Sending user data:', userData); // 전송 데이터 로그 출력
+  
         const response = await axios.put(`/api/users/${userId}`, userData, config);
-
+  
         if (response.status === 200) {
-          sessionStorage.setItem('userName', name);
-          sessionStorage.setItem('userBrtDt', dob);
-          sessionStorage.setItem('userGender', gender);
-          sessionStorage.setItem('userPhone', phone);
-          setMessage('회원정보가 성공적으로 수정되었습니다');
+          setMessage('비밀번호가 성공적으로 수정되었습니다');
         } else {
-          setMessage('회원정보 수정 중 오류가 발생했습니다');
+          setMessage('비밀번호 수정 중 오류가 발생했습니다');
         }
-      } 
+      }
     } catch (error) {
-      setMessage('회원정보 수정 중 오류가 발생했습니다');
-      console.error('Error updating user:', error);
+      setMessage('비밀번호 수정 중 오류가 발생했습니다');
+      console.error('Error updating password:', error);
     }
   };
-  
 
   return (
     <div>
@@ -92,27 +94,25 @@ function UserUpdate() {
             <label>회원 아이디:</label>
             <input type="text" value={userId} readOnly />
           </div>
-          {password !== undefined && (
-            <div>
-              <label>비밀번호:</label>
-              <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
-            </div>
-          )}
           <div>
             <label>사용자 이름:</label>
-            <input type="text" value={name} readOnly maxLength="15" onChange={e => setName(e.target.value)} />
+            <input type="text" value={name} readOnly />
           </div>
           <div>
             <label>생년월일:</label>
-            <input type="date" value={dob} readOnly onChange={e => setDob(e.target.value)} />
+            <input type="date" value={dob} readOnly />
           </div>
           <div>
             <label>성별:</label>
-            <input type='text' value={gender} readOnly onChange={e => setGender(e.target.value)} />
+            <input type="text" value={gender} readOnly />
           </div>
           <div>
             <label>연락처:</label>
-            <input type="tel" value={phone} readOnly onChange={handlePhoneChange} maxLength="13" />
+            <input type="tel" value={phone} onChange={handlePhoneChange} maxLength="13" />
+          </div>
+          <div>
+            <label>새 비밀번호:</label>
+            <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
           </div>
           <button type="button" onClick={handleUpdate}>확인</button>
           <button type="button" onClick={() => navigate('/')}>취소</button>

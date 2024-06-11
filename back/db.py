@@ -1,12 +1,15 @@
 import pymysql
-#db 정보 
-#gitignore 에 db.py 추가해서 관리필요
+import os
+from dotenv import load_dotenv
+
+load_dotenv()  # 환경 변수 로드
+
 def db_con():
     return pymysql.connect(
-        host='project-db-cgi.smhrd.com',
-        user='campus_23K_AI18_p3_2',
-        password='smhrd2',
-        db='campus_23K_AI18_p3_2',
-        port=3307,
+        host=os.getenv('DB_HOST'),
+        user=os.getenv('DB_USER'),
+        password=os.getenv('DB_PASSWORD'),
+        db=os.getenv('DB_NAME'),
+        port=int(os.getenv('DB_PORT')),  # 포트는 정수로 변환
         charset='utf8'
     )
