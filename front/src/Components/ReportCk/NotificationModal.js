@@ -9,7 +9,10 @@ import './NotificationModal.css';
 const NotificationModal = ({ onClose }) => {
     const [notifications, setNotifications] = useState([]);
     const [cctvAddresses, setCctvAddresses] = useState({});
-    const navigate = useNavigate();
+    const [selectedNotification, setSelectedNotification] = useState(null);
+    const [filter, setFilter] = useState('all'); // 'all', 'report', 'capture'
+    const [filteredNotifications, setFilteredNotifications] = useState([]);
+   
 
     useEffect(() => {
         const fetchNotifications = async () => {
@@ -45,6 +48,7 @@ const NotificationModal = ({ onClose }) => {
                 combinedNotifications.sort((a, b) => new Date(b.CAPTURE_FIRST_TIME || b.REPORT_TIME) - new Date(a.CAPTURE_FIRST_TIME || a.REPORT_TIME));
 
                 setNotifications(combinedNotifications);
+               
 
                 for (const notification of captureResponse.data) {
                     const cctvResponse = await axios.post('http://localhost:5000/capture_address', {
@@ -66,30 +70,75 @@ const NotificationModal = ({ onClose }) => {
         };
 
         fetchNotifications();
+        
     }, []);
+    useEffect(() => {
+        // 모달이 열릴 때 기본적으로 전체 알림을 설정하고 최근 7개만 필터링
+        setFilter('all');
+        setFilteredNotifications(notifications.slice(0, 7));
+    }, [notifications]);
+   
 
-    const handleDetailClick = (notification) => {
+    const handleDetailClick = async(notification) => {
         if (notification.type === 'capture') {
-            navigate('/CaptureNotificationPage', { state: { notification, notifications } });
-            
+            try {
+                await axios.post('http://localhost:5000/capture_detail', {
+                    capture_idx: notification.CAPTURE_IDX
+                });
+            } catch (error) {
+                console.error('Error updating capture detail:', error);
+            }
         } else if (notification.type === 'report') {
-            navigate('/ReportNotificationPage', { state: { notification, notifications } });
+            try {
+                await axios.post('http://localhost:5000/report_detail', {
+                    report_id: notification.REPORT_ID
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+            } catch (error) {
+                console.error('Error updating report detail:', error);
+            }
         }
+        setSelectedNotification(notification);
+        
+        
     };
-    const isConditionMet = (notification) => {
-        return (notification.REPORT_NOTIFICATION === 1 || notification.CAPTURE_ALARM_CK === 1);
+    const handleCloseModal = () => {
+        setSelectedNotification(null);
     };
+   
     const handleOutsideClick = (e) => {
         if (e.target.className === 'modal') {
             onClose();
         }
     };
+    const handleCaptureButtonClick = () => {
+        const captureNotifications = notifications.filter(notification => notification.type === 'capture');
+        setFilteredNotifications(captureNotifications);
+        setFilter('capture');
+    };
+    const handleReportButtonClick = () => {
+        const reportNotifications = notifications.filter(notification => notification.type === 'report');
+        setFilteredNotifications(reportNotifications);
+        setFilter('report');
+    };
+    const handleAllButtonClick = () => {
+        setFilteredNotifications(notifications.slice(0, 7));
+        setFilter('all');
+    };
 
     return (
         <div className="modal" onClick={handleOutsideClick}>
          <div className="modal-content">
+         <div className="notification-buttons">
+                    <button onClick={handleAllButtonClick}>전체 알림</button>
+                    <button onClick={handleReportButtonClick}>제보 알림</button>
+                    <button onClick={handleCaptureButtonClick}>발견 알림</button>
+        </div>
             <div className="notification-container">
-                {notifications.map(notification => (
+                {filteredNotifications.map(notification => (
                     <div key={notification.id} className={`notification ${notification.REPORT_NOTIFICATION === 1 || notification.CAPTURE_ALARM_CK === 1 ? 'notification-gray' : ''}`} onClick={() => handleDetailClick(notification)}>
                         <div className="notification-header">
                         <b>{notification.type === 'capture' ? `${notification.MISSING_NAME} 추정 캡쳐 알림` : `${notification.MISSING_NAME} 추정 제보 알림`}</b>
@@ -109,6 +158,29 @@ const NotificationModal = ({ onClose }) => {
                     </div>
                 ))}
             </div>
+            {selectedNotification && (
+                    <div className="modal-detail">
+                        <div>
+                            {selectedNotification.type === 'capture' ? (
+                                <>
+                                    <p>캡쳐 CCTV: CCTV{selectedNotification.CCTV_IDX}</p>
+                                    <p>캡쳐 장소: {cctvAddresses[selectedNotification.CCTV_IDX] || 'Loading address...'}</p>
+                                    <p>캡쳐 시간: {selectedNotification.CAPTURE_FIRST_TIME}</p>
+                                    <p>사진:</p>
+                                    <img src={selectedNotification.CAPTURE_PATH} alt="Capture" style={{ maxWidth: '100%' }} />
+                                </>
+                            ) : (
+                                <>
+                                    <p>제보 시간: {selectedNotification.REPORT_TIME}</p>
+                                    <p>발견 시간: {selectedNotification.REPORT_SIGHTING_TIME}</p>
+                                    <p>발견 장소: {selectedNotification.REPORT_SIGHTING_PLACE}</p>
+                                    <p>특이사항: {selectedNotification.REPORT_ETC}</p>
+                                </>
+                            )}
+                        </div>
+                        <button onClick={handleCloseModal}>Close</button>
+                    </div>
+                )}
         </div>
         </div>
     );
