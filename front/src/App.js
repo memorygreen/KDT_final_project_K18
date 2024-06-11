@@ -21,7 +21,6 @@ import Sidebar from './Components/SideBar/SideBar';
 import Nevbar from './Components/NevBar/NevBar';
 import KakaoLogin from './Components/KakaoLogin/KakaoLogin';
 import Card from './Components/Cards/Card/Card';
-import OpenAI from './Components/OpenAI/OpenAI';
 import ViewCCTVPage from './Page/ViewCCTVPage/ViewCCTVpage';
 import { ViewMissingListPage } from './Page/ViewMissingListPage/ViewMissingListPage';
 import SearchMissingUpdatePage from './Page/SearchMissingUpdatePage/SearchMissingUpdatePage';
@@ -56,7 +55,6 @@ function App() {
           <Route path="/Nevbar" element={<Nevbar />} />
           <Route path="/Login/Kakao" element={<KakaoLogin />} />
           <Route path='/Card' element={<Card />} />
-          <Route path='/OpenAI' element={<OpenAI />} />
           <Route path='/Mypage' element={<Mypage />} />
 
         </Routes>

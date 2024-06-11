@@ -60,8 +60,6 @@ const SearchMissing = ({ initialData }) => {
 
     };
 
-
-
     const topOptions = [
         { id: 'top long', label: '긴팔' }, //임시
         { id: 'top short', label: '반팔' }, // 임시
@@ -101,7 +99,7 @@ const SearchMissing = ({ initialData }) => {
         { id: 'backpack', label: '배낭' }, // 변경완
         { id: 'shoulder bag', label: '숄더백' }, // 변경완
         { id: 'hand bag', label: '핸드백' }, // 변경완
-        { id: 'acc_none', label: '해당없음' }, 
+        { id: 'acc_none', label: '해당없음' },
     ];
 
     const genderOptions = [
@@ -111,39 +109,6 @@ const SearchMissing = ({ initialData }) => {
 
     // 포스터 생성기능
     const [posterGenerating, setPosterGenerating] = useState('');
-
-
-
-
-
-
-        // // 인적사항 확인
-        console.log('프론트에서 넘어오는지 확인')
-        console.log('Missing Name:', missingName);
-        console.log('Missing Age:', missingAge);
-        console.log('Missing Gender:', missingGender);
-        console.log('Missing Location:', missingLocation);
-        console.log('Missing Location Lat:', missingLocationLat);
-        console.log('Missing Location Lng:', missingLocationLng);
-        console.log('Selected Img Url:', missingImgUrl);
-    
-        // // 인상착의 확인
-        console.log('Selected Top:', selectedTop);
-        console.log('Selected Top Color:', selectedTopColor);
-        console.log('Selected Bottom:', selectedBottom);
-        console.log('Selected Bottom Color:', selectedBottomColor);
-        console.log('Selected Belongings:', selectedBelongings);
-    
-        console.log('Selected Top(Kor):', selectedTopKor);
-        console.log('Selected Top Color(Kor):', selectedTopColorKor);
-        console.log('Selected Bottom(Kor):', selectedBottomKor);
-        console.log('Selected Bottom Color(Kor):', selectedBottomColorKor);
-        console.log('Selected Belongings(Kor):', selectedBelongingsKor);
-    
-        console.log('missingClothesEtc(인상착의 특이사항):', missingClothesEtc);
-        console.log('missingBelongingsEtc(소지품 특이사항):', missingBelongingsEtc);
-
-        
 
     const handle_submit = async (event) => {
         console.log('handle_submit 들어왔는지 확111')
@@ -160,7 +125,18 @@ const SearchMissing = ({ initialData }) => {
             } catch (error) {
                 console.error('실종자 이미지 aws 업로드 실패 Failed to upload image');
             }
-
+            const prompt = `
+            실종자를 찾는 포스터를 생성
+            실종자 정보 : 동양인
+            성별: ${missingGender}
+            나이: ${missingAge}
+            상의 타입: ${selectedTop}
+            상의 색상: ${selectedTopColor}
+            하의 타입: ${selectedBottom}
+            하의 색상: ${selectedBottomColor}
+            해당하는 이미지 생성해줘
+            `;
+            console.log(prompt);
             if (missingImgUrl) {
                 // 백으로 보내기
                 // POST request to submit form data
@@ -196,19 +172,18 @@ const SearchMissing = ({ initialData }) => {
                         console.log('실종자 정보 등록 성공 successfully:', response.data);
                         alert("등록 성공")
 
-                    
+
                         // 포스터 생성
                         if (posterGenerating) {
                             try {
                                 setTimeout(async () => {
-                                    await createPoster(); // createPoster 함수 실행
+                                    await createPoster(prompt); // createPoster 함수 실행
                                 }, 5000);  //db값 저장되고 실행하도록 시간텀을 줌
                             } catch (error) {
                                 // createPoster 함수 실행 중 오류가 발생한 경우 처리
                                 console.error('Error creating poster:', error);
                             }
                         }
-
 
 
                     })
@@ -221,14 +196,13 @@ const SearchMissing = ({ initialData }) => {
                 console.error('실종자 이미지 url 받은 후 백으로 보내기 실패 No image to upload');
                 console.error('실종자 이미지 url을 업로드해주세요.');
             }
-            
-            
+
+
         }
 
         // 포스터 생성
-        
-    };
 
+    };
 
 
     // 각 옵션의 label 값을 찾아서 상태에 저장하는 함수들
@@ -293,7 +267,6 @@ const SearchMissing = ({ initialData }) => {
     useEffect(() => {
         setSelectBox(selectedTxt.item);
     }, [selectedTxt]);
-
 
     // 인적사항 구분
     const missing_info_box = () => {
@@ -402,8 +375,6 @@ const SearchMissing = ({ initialData }) => {
                             onChange={(event) => setPosterGenerating(event.target.checked)}
                         />
                         <label className="radio_btn_label_poster" htmlFor='poster_check_box' >포스터 생성</label>
-
-
                         <input
                             type="text"
                             className="input_etc_poster_notice"
@@ -415,13 +386,7 @@ const SearchMissing = ({ initialData }) => {
                             readOnly='true'
                         />
                     </div>
-
-
                 </div>
-
-
-
-
             </div>
         );
     };
