@@ -3,7 +3,7 @@ from db import db_con
 
 user_update_bp = Blueprint('user_update', __name__)
 
-@user_update_bp.route('/api/users/<user_id>', methods=['PUT'])
+@user_update_bp.route('/UserUpdate/<user_id>', methods=['PUT'])
 def update_user(user_id):
     pw = request.json.get('password')  # 패스워드를 요청에서 가져옴
     db = db_con()
