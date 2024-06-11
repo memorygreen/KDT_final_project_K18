@@ -1,6 +1,7 @@
 import React from 'react'
-import SearchMissingUpdatePage from '../SearchMissingUpdatePage/SearchMissingUpdatePage'
 import NevBar from '../../Components/NevBar/NevBar';
+import Sidebar from '../../Components/SideBar/SideBar';
+import { MyPageCaptureView } from '../../Components/MyPage/MyPageCaptureView';
 
 export const MyPage = () => {
 
@@ -18,6 +19,17 @@ export const MyPage = () => {
             <div className='Main_card' >
                 <a href={`/ViewMissingListPage/${sessionId}`}>등록한 실종자 정보 보기</a>
             </div>
+
+
+            <div className="sidebar1">
+                {/* <Sidebar /> */}
+            </div>
+
+
+            <div>
+                <MyPageCaptureView />
+            </div>
+
         </div >
 
     );
