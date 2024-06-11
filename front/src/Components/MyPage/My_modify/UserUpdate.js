@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NevBar from '../../Components/NevBar/NevBar';
+import NevBar from '../../NevBar/NevBar';
 import axios from 'axios';
 
 function UserUpdate() {
