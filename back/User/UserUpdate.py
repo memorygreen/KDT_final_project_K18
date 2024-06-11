@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from db import db_con
+import bcrypt
 
 user_update_bp = Blueprint('user_update', __name__)
 
@@ -10,8 +11,10 @@ def update_user(user_id):
     cursor = db.cursor()
     try:
         if pw:  # 패스워드가 있는 경우에만 업데이트
+            # 비밀번호를 해시화하여 저장
+            hashed_password = hash_password(pw)
             update_sql = "UPDATE TB_USER SET USER_PW = %s WHERE USER_ID = %s"
-            cursor.execute(update_sql, (pw, user_id))
+            cursor.execute(update_sql, (hashed_password, user_id))
             db.commit()
             return jsonify({"message": "비밀번호 수정 완료"}), 200
         else:
@@ -22,3 +25,7 @@ def update_user(user_id):
     finally:
         cursor.close()
         db.close()
+
+# 비밀번호를 해시화하는 함수
+def hash_password(password):
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
