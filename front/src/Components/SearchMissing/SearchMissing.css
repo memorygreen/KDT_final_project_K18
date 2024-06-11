@@ -1,5 +1,17 @@
 /*자영(240529) : 검색기능 css*/
 
+
+.search_bar_all {
+  margin-top: 7rem;
+ /* 상단 여백을 음수로 설정하여 위로 올림 */
+}
+
+
+
+.missing_avatar_all{
+  margin-top: auto;
+}
+
 /*항목 내용 나올 박스 전체 */
 .search_missing_cate_group{
   border-radius: 25px;
@@ -56,9 +68,9 @@
 }
 
 
+
 /*포스터 체크 박스*/
 .radio_btn_label_poster {
-  
   font-size: 15px;
   color: #000000; /*글자색 */
   background: #ffffff; /*안 눌렀을 때 배경 색 */
@@ -71,8 +83,13 @@
   align-items: center;
   cursor: pointer;
   margin-right: 10px; /* Add some spacing between radio buttons */
+  white-space: normal; /* 기본값은 nowrap이므로 normal로 변경 */
+  overflow-wrap: break-word; /* 단어가 경계를 넘어갈 때 줄바꿈 */
 }
 
+.input_etc_poster_notice:hover{
+  background: #f7f7f7;
+}
 .radio_btn_poster{
   display: none;
 }

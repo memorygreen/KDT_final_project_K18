@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 from dotenv import load_dotenv
+import os
 
 # 다른 모듈에서 블루프린트를 가져오기
 from KakaoLogin import kakao_bp
@@ -18,6 +19,7 @@ from UserDelete import UserDelete_bp
 from getCCTV import get_CCTV_bp
 from SearchMissing.getSearchMissing import get_search_missing_bp
 from SearchMissing.getAllMissing import get_all_missing_bp
+from UserUpdate import user_update_bp  # UserUpdate 블루프린트 가져오기
 
 # 환경 변수 로드
 load_dotenv()
@@ -26,7 +28,7 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 # 시크릿 키 설정
-app.secret_key = 'your_secret_key_here'
+app.secret_key = os.getenv('SECRET_KEY')
 
 # 블루프린트 등록
 app.register_blueprint(kakao_bp)
@@ -44,6 +46,7 @@ app.register_blueprint(UserDelete_bp)
 app.register_blueprint(get_CCTV_bp) # 자영(240605) CCTV 상세보기 기능 블루프린트 등록
 app.register_blueprint(get_search_missing_bp) # 자영(240605) 실종자 인상착의 가져오기
 app.register_blueprint(get_all_missing_bp) # 자영(240605) 세션에 담긴 userid가 등록한 모든 실종자 가져오기
+app.register_blueprint(user_update_bp)  # UserUpdate 블루프린트 등록
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
