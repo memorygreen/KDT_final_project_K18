@@ -7,7 +7,7 @@ import Settings from './assets/Settings.png'
 import Dashboard from './assets/Dashboard.png'
 import profile from './assets/profile.jpg'
 import logo from './assets/logo.png'
-import NotificationModal from '../ReportCk/NotificationModal';
+// import NotificationModal from '../ReportCk/NotificationModal';
 const Sidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(true); // 로그인 상태 관리
@@ -135,7 +135,7 @@ const Sidebar = () => {
                     <div className="user-name">Willy</div>
                     <div className="email">Where's Willy?</div>
                 </div>
-                    {isNotificationModalOpen && <NotificationModal onClose={toggleNotificationModal} />}
+                    {/* {isNotificationModalOpen && <NotificationModal onClose={toggleNotificationModal} />} */}
                 <button onClick={handleLogout} className='logout'> {/* Link 대신 button 사용 */}
                     <img src={logoutIcon} alt="logout" width="40" height="40" />
                 </button>

@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import './NevBar.css'; // Make sure to create and style this CSS file accordingly
-import logo from "./assets/logo.png"
+import './NevBar.css';
+import logo from "./assets/logo.png";
 import { Link, useNavigate } from 'react-router-dom';
-
-
+import MyPage from '../MyPage/Mypage'; // MyPage component imported
 
 const NevBar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userCate, setUserCate] = useState(null);
+    const [isMyPageModalOpen, setIsMyPageModalOpen] = useState(false); // Modal state added
     const navigate = useNavigate();
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
+
     useEffect(() => {
-        // 세션 스토리지에서 userId 값을 확인하는 로직으로 변경
         const session = sessionStorage.getItem('userId');
         const sessionUserCate = sessionStorage.getItem('userCate');
         setIsLoggedIn(session ? true : false);
@@ -23,40 +23,35 @@ const NevBar = () => {
     }, []);
 
     const handleLogout = () => {
-        sessionStorage.clear(); // 세션 값 삭제
-        setIsLoggedIn(false); // 로그인 상태 업데이트
-        navigate('/Login'); // 로그인 페이지로 이동
+        sessionStorage.clear();
+        setIsLoggedIn(false);
+        navigate('/Login');
     };
 
+    const openMyPageModal = () => {
+        setIsMyPageModalOpen(true); // Open modal
+    };
 
+    const closeMyPageModal = () => {
+        setIsMyPageModalOpen(false); // Close modal
+    };
 
     return (
         <div className="all_header">
             <header className="header_class">
                 <div className="menu__wrapper">
                     <div className="menu__bar">
-
                         <Link to="/" className="logo_nev">
                             <img src={logo} alt="logo" />
                         </Link>
                         <nav>
                             <ul className={`navigation ${isMenuOpen ? '' : 'nevbar_hide'}`}>
+                                <li><Link to='/Mappage'>Map</Link></li>
                                 <li>
-                                    <Link to='/Mappage'>
-                                        Map
-                                    </Link>
+                                    {/* MyPage link replaced with button */}
+                                    <button onClick={openMyPageModal} className="link-button">MyPage</button>
                                 </li>
-                                <li>
-                                    <Link to='/MyPage'>
-                                        MyPage
-                                    </Link>
-
-                                </li>
-                                <li>
-                                    <Link to='/SearchMissingPage'>
-                                        실종자검색
-                                    </Link>
-                                </li>
+                                <li><Link to='/SearchMissingPage'>실종자검색</Link></li>
                             </ul>
                         </nav>
                     </div>
@@ -182,6 +177,13 @@ const NevBar = () => {
                     </button>
                 </div>
             </header>
+            {/* Modal component rendered conditionally */}
+            {isMyPageModalOpen && (
+                <div className="Mypage_modal">
+                    <MyPage />
+                    <button onClick={closeMyPageModal}>Close</button>
+                </div>
+            )}
         </div>
     );
 };

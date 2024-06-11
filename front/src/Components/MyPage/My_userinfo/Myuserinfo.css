@@ -13,7 +13,7 @@
 .Mypage_userinfo_icon {
     display: flex;
 }
-.Mypage_userinfo_icon img {
+.Mypage_userinfo_icon>div>img {
     width: 40px;
     height: 40px;
 }

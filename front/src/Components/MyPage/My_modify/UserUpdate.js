@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NevBar from '../../NevBar/NevBar';
 import axios from 'axios';
 
 function UserUpdate() {
@@ -85,7 +84,6 @@ function UserUpdate() {
 
   return (
     <div>
-      <NevBar />
       <div className="container">
         <h1>회원정보 수정</h1>
         {message && <p className="error-message">{message}</p>}
