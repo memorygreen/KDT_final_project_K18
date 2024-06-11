@@ -224,9 +224,9 @@ const Admincctv = () => {
                 </div>
 
                 {showModal && (
-                    <div className="modal">
-                        <div className="modal-content">
-                            <span className="close" onClick={closeModal}>&times;</span>
+                    <div className="CCTV_modal">
+                        <div className="CCTV_modal-content">
+                            <span className="CCTV_close" onClick={closeModal}>&times;</span>
                             <h2>새 CCTV 생성</h2>
                             {validationError && <p className="error">{validationError}</p>}
                             <form onSubmit={handleCreateCctv}>
