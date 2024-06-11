@@ -5,8 +5,7 @@ user_update_bp = Blueprint('user_update', __name__)
 
 @user_update_bp.route('/api/users/<user_id>', methods=['PUT'])
 def update_user(user_id):
-    data = request.get_json()
-    pw = data.get('password')  # 패스워드를 요청에서 가져옴
+    pw = request.json.get('password')  # 패스워드를 요청에서 가져옴
     db = db_con()
     cursor = db.cursor()
     try:
