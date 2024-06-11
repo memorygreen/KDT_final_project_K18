@@ -126,6 +126,30 @@ def login():
         connection.close()
 
 
+@signup_bp.route('/userInfoOne', methods=['POST'])
+def userInfoOne():
+    data = request.json
+    user_id = data.get('user_id')
+    try:
+        connection = db_con()
+        with connection.cursor() as cursor:
+            sql = "SELECT USER_NAME, USER_BRT_DT, USER_GENDER, USER_PHONE, USER_STATUS, USER_CATE FROM TB_USER WHERE USER_ID = %s"
+            cursor.execute(sql, (user_id,))
+            user_data = cursor.fetchone()
+            if user_data:
+                # 튜플을 딕셔너리로 변환
+                keys = ["USER_NAME", "USER_BRT_DT", "USER_GENDER",
+                        "USER_PHONE", "USER_STATUS", "USER_CATE"]
+                user_data_dict = dict(zip(keys, user_data))
+                return jsonify(user_data_dict), 200
+            else:
+                return jsonify({'message': 'User not found'}), 404
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
+    finally:
+        connection.close()
+
+
 if __name__ == '__main__':
     app.register_blueprint(signup_bp)
     app.run(debug=True)

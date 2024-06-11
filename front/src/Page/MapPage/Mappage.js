@@ -14,7 +14,7 @@ const Mappage = () => {
             <KakaoMap />
           </div>
           <div className="sidebar1">
-            <Sidebar />
+            {/* <Sidebar /> */}
           </div>
         </div>
       </div>

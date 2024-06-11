@@ -10,10 +10,10 @@ from post import post_bp
 from CCTVLocation import cctv_bp
 from report import report_bp
 from SignUp import signup_bp  # SignUp 블루프린트 가져오기
-from Admin import Admin_bp
-from Adminmanage import Adminmanage_bp
-from Admincctv import Admincctv_bp
-from Adminmissing import Adminmissing_bp
+from Admin.Admin import Admin_bp
+from Admin.Adminmanage import Adminmanage_bp
+from Admin.Admincctv import Admincctv_bp
+from Admin.Adminmissing import Adminmissing_bp
 from SearchMissing.searchMissing import search_missing_bp # 자영(240407) 실종자 검색 등록 ->경로 변경
 from UserDelete import UserDelete_bp
 from getCCTV import get_CCTV_bp

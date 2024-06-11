@@ -26,8 +26,8 @@ import Card from './Components/Cards/Card/Card';
 import OpenAI from './Components/OpenAI/OpenAI';
 import ViewCCTVPage from './Page/ViewCCTVPage/ViewCCTVpage';
 import { ViewMissingListPage } from './Page/ViewMissingListPage/ViewMissingListPage';
-import { MyPage } from './Page/MyPage/Mypage';
 import SearchMissingUpdatePage from './Page/SearchMissingUpdatePage/SearchMissingUpdatePage';
+import Mypage from './Components/MyPage/Mypage';
 
 
 function App() {
@@ -42,7 +42,7 @@ function App() {
           <Route path="/Signup" element={<Signup />} />
           <Route path="*" element={<NotFound />} />
           <Route path='/SearchMissingPage' element={<SerchMissing />} /> {/* 자영 추가*/}
-          <Route path='/Adminpage' element={<Adminpage />}/>
+          <Route path='/Adminpage' element={<Adminpage />} />
           <Route path="/Adminmanage" element={<Adminmanage />} />
           <Route path="/Admincctv" element={<Admincctv />} />
           <Route path="/Adminmissing" element={<Adminmissing />} />
@@ -50,10 +50,9 @@ function App() {
           {/* <Route path='/UserDelete' element={<UserDelete />}/> */}
           <Route path="/UserUpdate" element={<UserUpdate />} /> {/* UserUpdate 컴포넌트를 호출하는 경로 추가 */}
           <Route path="/ViewCCTVPage/:cctvId" element={<ViewCCTVPage />} />
-          <Route path="/MyPage" element={<MyPage/>} />
           <Route path="/ViewMissingListPage/:userId" element={<ViewMissingListPage />} />
           <Route path="/SearchMissingUpdatePage/:missing_idx" element={<SearchMissingUpdatePage />} />
-          <Route path="/CaptureNotificationPage" element={<CaptureNotificationPage/>} />
+          <Route path="/CaptureNotificationPage" element={<CaptureNotificationPage />} />
 
           {/* Test용 Components */}
           <Route path="/Map" element={<KakaoMap />} />
@@ -62,6 +61,7 @@ function App() {
           <Route path="/Login/Kakao" element={<KakaoLogin />} />
           <Route path='/Card' element={<Card />} />
           <Route path='/OpenAI' element={<OpenAI />} />
+          <Route path='/Mypage' element={<Mypage />} />
 
         </Routes>
       </Router>
