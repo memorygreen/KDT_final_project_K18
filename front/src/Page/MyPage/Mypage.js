@@ -1,33 +1,47 @@
-import React from 'react'
+import React, { useState } from 'react'
+import './Mypage.css';
+import Myuserinfo from './My_userinfo/Myuserinfo';
+import Notification from './My_alram/Notification';
+import MyCapture from './My_capture/MyCapture';
+import UserUpdate from './My_modify/UserUpdate';
 import NevBar from '../../Components/NevBar/NevBar';
 
-
-export const MyPage = () => {
-
-    //missing id 받는 곳
-
+const MyPage = () => {
     const sessionId = sessionStorage.getItem('userId') // session에 있는 id 값 
+    const [activeComponent, setActiveComponent] = useState('capture'); // 기본값은 'capture'
+
+    const handleIconClick = (component) => {
+        console.log('Changing active component to:', component); // 상태 변화 로깅
+        setActiveComponent(component);
+    };
 
     return (
-        <div className="Nev-Card">
-            <header className='nevibar_card'> <NevBar /></header>
-            <div className='Main_start'>
-                <h1>MyPage</h1>
+        <div className="Mypages">
+            <header><NevBar /></header>
+            <div className="Mypage_container">
+                <div className='Mypage_userinfo'>
+                    <Myuserinfo sessionId={sessionId} onIconClick={handleIconClick} />
+                </div>
+                <div className='Mypage_content'>
+                    {activeComponent === 'capture' && (
+                        <div className='Mypage_capture'>
+                            <MyCapture sessionId={sessionId} />
+                        </div>
+                    )}
+                    {activeComponent === 'update' && (
+                        <div className='Mypage_modify'>
+                            <UserUpdate sessionId={sessionId} />
+                        </div>
+                    )}
+                    {activeComponent === 'notification' && (
+                        <div className='Mypage_alarm'>
+                            <Notification sessionId={sessionId} />
+                        </div>
+                    )}
+                </div>
             </div>
-
-            <div className='Main_card' >
-                <a href={`/ViewMissingListPage/${sessionId}`}>등록한 실종자 정보 보기</a>
-            </div>
-
-
-            <div className="sidebar1">
-                {/* <Sidebar /> */}
-            </div>
-
-
-
-
         </div >
-
     );
 }
+
+export default MyPage;

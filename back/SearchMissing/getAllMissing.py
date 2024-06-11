@@ -11,20 +11,12 @@ def get_all_missing():
     # user id 받아오기
     
     try:
-        print('getAllMissing.py로 넘어옴')
         data = request.json  # JSON 형식으로 데이터를 받음
-        print("백에서 데이터 수신 확인: ", data) # 디버깅
-
         # 세션에 담긴 id
-        user_id = data.get('user_id')
-        print("백으로 받은 세션 값:", user_id)# 디버깅
-        
+        user_id = data.get('user_id')  
         # user id 가 등록한 missing 전체 select
         db = db_con()
-        cursor = db.cursor()
-        
-        print("db 연결 확인 : ", db, cursor) # 디버깅
-        
+        cursor = db.cursor()  
         missing_spl = """
             SELECT 
                 A.BELONGINGS_CATE_KOR, 
@@ -56,9 +48,6 @@ def get_all_missing():
         
         
         missing_sel = cursor.fetchall()
-        print("select 결과 ", missing_sel) # 디버깅
-        
-        
         missing = []
         for i in missing_sel:
             missing.append({
@@ -80,8 +69,6 @@ def get_all_missing():
                 "MISSING_BOTTOMS_COLOR_KOR": i[15]
             })
         
-        
-        print("missing 배열에 담기 (완):", missing)
         cursor.close()
         db.close()
         
