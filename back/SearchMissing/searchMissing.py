@@ -126,8 +126,9 @@ def search_missing():
         cursor.execute(sql_belongings, (missing_id, selected_belongings, selected_belongings_kor, missing_belongings_etc))
 
         print('확인용)실종자 소지품 테이블 삽입 후')
-        
-        
+
+        near_cctv(missing_location_lat,missing_location_lng)
+        print(near_cctv)
         conn.commit()
         cursor.close()
         conn.close()
@@ -172,3 +173,61 @@ def search_missing():
             'message': str(e)
         }
         return jsonify(response), 500
+    
+def near_cctv(missing_location_lat, missing_location_lng):
+    try:
+        # /CCTVLocation 엔드포인트에 GET 요청하여 모든 CCTV의 정보를 가져옴
+        cctv_locations = request.get('/CCTVLocation').json()
+        
+        # 최초 거리를 무한대로 설정하여 초기화
+        min_distance = float('inf')
+        nearest_cctv = None
+        
+        # 모든 CCTV의 정보를 반복하며 입력된 위치와의 거리를 계산하여 가장 가까운 CCTV를 찾음
+        for cctv in cctv_locations:
+            cctv_lat = cctv.get('lat')
+            cctv_lng = cctv.get('lng')
+            
+            # 두 점 간의 거리 계산
+            distance = calculate_distance(missing_location_lat, missing_location_lng, cctv_lat, cctv_lng)
+            
+            # 현재까지의 최소 거리보다 더 짧은 거리가 나오면 최소 거리와 가장 가까운 CCTV를 업데이트
+            if distance < min_distance:
+                min_distance = distance
+                nearest_cctv = cctv
+        
+        return nearest_cctv
+        
+    except Exception as e:
+        # 에러 발생 시 처리
+        print("Error occurred while finding nearest CCTV:", str(e))
+        return None
+
+# 두 지점 간의 거리를 계산하는 함수
+def calculate_distance(lat1, lon1, lat2, lon2):
+    from math import sin, cos, sqrt, atan2, radians
+
+    # 지구의 반지름 (미터)
+    R = 6373.0
+
+    # 라디안으로 변환
+    lat1 = radians(lat1)
+    lon1 = radians(lon1)
+    lat2 = radians(lat2)
+    lon2 = radians(lon2)
+
+    # 위도 및 경도의 차이 계산
+    dlon = lon2 - lon1
+    dlat = lat2 - lat1
+
+    # 거리를 계산하기 위한 Haversine 공식 적용
+    a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+    # 거리 계산
+    distance = R * c
+
+    return distance
+
+
+    
