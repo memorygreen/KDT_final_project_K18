@@ -68,7 +68,7 @@ function UserUpdate() {
         const userData = { password }; // 비밀번호만 포함된 객체
         console.log('Sending user data:', userData); // 전송 데이터 로그 출력
   
-        const response = await axios.put(`/api/users/${userId}`, userData, config);
+        const response = await axios.put(`/UserUpdate/${userId}`, userData, config);
   
         if (response.status === 200) {
           setMessage('비밀번호가 성공적으로 수정되었습니다');
