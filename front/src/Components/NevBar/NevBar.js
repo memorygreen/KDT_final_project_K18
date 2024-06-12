@@ -41,7 +41,7 @@ const NevBar = () => {
                                         {/* MyPage link replaced with button */}
                                         <Link to="/MyPage" className="link-button">MyPage</Link>
                                     </li>
-                                    <li><Link to='/SearchMissingPage'>실종자검색</Link></li>
+                                    <li><Link to='/SearchMissingPage'>실종자등록</Link></li>
                                 </ul>
                             )}
                         </nav>
