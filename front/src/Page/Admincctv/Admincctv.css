@@ -1,5 +1,5 @@
 /* Admincctv.css */
-.modal {
+.CCTV_modal {
     display: flex;
     position: fixed;
     z-index: 1;
@@ -14,7 +14,7 @@
     align-items: center;
 }
 
-.modal-content {
+.CCTV_modal-content {
     background-color: #fefefe;
     margin: auto;
     padding: 20px;
@@ -25,15 +25,15 @@
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
-.close {
+.CCTV_close {
     color: #aaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
 }
 
-.close:hover,
-.close:focus {
+.CCTV_close:hover,
+.CCTV_close:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;

@@ -75,35 +75,33 @@ let acc_none =''
 // 이미지 변수 명
 const top_long_colors = [
   top_long_red,
-  top_long_orange,
   top_long_yellow,
   top_long_green,
   top_long_blue,
   top_long_purple,
-  top_long_pink,
-  top_long_brown,
   top_long_white,
   top_long_grey,
   top_long_black,
+  // top_long_orange,
+  // top_long_pink,
+  // top_long_brown,
 ];
 
 const top_short_colors = [
   top_short_red,
-  top_short_orange,
   top_short_yellow,
   top_short_green,
   top_short_blue,
   top_short_purple,
-  top_short_pink,
-  top_short_brown,
   top_short_white,
   top_short_grey,
   top_short_black,
+  // top_short_orange,
+  // top_short_pink,
+  // top_short_brown,
 ];
 
 const bottom_long_colors = [
-  bottom_long_red,
-  bottom_long_orange,
   bottom_long_yellow,
   bottom_long_green,
   bottom_long_blue,
@@ -112,12 +110,12 @@ const bottom_long_colors = [
   bottom_long_brown,
   bottom_long_white,
   bottom_long_grey,
-  bottom_long_black
+  bottom_long_black,
+  // bottom_long_red,
+  // bottom_long_orange,
 ];
 
 const bottom_short_colors = [
-  bottom_short_red,
-  bottom_short_orange,
   bottom_short_yellow,
   bottom_short_green,
   bottom_short_blue,
@@ -127,11 +125,11 @@ const bottom_short_colors = [
   bottom_short_white,
   bottom_short_grey,
   bottom_short_black,
+  // bottom_short_red,
+  // bottom_short_orange,
 ];
 
 const bottom_skirt_colors = [
-  bottom_skirt_red,
-  bottom_skirt_orange,
   bottom_skirt_yellow,
   bottom_skirt_green,
   bottom_skirt_blue,
@@ -141,6 +139,8 @@ const bottom_skirt_colors = [
   bottom_skirt_white,
   bottom_skirt_grey,
   bottom_skirt_black
+  // bottom_skirt_red,
+  // bottom_skirt_orange,
 ];
 
 const belongings = [
@@ -152,13 +152,30 @@ const belongings = [
 ];
 
 // 사용자가 선택한 실종자 상의
-const top_type_ids = ['long_sleeve', 'short_sleeve'];
-const top_color_ids = ['top_red', 'top_orange', 'top_yellow', 'top_green', 'top_blue', 'top_purple', 'top_pink', 'top_brown', 'top_white', 'top_grey', 'top_black'];
+const top_type_ids = ['top long', 'top short'];
+const top_color_ids = ['top red', 
+                        'top yellow', 
+                        'top green', 
+                        'top blue', 
+                        'top purple', 
+                        'top white', 
+                        'top gray', 
+                        'top black'];
+
+
 // 사용자가 선택한 실종자  하의
-const bottom_type_ids = ['long_pants', 'short_pants', 'skirt'];
-const bottom_color_ids = ['bottom_red', 'bottom_orange', 'bottom_yellow', 'bottom_green', 'bottom_blue', 'bottom_purple', 'bottom_pink', 'bottom_brown', 'bottom_white', 'bottom_grey', 'bottom_black'];
+const bottom_type_ids = ['bottom long', 'bottom short', 'bottom skirt'];
+const bottom_color_ids = [  'bottom yellow', // 변경완
+                            'bottom green',
+                            'bottom blue',
+                            'bottom purple',
+                            'bottom pink',
+                            'bottom brown',
+                            'bottom white',
+                            'bottom gray',
+                            'bottom black'];
 // 사용자가 선택한 실종자 소지품
-const belongings_ids = ['hat', 'back_pack', 'shoulder_bag', 'hand_bag', 'acc_none'];
+const belongings_ids = ['hat', 'backpack', 'shoulder bag', 'hand bag', 'acc_none'];
 
 
 export const MissingAvatar = ({
@@ -181,7 +198,7 @@ export const MissingAvatar = ({
 
   // 상의 선택
   useEffect(() => {
-    if (selectedTop === 'long_sleeve') {
+    if (selectedTop === 'top long') {
       const colorIndex = top_color_ids.indexOf(selectedTopColor);
       if (colorIndex !== -1) {
         set_top_img_src(top_long_colors[colorIndex]);
@@ -190,7 +207,7 @@ export const MissingAvatar = ({
         set_top_img_src('');
         set_top_img_class('');
       }
-    } else if (selectedTop === 'short_sleeve') {
+    } else if (selectedTop === 'top short') {
       const colorIndex = top_color_ids.indexOf(selectedTopColor);
       if (colorIndex !== -1) {
         set_top_img_src(top_short_colors[colorIndex]);
@@ -207,7 +224,7 @@ export const MissingAvatar = ({
 
   // 하의 선택
   useEffect(() => {
-    if (selectedBottom === 'long_pants') {
+    if (selectedBottom === 'bottom long') {
       const colorIndex = bottom_color_ids.indexOf(selectedBottomColor);
       if (colorIndex !== -1) {
         set_bottom_img_src(bottom_long_colors[colorIndex]);
@@ -216,7 +233,7 @@ export const MissingAvatar = ({
         set_bottom_img_src('');
         set_bottom_img_class('');
       }
-    } else if (selectedBottom === 'short_pants') {
+    } else if (selectedBottom === 'bottom short') {
       const colorIndex = bottom_color_ids.indexOf(selectedBottomColor);
       if (colorIndex !== -1) {
         set_bottom_img_src(bottom_short_colors[colorIndex]);
@@ -225,7 +242,7 @@ export const MissingAvatar = ({
         set_bottom_img_src('');
         set_bottom_img_class('');
       }
-    } else if (selectedBottom === 'skirt') {
+    } else if (selectedBottom === 'bottom skirt') {
       const colorIndex = bottom_color_ids.indexOf(selectedBottomColor);
       if (colorIndex !== -1) {
         set_bottom_img_src(bottom_skirt_colors[colorIndex]);

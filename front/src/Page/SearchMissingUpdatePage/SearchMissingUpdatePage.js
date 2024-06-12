@@ -15,7 +15,7 @@ const SearchMissingUpdatePage = () => {
 
     useEffect(() => {
         // 사용자의 id를 넘겨주면 전체 실종자 가져오기
-        axios.post('/getSearchMissing', { missing_idx: missing_idx, session_id:session_id })
+        axios.post('/getSearchMissing', { missing_idx: missing_idx, session_id: session_id })
             .then(response => {
                 console.log("missing_idx 보내고 전체 missing에 대한 정보 불러오기 성공(성공)", response.data);
                 set_missing_data(response.data);
@@ -25,25 +25,25 @@ const SearchMissingUpdatePage = () => {
             });
     }, [missing_idx]);
 
-    
+
 
 
     return (
         <div className="Nev-Card">
             <header className='nevibar_card'> <NevBar />
             </header>
-            
-             
+
+
             <div className='Main_card'>
                 {missing_data ? <SearchMissing initialData={missing_data} /> : <div>Missing Update Loading...</div>}
-                
+
             </div>
         </div>
-        
 
 
 
-        
+
+
     );
 };
 
