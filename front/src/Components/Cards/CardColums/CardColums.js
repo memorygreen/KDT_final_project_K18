@@ -38,7 +38,7 @@ const CardColums = ({ posters, handleImageClick }) => {
     const scrollAnimations = (columns, mergedItems) => {
         columns.forEach((column, pos) => {
             gsap.to(column, {
-                yPercent: -1 * pos * 10,
+                yPercent: -(2 - pos) * 7,
                 ease: 'none',
                 scrollTrigger: {
                     trigger: column,
