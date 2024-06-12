@@ -148,8 +148,26 @@ const Adminpage = () => {
     return (
         <div>
             <NevBar />
-            <div className="main">
+            <div className="admin_main">
                 <h1>운영자 페이지</h1>
+                <div className='Admin_search-bar'>
+                    <select value={searchField} onChange={e => setSearchField(e.target.value)}>
+                        <option value="">선택</option>
+                        {searchOptions.map((option, index) => (
+                            <option key={index} value={option}>
+                                {option}
+                            </option>
+                        ))}
+                    </select>
+                    <input
+                        type='text'
+                        value={searchText}
+                        onChange={e => setSearchText(e.target.value)}
+                        placeholder='검색어 입력'
+                        onKeyDown={handleKeyDown}
+                    />
+                    <button onClick={handleSearch}>검색</button>
+                </div>
                 <table>
                     <thead>
                         <tr>
@@ -208,24 +226,6 @@ const Adminpage = () => {
                         <li onClick={handleNextGroup} className="next-group">다음</li>
                     )}
                 </ul>
-                <div className='search-bar'>
-                    <select value={searchField} onChange={e => setSearchField(e.target.value)}>
-                        <option value="">선택</option>
-                        {searchOptions.map((option, index) => (
-                            <option key={index} value={option}>
-                                {option}
-                            </option>
-                        ))}
-                    </select>
-                    <input
-                        type='text'
-                        value={searchText}
-                        onChange={e => setSearchText(e.target.value)}
-                        placeholder='검색어 입력'
-                        onKeyDown={handleKeyDown}
-                    />
-                    <button onClick={handleSearch}>검색</button>
-                </div>
             </div>
         </div>
     );

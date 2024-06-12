@@ -48,7 +48,7 @@ const Adminmanage = () => {
             <header>
                 <NevBar />
             </header>
-            <div className="main">
+            <div className="admin_main">
                 <h1>포스터 관리 페이지</h1>
                 <p>사용자 ID: {user_id}</p>
                 {loading && <p>로딩 중...</p>}
