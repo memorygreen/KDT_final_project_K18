@@ -54,7 +54,7 @@ function UserUpdate() {
       alert('비밀번호를 입력해주세요');
       return;
     }
-  
+
     try {
       const sessionToken = sessionStorage.getItem('sessionToken');
       const config = {
@@ -63,13 +63,13 @@ function UserUpdate() {
           'Content-Type': 'application/json'
         }
       };
-  
+
       if (userId) {
         const userData = { password }; // 비밀번호만 포함된 객체
         console.log('Sending user data:', userData); // 전송 데이터 로그 출력
-  
+
         const response = await axios.put(`/UserUpdate/${userId}`, userData, config);
-  
+
         if (response.status === 200) {
           setMessage('비밀번호가 성공적으로 수정되었습니다');
         } else {
@@ -79,6 +79,31 @@ function UserUpdate() {
     } catch (error) {
       setMessage('비밀번호 수정 중 오류가 발생했습니다');
       console.error('Error updating password:', error);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      const sessionToken = sessionStorage.getItem('sessionToken');
+      const config = {
+        headers: {
+          'Authorization': `Bearer ${sessionToken}`,
+          'Content-Type': 'application/json'
+        }
+      };
+
+      const response = await axios.post('/UserDelete', { userId }, config);
+
+      if (response.status === 200) {
+        alert('회원탈퇴가 완료되었습니다.');
+        sessionStorage.clear(); // 세션스토리지 비우기
+        navigate('/'); // 탈퇴 완료 후 메인 페이지로 이동
+      } else {
+        alert('회원탈퇴 중 오류가 발생했습니다.');
+      }
+    } catch (error) {
+      alert('회원탈퇴 중 오류가 발생했습니다.');
+      console.error('Error deleting user:', error);
     }
   };
 
@@ -112,8 +137,15 @@ function UserUpdate() {
             <label>새 비밀번호:</label>
             <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
           </div>
-          <button type="button" onClick={handleUpdate}>확인</button>
-          <button type="button" onClick={() => navigate('/')}>취소</button>
+          <div className="button-container">
+            <div className="left-buttons">
+              <button type="button" onClick={handleUpdate}>확인</button>
+              <button type="button" onClick={() => navigate('/')}>취소</button>
+            </div>
+            <div className="right-buttons">
+              <button type="button" onClick={handleDelete}>탈퇴</button>
+            </div>
+          </div>
         </form>
       </div>
     </div>
