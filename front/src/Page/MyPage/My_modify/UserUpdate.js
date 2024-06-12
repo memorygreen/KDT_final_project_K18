@@ -128,10 +128,11 @@ function UserUpdate() {
 
   return (
     <div>
-           <div className="container">
+      <div className="container">
         <h1>회원정보 수정</h1>
         {message && <p className="error-message">{message}</p>}
         <form>
+          <hr />
           <div>
             <label>회원 아이디:</label>
             <input type="text" value={userId} readOnly />
@@ -155,6 +156,7 @@ function UserUpdate() {
           <div>
             <label>새 비밀번호:</label>
             <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
+            <hr />
           </div>
           <div className="button-container">
             <div>
@@ -183,4 +185,3 @@ function UserUpdate() {
 }
 
 export default UserUpdate;
-
