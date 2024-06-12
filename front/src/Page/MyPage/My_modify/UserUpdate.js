@@ -9,13 +9,15 @@ function UserUpdate() {
   const [dob, setDob] = useState('');
   const [gender, setGender] = useState('');
   const [phone, setPhone] = useState('');
+  const [deletePassword, setDeletePassword] = useState(''); // 탈퇴 확인용 비밀번호
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false); // 탈퇴 확인 UI 표시 여부
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
     const userId = sessionStorage.getItem('userId');
     const userName = sessionStorage.getItem('userName');
-    const userDob = sessionStorage.getItem('userBrtDt'); // 여기서 userBrtDt를 가져옴
+    const userDob = sessionStorage.getItem('userBrtDt');
     const userGender = sessionStorage.getItem('userGender') || 'male';
     const userPhone = sessionStorage.getItem('userPhone');
 
@@ -65,8 +67,8 @@ function UserUpdate() {
       };
 
       if (userId) {
-        const userData = { password }; // 비밀번호만 포함된 객체
-        console.log('Sending user data:', userData); // 전송 데이터 로그 출력
+        const userData = { password };
+        console.log('Sending user data:', userData);
 
         const response = await axios.put(`/UserUpdate/${userId}`, userData, config);
 
@@ -82,7 +84,16 @@ function UserUpdate() {
     }
   };
 
-  const handleDelete = async () => {
+  const handleDeleteClick = () => {
+    setShowDeleteConfirmation(true);
+  };
+
+  const handleDeleteConfirmation = async () => {
+    if (!deletePassword) {
+      alert('탈퇴 확인을 위해 비밀번호를 입력해주세요');
+      return;
+    }
+
     try {
       const sessionToken = sessionStorage.getItem('sessionToken');
       const config = {
@@ -92,14 +103,22 @@ function UserUpdate() {
         }
       };
 
-      const response = await axios.post('/UserDelete', { userId }, config);
+      const response = await axios.post('/VerifyPassword', { userId, password: deletePassword }, config);
 
-      if (response.status === 200) {
-        alert('회원탈퇴가 완료되었습니다.');
-        sessionStorage.clear(); // 세션스토리지 비우기
-        navigate('/'); // 탈퇴 완료 후 메인 페이지로 이동
+      if (response.status === 200 && response.data.valid) {
+        if (window.confirm('등록한 회원정보가 모두 삭제됩니다. 정말 탈퇴하시겠습니까?')) {
+          const deleteResponse = await axios.post('/UserDelete', { userId, password: deletePassword }, config);
+
+          if (deleteResponse.status === 200) {
+            alert('회원탈퇴가 완료되었습니다.');
+            sessionStorage.clear();
+            navigate('/');
+          } else {
+            alert('회원탈퇴 중 오류가 발생했습니다.');
+          }
+        }
       } else {
-        alert('회원탈퇴 중 오류가 발생했습니다.');
+        alert('비밀번호가 일치하지 않습니다.');
       }
     } catch (error) {
       alert('회원탈퇴 중 오류가 발생했습니다.');
@@ -109,7 +128,7 @@ function UserUpdate() {
 
   return (
     <div>
-      <div className="container">
+           <div className="container">
         <h1>회원정보 수정</h1>
         {message && <p className="error-message">{message}</p>}
         <form>
@@ -138,14 +157,25 @@ function UserUpdate() {
             <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
           </div>
           <div className="button-container">
-            <div className="left-buttons">
+            <div>
               <button type="button" onClick={handleUpdate}>확인</button>
               <button type="button" onClick={() => navigate('/')}>취소</button>
             </div>
-            <div className="right-buttons">
-              <button type="button" onClick={handleDelete}>탈퇴</button>
+            <div>
+              <button type="button" onClick={handleDeleteClick}>탈퇴</button>
             </div>
           </div>
+          {showDeleteConfirmation && (
+            <div className="delete-confirmation">
+              <label>비밀번호 확인:</label>
+              <input
+                type="password"
+                value={deletePassword}
+                onChange={e => setDeletePassword(e.target.value)}
+              />
+              <button type="button" onClick={handleDeleteConfirmation}>탈퇴확인</button>
+            </div>
+          )}
         </form>
       </div>
     </div>
@@ -153,3 +183,4 @@ function UserUpdate() {
 }
 
 export default UserUpdate;
+
