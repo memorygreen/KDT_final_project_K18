@@ -1,20 +1,20 @@
-.main {
+.admin_main {
     font-family: Arial, sans-serif;
     text-align: center;
   }
   
-  table {
+  .admin_main table {
     width: 100%;
     border-collapse: collapse;
     margin: 20px 0;
   }
   
-  th, td {
+  .admin_main th, .admin_main td {
     border: 1px solid #ddd;
     padding: 8px;
   }
   
-  th {
+  .admin_main th {
     background-color: #f2f2f2;
   }
   #page-numbers {
@@ -25,12 +25,12 @@
     padding: 0;
 }
 
-#page-numbers li {
+.admin_main #page-numbers li {
     margin: 0 5px;
     cursor: pointer;
 }
 
-#page-numbers li.active {
+.admin_main #page-numbers li.active {
     font-weight: bold;
     color: red;
 }

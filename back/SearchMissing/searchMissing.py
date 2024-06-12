@@ -31,7 +31,7 @@ async def search_missing():
         elif(missing_age <=60) :
             missing_age_cate = 'adult'
         else :
-            missing_age_cate ='senior'
+            missing_age_cate ='old'
             
         
         # 실종자 마지막 발견장소

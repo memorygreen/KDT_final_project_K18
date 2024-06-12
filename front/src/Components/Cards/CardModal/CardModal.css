@@ -14,14 +14,45 @@
 .modal_content {
     background: #ffffff;
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 20px;
     position: relative;
     width: 90%;
-    max-width: 600px;
-    max-height: 80vh;
+    max-width: 700px;
+    max-height: 90vh;
     /* 모달의 최대 높이를 설정 */
     overflow-y: auto;
     /* 콘텐츠가 오버플로우될 경우 스크롤 추가 */
+}
+.Card_missingInfo{
+    height: 50%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.card_info_container{
+    width: 50%;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.card_img_container{
+    height: 100%;
+}
+
+.card_img{
+    width: 300px;
+    height: 300px;
+}
+.card_img img {
+    border-radius: 20px;
+    margin-bottom: 15px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .modal_close-btn {
@@ -40,13 +71,6 @@
 
 .Card_modal {
     text-align: center;
-}
-
-.Card_modal img {
-    width: 70%;
-    max-width: 100%;
-    vertical-align: top;
-    opacity: 0.85;
 }
 
 .Card_modal figcaption {
