@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Login.css';
 import Kakao_logo from './assets/Kakao_logo.png';
-import logo from './assets/storeify.png';
+import logo from './assets/logo_black.png';
 import { Link } from 'react-router-dom';
 
 const LoginPage = () => {
@@ -55,21 +55,22 @@ const LoginPage = () => {
                     <Link to="/">
                         <img src={logo} alt="Logo" className="logo" />
                     </Link>
-                    <h1>Welcome back &#x1F44F;</h1>
-                    <p>Please enter your details!</p>
+                    <h1>환영합니다 &#x1F44F;</h1>
+                    <p>아이디와 비밀번호를 입력해주세요.</p>
                 </div>
                 <div className="input__wrapper">
                     <input
                         type="text"
                         id="id"
                         name="id"
-                        className="input__field"
+                        // className="in/put__field"
+                        className="input_field_re"
                         value={id}
                         onChange={(e) => setId(e.target.value)}
                         required
                     />
                     <label htmlFor="id" className="input__label">
-                        ID
+                        아이디
                     </label>
                     <svg
                         className="input__icon"
@@ -92,7 +93,8 @@ const LoginPage = () => {
                     <input
                         id="password"
                         type="password"
-                        className="input__field"
+                        className="input_field_re"
+                        placeholder='아이디를 입력해주세요'
                         title="Minimum 6 characters at least 1 Alphabet and 1 Number"
                         pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$"
                         value={password}
@@ -100,7 +102,7 @@ const LoginPage = () => {
                         required
                     />
                     <label htmlFor="password" className="input__label">
-                        Password
+                        비밀번호
                     </label>
                     <svg
                         className="input__icon"
@@ -120,20 +122,23 @@ const LoginPage = () => {
                         <path d="M8 11v-4a4 4 0 1 1 8 0v4"></path>
                     </svg>
                 </div>
-                <button type="submit" className="my-form__button">
-                    Login
+
+                {/* <button type="submit" className="login_btn"> */}
+                <button type="submit" className="login_btn">
+                    로그인
                 </button>
-                <div className="socials-row">
+                {/* <div className="socials-row"> */}
+                <div className="kakao_div">
                     <a href={KAKAO_AUTH_URL} title="Use Kakao">
                         <img src={Kakao_logo} alt="Kakao" />
-                        Log in with Kakao
+                        카카오 로그인
                     </a>
                 </div>
                 <div className="my-form__actions">
                     <div className="my-form__row">
-                        <span>Don't have an account?</span>
+                        <span>아직 회원이 아니신가요?</span>
                         <Link to="/SignUp" className='SignUp' title="Create Account">
-                            Sign Up
+                            회원가입
                         </Link>
                     </div>
                 </div>
