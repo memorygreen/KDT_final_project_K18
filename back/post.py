@@ -33,6 +33,9 @@ def get_all_missing_info():
 
         # 포스터 정보 가져오기
         sql_poster = "SELECT * FROM TB_POSTER WHERE MISSING_IDX=%s AND POSTER_SHOW=1 "
+
+        #AND POSTER_SHOW=1 추가하면 1인 포스터만 보임
+
         cursor.execute(sql_poster, (missing_idx,))
         poster = cursor.fetchone()
 
