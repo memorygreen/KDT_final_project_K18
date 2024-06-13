@@ -52,6 +52,6 @@ app.register_blueprint(get_all_missing_bp)
 app.register_blueprint(user_update_bp)  # UserUpdate 블루프린트 등록
 app.register_blueprint(SearchCapture_bp)  # SearchCapture 블루프린트 등록
 
-
+# .
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
