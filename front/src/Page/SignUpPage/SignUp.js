@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './SignUp.css';
 import { Link } from 'react-router-dom';
-import logo from './assets/logo.png'
+import logo from './assets/logo_black.png'
 
 const Signup = () => {
   const [id, setId] = useState('');
@@ -71,17 +71,17 @@ const Signup = () => {
             <Link to="/">
               <img className="signup-welcome" alt="Logo" src={logo} />
             </Link>
-            <h1>Sign Up!</h1>
+            <h1>회원가입</h1>
           </div>
           <div className="my-form__content">
             <div className="text-field">
-              <label htmlFor="id">ID:</label>
+              <label htmlFor="id">아이디</label>
               <input
                 aria-label="ID"
                 type="text"
                 id="id"
                 name="id"
-                placeholder="Your ID"
+                placeholder="사용하실 아이디를 입력해주세요."
                 autoComplete="off"
                 value={id}
                 onChange={(e) => setId(e.target.value)}
@@ -89,12 +89,12 @@ const Signup = () => {
               />
             </div>
             <div className="text-field">
-              <label htmlFor="password">Password:</label>
+              <label htmlFor="password">비밀번호</label>
               <input
                 id="password"
                 type="password"
                 name="password"
-                placeholder="Your Password"
+                placeholder="사용하실 비밀번호를 입력해주세요."
                 title="Minimum 6 characters at least 1 Alphabet and 1 Number"
                 pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$"
                 value={password}
@@ -103,25 +103,25 @@ const Signup = () => {
               />
             </div>
             <div className="text-field">
-              <label htmlFor="confirm-password">Confirm Password:</label>
+              <label htmlFor="confirm-password">비밀번호 확인</label>
               <input
                 id="confirm-password"
                 type="password"
                 name="confirm-password"
-                placeholder="Confirm Password"
+                placeholder="다시 한 번 비밀번호를 입력해주세요."
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
             </div>
             <div className="text-field">
-              <label htmlFor="name">Name:</label>
+              <label htmlFor="name">이름</label>
               <input
                 aria-label="Name"
                 type="text"
                 id="name"
                 name="name"
-                placeholder="Your Name"
+                placeholder="홍길동"
                 autoComplete="off"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -129,7 +129,7 @@ const Signup = () => {
               />
             </div>
             <div className="text-field">
-              <label htmlFor="dob">Date of Birth:</label>
+              <label htmlFor="dob">생년월일</label>
               <input
                 aria-label="Date of Birth"
                 type="date"
@@ -142,13 +142,13 @@ const Signup = () => {
               />
             </div>
             <div className="text-field">
-              <label htmlFor="phone">Phone Number:</label>
+              <label htmlFor="phone">휴대폰 번호</label>
               <input
                 aria-label="Phone Number"
                 type="tel"
                 id="phone"
                 name="phone"
-                placeholder="Your Phone Number"
+                placeholder="010-0000-0000"
                 autoComplete="off"
                 value={phone}
                 onChange={handlePhoneChange}
@@ -157,26 +157,45 @@ const Signup = () => {
                 required
               />
             </div>
-            <div className="text-field">
-              <label htmlFor="gender">Gender:</label>
-              <select
-                id="gender"
-                name="gender"
-                value={gender}
-                onChange={(e) => setGender(e.target.value)}
-                required
-              >
-                <option value="">Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-              </select>
+
+
+            {/* <div className="text-field"> */}
+            <div >
+              <label>성별</label>
+              <div className="gender_radio_btn_div">
+                <input
+                  type="radio"
+                  id="male"
+                  name="gender"
+                  value="male"
+                  checked={gender === 'male'}
+                  onChange={(e) => setGender(e.target.value)}
+                  required
+                />
+                <label htmlFor="male">남자</label>
+
+                <input
+                  type="radio"
+                  id="female"
+                  name="gender"
+                  value="female"
+                  checked={gender === 'female'}
+                  onChange={(e) => setGender(e.target.value)}
+                  required
+                />
+                <label htmlFor="female">여자</label>
+              </div>
             </div>
+
+
+
           </div>
           <div className="my-form__actions">
-            <input type="submit" className="my-form__button" value="Sign-Up" />
+            {/* <button type="submit" className="my-form__button" >회원가입</button> */}
+            <button type="submit" className="sign_up_btn" >회원가입</button>
             <div className="my-form__signin">
               <Link to="/Login" title="Login" className='Login'>
-                Login
+                로그인
               </Link>
             </div>
           </div>

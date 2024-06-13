@@ -162,18 +162,59 @@
     flex: 1;
 }
 
-.missing_report_form input {
+
+.missing_report_form input { /*자영(240612) input태그 실종자등록페이지 걸로 가져왔음요*/
     width: 100%;
     padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    /* border: 1px solid #ccc;
+    border-radius: 5px; */
+
+
+    /* width: 95%; */
+    height: 40px;
+    font-size: 15px;
+    border-radius: 50px;
+    border: solid 1px rgb(213, 213, 213);
+    outline: none;
+    padding-left: 10px;
+    background-color: rgb(255, 255, 255);
 }
 
-.button-group .follow {
-    border-radius: 10px;
-    height: 30px;
-    width: 100%;
+
+
+.missing_report_form input:hover{ /*자영(240612) input태그 실종자등록페이지 걸로 가져왔음요*/
+    background: #f7f7f7; /*마우스 가져다댔을 때 테두리 */
 }
+
+
+.button-group .follow { /*자영(240612) 제보하기 버튼 모양 수정~~*/
+    /* border-radius: 10px; */
+    /* height: 30px; */
+    width: 90%;
+
+    /* width: calc(50%); */
+    font-size: 100%;
+    color: #000000; /*글자색 */
+    background: #ffffff; /*안 눌렀을 때 배경 색 */
+    /* width: 90px; */
+    height: 40px;
+    border-radius: 50px;
+    border: solid 1px rgb(213, 213, 213);
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin: 0; 
+
+}
+.button-group .follow:hover{
+    border: solid 1px rgb(0, 0, 0);/*마우스 가져다댔을 때 테두리 */
+}
+
+
+
+
+
 
 .missing_report_form div:first-child {
     flex: 0.3;
@@ -187,10 +228,24 @@
     margin: 20px 0;
 }
 
-.missing_report button {
+.missing_report button { /*자영(240612) 제보하기 , 접기 버튼 모양 수정*/
     width: calc(50%);
-    border-radius: 10px;
-    border-color: #ffffff;
-    height: 30px;
-    margin: 0;
+    font-size: 90%;
+    color: #000000; /*글자색 */
+    background: #ffffff; /*안 눌렀을 때 배경 색 */
+    height: 40px;
+    border-radius: 50px;
+    border: solid 1px rgb(213, 213, 213);
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin: 0; 
+
 }
+
+.missing_report button:hover{
+    border: solid 1px rgb(0, 0, 0);/*마우스 가져다댔을 때 테두리 */
+}
+
+
