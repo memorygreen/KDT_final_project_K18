@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-// import './UserUpdate.css'; 
+import './UserUpdate.css'; 
 
 function UserUpdate() {
   const [userId, setUserId] = useState('');
