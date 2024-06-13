@@ -112,8 +112,8 @@ const SearchMissing = ({ initialData }) => {
     ];
 
     const genderOptions = [
-        { id: 'male', label: '여성' },
-        { id: 'female', label: '남성' }
+        { id: 'female', label: '여성' },
+        { id: 'male', label: '남성' }
     ];
 
     // 포스터 생성기능
@@ -127,7 +127,9 @@ const SearchMissing = ({ initialData }) => {
         if (missingImg) {
             console.log('missingImg 들어왔는지 확인')
             try {
-                setMissingImgUrl(await UploadMissingImg(missingImg));
+                const uploadedImageUrl = await UploadMissingImg(missingImg); // 업로드 완료될때까지 기다리기
+                setMissingImgUrl(uploadedImageUrl);         
+                console.log("업로드된 이미지 URL:", uploadedImageUrl);
 
                 // missingImgUrl = Url;
                 console.log("업로드된 이미지 URL (확인)):", missingImgUrl); // URL을 로그로 출력
