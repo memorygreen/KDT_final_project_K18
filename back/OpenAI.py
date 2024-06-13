@@ -45,7 +45,7 @@ def generate_image():
             size="1024x1024",
             n=1,
         )
-
+        print(response)
         image_url = response.data[0].url
         image_response = requests.get(image_url)
         image_data = image_response.content
