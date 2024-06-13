@@ -5,18 +5,11 @@ const SearchMissingPage = () => {
     return (
 
         <div className="Nev-Card">
-            <header className='nevibar_card'> <NevBar /></header>
-            
-            
-            
+            <header className='nevibar_card'> <NevBar /></header> 
             <div className='Main_card' >
-                
                 <SearchMissing initialData={ null }/>
             </div>
         </div>
-        /** */
-
-
 
         
     );

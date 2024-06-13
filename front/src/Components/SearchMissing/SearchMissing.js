@@ -127,7 +127,7 @@ const SearchMissing = ({ initialData }) => {
             console.log('missingImg 들어왔는지 확인')
             try {
                 const uploadedImageUrl = await UploadMissingImg(missingImg); // 업로드 완료될때까지 기다리기
-                setMissingImgUrl(uploadedImageUrl);         
+                setMissingImgUrl(uploadedImageUrl);
                 console.log("업로드된 이미지 URL:", uploadedImageUrl);
                 // missingImgUrl = Url;
                 console.log("업로드된 이미지 URL (확인)):", missingImgUrl); // URL을 로그로 출력
@@ -138,7 +138,7 @@ const SearchMissing = ({ initialData }) => {
 
 
 
-            
+
             const prompt = `
             실종자를 찾는 포스터를 생성
             실종자 정보 : 동양인
@@ -593,22 +593,22 @@ const SearchMissing = ({ initialData }) => {
 
 
     return (
-        <div>
-            <div className='missing_avatar_all'>
-                < MissingAvatar
-                    selectedTop={selectedTop}
-                    selectedTopColor={selectedTopColor}
-                    selectedBottom={selectedBottom}
-                    selectedBottomColor={selectedBottomColor}
-                    selectedBelongings={selectedBelongings}
-
-                />
-            </div>
-
-
+        <div className='SearchMissing_all'>
             <div className='search_bar_all'>
-                <SearchBar setSelectTxt={setSelectTxt} handle_submit={handle_submit} />
-                {selectedComponent}
+                <div className='search_missing_avatar_all'>
+                    < MissingAvatar
+                        selectedTop={selectedTop}
+                        selectedTopColor={selectedTopColor}
+                        selectedBottom={selectedBottom}
+                        selectedBottomColor={selectedBottomColor}
+                        selectedBelongings={selectedBelongings}
+                    />
+                    <div className='search_missing_info_all'>
+                        <SearchBar setSelectTxt={setSelectTxt} handle_submit={handle_submit} />
+                        {selectedComponent}
+                    </div>
+                </div>
+
             </div>
         </div>
     );
