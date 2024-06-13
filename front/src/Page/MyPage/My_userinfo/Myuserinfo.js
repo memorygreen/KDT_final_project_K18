@@ -7,7 +7,7 @@ import setting from '../assets/set.png';
 import cap from '../assets/cap.png';
 import CardModal from '../../../Components/Cards/CardModal/CardModal'; // CardModal component imported
 
-const Myuserinfo = ({ sessionId, onIconClick }) => {
+const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx}) => {
     const [showMissingList, setShowMissingList] = useState(true);
     const [userId, setUserId] = useState(sessionId);
     const [userInfo, setUserInfo] = useState();
@@ -15,12 +15,6 @@ const Myuserinfo = ({ sessionId, onIconClick }) => {
     const [selectedMissing, setSelectedMissing] = useState(null); // State to store selected missing person info
     const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal open/close
 
-    // 자영 : missing_idx 데이터를 넘겨주는 함수 만들기
-    const  handle_missing_name_click = () => {
-
-    }
-
-    // 클릭하면 상세보기 나오는 모달창 나오게 하기
     const handleMissingClick = (missing) => {
         setSelectedMissing(missing); // Store selected missing person info
         setIsModalOpen(true); // Open modal
@@ -62,6 +56,8 @@ const Myuserinfo = ({ sessionId, onIconClick }) => {
     };
 
 
+
+
     useEffect(() => {
         fetchMissingData();
         fetchUserInfo();
@@ -83,9 +79,11 @@ const Myuserinfo = ({ sessionId, onIconClick }) => {
                     <ul>
                         {missingList.map((missing) => (
                             // <li key={missing.MISSING_IDX} onClick={() => handleMissingClick(missing)}>
-                            <li key={missing.MISSING_IDX} onClick={() => handle_missing_name_click()}>
+                            <li key={missing.MISSING_IDX} onClick={() => {setMissingIdx(missing.MISSING_IDX)}}>
                                 {missing.MISSING_NAME}
-                                <button onClick={() => handleMissingClick(missing)}>상세보기</button>
+                                <button className='Mypage_missing_btn' onClick={() => handleMissingClick(missing)}>상세보기</button>
+                                <button className='Mypage_missing_btn' onClick={() => handleMissingClick(missing)}>삭제</button>
+
 
                             </li>
                             

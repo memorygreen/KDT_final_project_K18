@@ -3,7 +3,7 @@ from db import db_con
 
 SearchCapture_bp = Blueprint('SearchCapture', __name__)
 
-
+# 해당 실종자에 맞는 캡처 정보 호출하기 (자영 240613 수정)
 @SearchCapture_bp.route('/get_user_captures', methods=['POST'])
 def get_user_captures():
     db = db_con()
