@@ -2,7 +2,6 @@ from flask import Blueprint, request, jsonify
 from db import db_con
 import requests
 import asyncio
-import aiohttp
 from math import sin, cos, sqrt, atan2, radians
 search_missing_bp = Blueprint('SearchMissing', __name__)
 
