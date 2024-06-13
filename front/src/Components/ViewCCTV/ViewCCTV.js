@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import './ViewCCTV.css'; // CSS 파일을 임포트
 
 const ViewCCTV = () => {
     const { cctvId } = useParams(); // URL에서 cctvId를 가져옴
@@ -28,11 +29,13 @@ const ViewCCTV = () => {
     }, [cctvId]); // cctvId가 변경될 때마다 실행
 
     return (
-        <div>
+        <div className="view-cctv-container">
             {cctvUrl ? (
-                <video controls width="80%">
-                    <source src={cctvUrl} type="video/mp4" />
-                </video>
+                <div className="video-container">
+                    <video controls width="100%">
+                        <source src={cctvUrl} type="video/mp4" />
+                    </video>
+                </div>
             ) : (
                 <p>Loading video...</p>
             )}
