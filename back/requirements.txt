@@ -13,7 +13,7 @@
    matplotlib
    asyncio
    aiohttp
-   
+
 # cd back
 # pip install -r requirements.txt
 
