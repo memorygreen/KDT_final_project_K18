@@ -3,13 +3,13 @@ from db import db_con
 
 SearchCapture_bp = Blueprint('SearchCapture', __name__)
 
+
 @SearchCapture_bp.route('/get_user_captures', methods=['POST'])
 def get_user_captures():
     db = db_con()
     cursor = db.cursor()
     data = request.json
     user_id = data['user_id']
-    
     query = """
     SELECT c.CAPTURE_IDX, c.MISSING_IDX, c.CCTV_IDX, c.CAPTURE_FIRST_TIME, 
            c.CAPTURE_PATH, c.CAPTURE_ALARM_CK, c.CAPTURE_ALARM_CK_TIME,
@@ -19,12 +19,13 @@ def get_user_captures():
     JOIN TB_MISSING m ON c.MISSING_IDX = m.MISSING_IDX
     WHERE m.USER_ID = %s
     """
-    
+
     cursor.execute(query, (user_id,))
     captures = cursor.fetchall()
+    print(captures)
     cursor.close()
     db.close()
-    
+
     return jsonify(captures)
 
 
@@ -34,17 +35,17 @@ def get_captures_by_missing():
     cursor = db.cursor()
     data = request.json
     missing_id = data['missing_id']
-    
+
     query = """
     SELECT c.CAPTURE_IDX, c.MISSING_IDX, c.CCTV_IDX, c.CAPTURE_FIRST_TIME, 
            c.CAPTURE_PATH, c.CAPTURE_ALARM_CK, c.CAPTURE_ALARM_CK_TIME
     FROM CAPTURE c
     WHERE c.MISSING_IDX = %s
     """
-    
+
     cursor.execute(query, (missing_id,))
     captures = cursor.fetchall()
     cursor.close()
     db.close()
-    
+
     return jsonify(captures)

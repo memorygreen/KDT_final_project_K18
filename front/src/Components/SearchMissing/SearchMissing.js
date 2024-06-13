@@ -177,7 +177,7 @@ const SearchMissing = ({ initialData }) => {
                     missing_clothes_etc: missingClothesEtc,
                     missing_belongings_etc: missingBelongingsEtc,
                 })
-                    .then(response => {
+                    .then(async (response) => {
                         console.log('실종자 정보 등록 성공 successfully:', response.data);
                         alert("등록 성공")
                         navigate('/'); // 성공 후 메인 페이지로 리다이렉트
@@ -186,9 +186,8 @@ const SearchMissing = ({ initialData }) => {
                         // 포스터 생성
                         if (posterGenerating) {
                             try {
-                                setTimeout(async () => {
-                                    await createPoster(prompt); // createPoster 함수 실행
-                                }, 5000);  //db값 저장되고 실행하도록 시간텀을 줌
+                                await createPoster(prompt); // createPoster 함수 실행
+                                //db값 저장되고 실행하도록 시간텀을 줌
                             } catch (error) {
                                 // createPoster 함수 실행 중 오류가 발생한 경우 처리
                                 console.error('Error creating poster:', error);
