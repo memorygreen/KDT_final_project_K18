@@ -6,6 +6,7 @@ import alram from '../assets/alr.png';
 import setting from '../assets/set.png';
 import cap from '../assets/cap.png';
 import CardModal from '../../../Components/Cards/CardModal/CardModal'; // CardModal component imported
+import alramck from '../assets/alrck.png'
 
 const Myuserinfo = ({ sessionId, onIconClick }) => {
     const [showMissingList, setShowMissingList] = useState(true);
@@ -14,6 +15,7 @@ const Myuserinfo = ({ sessionId, onIconClick }) => {
     const [missingList, setMissingList] = useState([]);
     const [selectedMissing, setSelectedMissing] = useState(null); // State to store selected missing person info
     const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal open/close
+    const [notificationRead, setNotificationRead] = useState(false); // State to check if notification is read
 
     const handleMissingClick = (missing) => {
         setSelectedMissing(missing); // Store selected missing person info
@@ -29,6 +31,9 @@ const Myuserinfo = ({ sessionId, onIconClick }) => {
     const handleIconClick = (type) => {
         onIconClick(type);
         setShowMissingList(false);  // Hide missing list
+        if (type === 'notification') {
+            setNotificationRead(true); // Set notification as read
+        }
     }
 
     // 유저 정보 불러오기
@@ -68,7 +73,9 @@ const Myuserinfo = ({ sessionId, onIconClick }) => {
                 <div className='Mypage_userinfo_name'>{userInfo && userInfo.USER_NAME}</div>
             </div>
             <div className='Mypage_userinfo_icon'>
-                <div onClick={() => handleIconClick('notification')}><img src={alram} alt="alram" /></div>
+                <div onClick={() => handleIconClick('notification')}>
+                    <img src={notificationRead ? alramck : alram} alt="alram" />
+                </div>
                 <div onClick={handleCapClick}><img src={cap} alt="cap" /></div>
                 <div onClick={() => handleIconClick('update')}><img src={setting} alt="setting" /></div>
             </div>
