@@ -35,9 +35,16 @@ const Adminmanage = () => {
     const handleDelete = async (poster_idx) => {
         try {
             await axios.post('/delete_poster', { poster_idx });
-            alert('삭제되었습니다.');
-            // 삭제 후 사용자 정보를 다시 로드하거나, 화면에서 삭제된 항목을 제거하는 로직을 추가할 수 있습니다.
-            setUserInfo(userInfo.filter(user => user.POSTER_INFO.POSTER_IDX !== poster_idx));
+            alert('포스터 상태가 "글내림"으로 변경되었습니다.');
+            setUserInfo(userInfo.map(user => 
+                user.POSTER_INFO.POSTER_IDX === poster_idx ? {
+                    ...user,
+                    POSTER_INFO: {
+                        ...user.POSTER_INFO,
+                        POSTER_SHOW: 0
+                    }
+                } : user
+            ));
         } catch (error) {
             alert('삭제에 실패했습니다.');
         }
@@ -57,18 +64,23 @@ const Adminmanage = () => {
                     userInfo.map((user, index) => (
                         <div key={index} className="user-info">
                             <div className="images-container">
-                                {user.POSTER_INFO.POSTER_IMG_PATH.split(',').map((imgPath, imgIndex) => (
-                                    <div key={imgIndex} className='user_poster'>
-                                        <img className='pic' src={imgPath} alt={user.MISSING_NAME} />
-                                        <br />
-                                        <button
-                                            type='button'
-                                            onClick={() => handleDelete(user.POSTER_INFO.POSTER_IDX)}
-                                        >
-                                            삭제
-                                        </button>
-                                    </div>
-                                ))}
+                                {user.POSTER_INFO.POSTER_IMG_PATH ? (
+                                    user.POSTER_INFO.POSTER_IMG_PATH.split(',').map((imgPath, imgIndex) => (
+                                        <div key={imgIndex} className='user_poster'>
+                                            <img className='pic' src={imgPath} alt={user.MISSING_NAME} />
+                                            <br />
+                                            <button
+                                                type='button'
+                                                onClick={() => handleDelete(user.POSTER_INFO.POSTER_IDX)}
+                                            >
+                                                삭제
+                                            </button>
+                                            <p>상태: {user.POSTER_INFO.POSTER_SHOW === 1 ? "게시중" : "글내림"}</p>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p>이미지 없음</p>
+                                )}
                             </div>
                         </div>
                     ))
