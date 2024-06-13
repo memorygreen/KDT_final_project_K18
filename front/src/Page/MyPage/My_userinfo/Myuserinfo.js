@@ -15,7 +15,7 @@ const Myuserinfo = ({ sessionId, onIconClick }) => {
     const [missingList, setMissingList] = useState([]);
     const [selectedMissing, setSelectedMissing] = useState(null); // State to store selected missing person info
     const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal open/close
-    const [notificationRead, setNotificationRead] = useState(false); // State to check if notification is read
+    const [notificationStatus, setNotificationStatus] = useState('read'); // State to check if notification is read or unread
 
     const handleMissingClick = (missing) => {
         setSelectedMissing(missing); // Store selected missing person info
@@ -32,7 +32,7 @@ const Myuserinfo = ({ sessionId, onIconClick }) => {
         onIconClick(type);
         setShowMissingList(false);  // Hide missing list
         if (type === 'notification') {
-            setNotificationRead(true); // Set notification as read
+            setNotificationStatus('read'); // Set notification as read
         }
     }
 
@@ -59,12 +59,24 @@ const Myuserinfo = ({ sessionId, onIconClick }) => {
                 console.error('Error fetching missing data:', error);
             });
     };
-
-
     useEffect(() => {
         fetchMissingData();
         fetchUserInfo();
+
+        // Setup push notification listener
+        const eventSource = new EventSource('http://127.0.0.1:5000/notify');
+        eventSource.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.user_id === userId) {
+                fetchUserInfo();
+            }
+        };
+
+        return () => {
+            eventSource.close();
+        };
     }, []);
+    const notificationIcon = userInfo && userInfo.USER_NOTIFICATION_STATUS === 'unread' ? alramck : alram;
 
     return (
         <div className='Mypage_userinfo_all'>
@@ -74,7 +86,7 @@ const Myuserinfo = ({ sessionId, onIconClick }) => {
             </div>
             <div className='Mypage_userinfo_icon'>
                 <div onClick={() => handleIconClick('notification')}>
-                    <img src={notificationRead ? alramck : alram} alt="alram" />
+                    <img src={notificationIcon} alt="alram" />
                 </div>
                 <div onClick={handleCapClick}><img src={cap} alt="cap" /></div>
                 <div onClick={() => handleIconClick('update')}><img src={setting} alt="setting" /></div>

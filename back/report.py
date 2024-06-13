@@ -1,7 +1,10 @@
 from db import db_con
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify ,Response
+import json
+import time
 
 report_bp = Blueprint('report', __name__)
+clients = []
 
 #실종자 알림 제보
 @report_bp.route('/report', methods=['POST'])
@@ -25,10 +28,26 @@ def report_missing_person():
             insert_query = "INSERT INTO TB_REPORT (POSTER_IDX, REPORT_SIGHTING_PLACE, REPORT_SIGHTING_TIME, REPORT_ETC) VALUES (%s, %s, %s, %s)"
             cursor.execute(insert_query, (POSTER_IDX,
                            REPORT_SIGHTING_PLACE, REPORT_SIGHTING_TIME, REPORT_ETC))
+             # Get the USER_ID of the user who posted the poster
+            select_user_query = """
+                SELECT USER_ID 
+                FROM TB_POSTER 
+                JOIN TB_MISSING ON TB_POSTER.MISSING_IDX = TB_MISSING.MISSING_IDX 
+                WHERE POSTER_IDX = %s
+            """
+            cursor.execute(select_user_query, (POSTER_IDX,))
+            result = cursor.fetchone()
 
-            # Commit changes
-            db.commit()
+            if result:
+                USER_ID = result[0]
 
+                # Update the USER_ALARM_CK to 0 for the user
+                update_alarm_query = "UPDATE TB_USER SET USER_ALARM_CK = 0 WHERE USER_ID = %s"
+                cursor.execute(update_alarm_query, (USER_ID,))
+                # Commit changes
+                db.commit()
+                # Send push notification to the user
+                send_push_notification(USER_ID)
             # Close cursor and database connection
             cursor.close()
             db.close()
@@ -36,6 +55,21 @@ def report_missing_person():
             return jsonify({"message": "Report submitted successfully"}), 200
         except Exception as e:
             return jsonify({"error": str(e)}), 500
+        
+@report_bp.route('/notify')
+def notify():
+    def event_stream():
+        while True:
+            if clients:
+                for client in clients:
+                    yield f'data: {json.dumps(client)}\n\n'
+            time.sleep(1)  # Adjust the sleep time as needed
+
+    return Response(event_stream(), content_type='text/event-stream')
+
+def send_push_notification(user_id):
+    # Send notification to all clients (in a real scenario, you'd send to specific clients)
+    clients.append({"user_id": user_id, "message": "You have a new alert"})
 
 
 
