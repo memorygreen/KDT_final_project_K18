@@ -1,0 +1,23 @@
+/* ViewCCTVPage.css */
+
+.nev-card {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.nevibar-card {
+    flex: 0 0 auto;
+}
+
+.main-start {
+    flex: 1 0 auto;
+}
+
+.main-card {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
