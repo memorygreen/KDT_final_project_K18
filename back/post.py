@@ -259,3 +259,74 @@ def post_no_show():
         return jsonify({"message": "capture updated successfully"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+
+@post_bp.route('/missing_info_oneuser', methods=['GET','POST'])
+def get_all_missing_info_oneuser():
+    user_id = request.json.get('user_id')
+    print(user_id)
+    if not user_id:
+        return jsonify({'error': 'User is not logged in'}), 401
+
+    db = db_con()
+    cursor = db.cursor()
+
+    # 실종자 정보 가져오기 (테이블 이름을 정확하게 확인하고 수정)   
+    sql_missing = "SELECT * FROM TB_MISSING WHERE MISSING_FINDING='finding' AND USER_ID=%s"
+    cursor.execute(sql_missing, (user_id,))
+    missings = cursor.fetchall()
+
+    result = []
+    for missing in missings:
+        missing_idx = missing[0]
+
+        # 실종자 옷 정보 가져오기
+        sql_clothes = "SELECT * FROM TB_MISSING_CLOTHES WHERE MISSING_IDX=%s"
+        cursor.execute(sql_clothes, (missing_idx,))
+        clothes = cursor.fetchall()
+
+        # 포스터 정보 가져오기
+        sql_poster = "SELECT * FROM TB_POSTER WHERE MISSING_IDX=%s"
+        # sql_poster = "SELECT * FROM TB_POSTER WHERE MISSING_IDX=%s AND POSTER_SHOW=1" 이렇게 바꾸면 show=1인 포스터만 보임
+        cursor.execute(sql_poster, (missing_idx,))
+        poster = cursor.fetchone()
+
+        # POSTER_IMG_PATH가 null이 아닌 경우만 결과에 추가
+        if poster and poster[4] is not None:
+            missing_info = {
+                'MISSING_IDX': missing[0],
+                'USER_ID': missing[1],
+                'MISSING_NAME': missing[2],
+                'MISSING_GENDER': missing[3],
+                'MISSING_AGE_CATE': missing[4],
+                'MISSING_IMG': missing[5],
+                'MISSING_LOCATION_LAT': missing[6],
+                'MISSING_LOCATION_LON': missing[7],
+                'MISSING_FINDING': missing[8],
+                'MISSING_LOCATION' : missing[9],
+                'MISSING_AGE' : missing[10],
+                'MISSING_CLOTHES': [{
+                    'MISSING_CLOTHES_IDX': cloth[0],
+                    'MISSING_IDX': cloth[1],
+                    'MISSING_TOP': cloth[2],
+                    'MISSING_TOP_COLOR': cloth[3],
+                    'MISSING_BOTTOMS': cloth[4],
+                    'MISSING_BOTTOMS_COLOR': cloth[5],
+                    'MISSING_CLOTHES_ETC': cloth[6]
+                } for cloth in clothes],
+                'POSTER_INFO': {
+                    'POSTER_IDX': poster[0],
+                    'MISSING_IDX': poster[1],
+                    'POSTER_CREATED_AT': poster[2],
+                    'POSTER_VIEW': poster[3],
+                    'POSTER_IMG_PATH': poster[4],
+                    'POSTER_SHOW': poster[5]
+                }
+            }
+            result.append(missing_info)
+
+    cursor.close()
+    db.close()
+
+    return jsonify(result)
