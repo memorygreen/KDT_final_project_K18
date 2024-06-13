@@ -1,15 +1,14 @@
 /*자영(240529) : 검색기능 css*/
 
-
-.search_bar_all {
-  margin-top: 7rem;
- /* 상단 여백을 음수로 설정하여 위로 올림 */
+.search_missing_avatar_all{
+  display: flex;
+  flex-direction: row;
 }
-
 
 
 .missing_avatar_all{
   margin-top: auto;
+  width: 100%;
 }
 
 /*항목 내용 나올 박스 전체 */
@@ -23,8 +22,11 @@
 
 /* 각 항목 안의 내용 */
 .search_missing_cate_content{
-   margin: 5%;
+   margin: 20px;
    border-radius: 0.5rem;
+}
+.search_missing_cate_content h2{
+  margin-bottom: 10px;
 }
   
 /* 라디오 버튼 들의 묶음 */
@@ -39,7 +41,11 @@
 .radio_btn {
     display: none;
 }
-
+.search_missing_info_all{
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
 
 /* 라디오버튼 라벨 css */
 .radio_btn_label {
