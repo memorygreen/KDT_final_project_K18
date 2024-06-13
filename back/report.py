@@ -185,7 +185,7 @@ def capture_detail():
         current_notification = cursor.fetchone()
 
         if current_notification and current_notification[0] == 0:
-            # REPORT_NOTIFICATION이 0인 경우에만 업데이트
+            # CAPTURE_ALARM_CK 가 0인 경우에만 업데이트
             sql_capture_update = """
             UPDATE TB_CAPTURE
             SET CAPTURE_ALARM_CK = 1, CAPTURE_ALARM_CK_TIME = NOW()

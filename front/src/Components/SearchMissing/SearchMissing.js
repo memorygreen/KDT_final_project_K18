@@ -127,7 +127,10 @@ const SearchMissing = ({ initialData }) => {
         if (missingImg) {
             console.log('missingImg 들어왔는지 확인')
             try {
-                setMissingImgUrl(await UploadMissingImg(missingImg));
+                const uploadedImageUrl = await UploadMissingImg(missingImg); // 업로드 완료될때까지 기다리기
+                setMissingImgUrl(uploadedImageUrl);
+                console.log("업로드된 이미지 URL:", uploadedImageUrl);
+
 
                 // missingImgUrl = Url;
                 console.log("업로드된 이미지 URL (확인)):", missingImgUrl); // URL을 로그로 출력
@@ -182,6 +185,7 @@ const SearchMissing = ({ initialData }) => {
                         alert("등록 성공")
                         navigate('/'); // 성공 후 메인 페이지로 리다이렉트
 
+                       
 
                         // 포스터 생성
                         if (posterGenerating) {
@@ -193,8 +197,24 @@ const SearchMissing = ({ initialData }) => {
                                 console.error('Error creating poster:', error);
                             }
                         }
-
-
+                         // 가장 가까운 CCTV의 위도와 경도 데이터 추출
+                            const nearestCCTV = response.data.nearest_cctv;
+                            if (nearestCCTV) {  // nearest_cctv 데이터가 존재하는 경우에만 /near_cctv 엔드포인트로 데이터 전송
+                                const CCTV_LAT = nearestCCTV.CCTV_LAT;
+                                const CCTV_LNG = nearestCCTV.CCTV_LNG;
+                        
+                                // /near_cctv 엔드포인트로 데이터 전송
+                                axios.post('/near_cctv', {
+                                    CCTV_LAT: CCTV_LAT,
+                                    CCTV_LNG: CCTV_LNG
+                                })
+                                .then(response => {
+                                    //
+                                })
+                                .catch(error => {
+                                    console.error('Failed to send data to /near_cctv:', error);
+                                });
+                            }
                     })
                     .catch(error => {
                         console.error('실종자 정보 등록 실패 에러 Error submitting report:', error);

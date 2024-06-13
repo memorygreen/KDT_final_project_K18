@@ -11,7 +11,7 @@ const ViewCCTVPage = () => {
             <header className='nevibar_card'> <NevBar /></header>
             
             <div className='Main_start'>
-                    <h1>ViewCCTVPage</h1>
+                    
             </div>
             
             <div className='Main_card' >

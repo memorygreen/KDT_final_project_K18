@@ -17,7 +17,7 @@ def get_all_missing_info():
     db = db_con()
     cursor = db.cursor()
 
-    # 실종자 정보 가져오기 (테이블 이름을 정확하게 확인하고 수정)
+    # 실종자 정보 가져오기 (테이블 이름을 정확하게 확인하고 수정).
     sql_missing = "SELECT * FROM TB_MISSING WHERE MISSING_FINDING='finding'"
     cursor.execute(sql_missing)
     missings = cursor.fetchall()
@@ -32,8 +32,8 @@ def get_all_missing_info():
         clothes = cursor.fetchall()
 
         # 포스터 정보 가져오기
-        sql_poster = "SELECT * FROM TB_POSTER WHERE MISSING_IDX=%s"
-        # sql_poster = "SELECT * FROM TB_POSTER WHERE MISSING_IDX=%s AND POSTER_SHOW=1" 이렇게 바꾸면 show=1인 포스터만 보임
+        sql_poster = "SELECT * FROM TB_POSTER WHERE MISSING_IDX=%s "
+        #AND POSTER_SHOW=1 추가하면 1인 포스터만 보임
         cursor.execute(sql_poster, (missing_idx,))
         poster = cursor.fetchone()
 

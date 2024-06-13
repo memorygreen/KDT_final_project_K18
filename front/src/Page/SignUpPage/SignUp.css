@@ -90,55 +90,113 @@
     gap: 0.5rem;
 }
 
-.my-form__button {
+.sign_up_btn { /*회원가입 버튼 (원래 이름 my-form__button)*/ 
     background-color: var(--cigBlue);
     color: white;
     white-space: nowrap;
-    border: none;
     display: flex;
-    justify-content: center;
-    align-items: center;
     margin-top: 1rem;
     line-height: 3.125rem;
     outline: none;
-    font-size: 1.125rem;
     letter-spacing: .025em;
     text-decoration: none;
-    cursor: pointer;
     font-weight: 800;
-    min-height: 3.125rem;
-    width: 100%;
-    border-radius: 0.5rem;
-    box-shadow: 0 5px 10px rgba(0,0,0,.15);
-    transition: all .3s ease;
-    -webkit-transition: all .3s ease;
+
+    width: 95%;
+    font-size: 100%;
+    color: #000000; /*글자색 */
+    background: #ffffff; /*안 눌렀을 때 배경 색 */
+    height: 3rem;
+    border-radius: 50px;
+    border: solid 1px rgb(213, 213, 213);
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin: 0; 
+
 }
+.sign_up_btn:hover { /*회원가입 버튼 (원래 이름 my-form__button)*/ 
+    background-color: #7771f7;
+}
+
+
+.gender_radio_btn_div{
+    display: flex;
+}
+.gender_radio_btn_div label {
+    font-size: 15px;
+    color: #000000; /* 글자색 */
+    background: #ffffff; /* 안 눌렀을 때 배경 색 */
+    width: 90px;
+    height: 40px;
+    border-radius: 50px;
+    border: solid 1px rgb(213, 213, 213);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 10px; /* 라디오 버튼 사이 간격 */
+}
+
+.gender_radio_btn_div input{
+    display: none;
+}
+.gender_radio_btn_div input[type="radio"]:checked + label {
+    background: #f7f7f7; /* 선택 됐을 때 배경 색 */
+    color: #000000;
+    border: solid 1px rgb(0, 0, 0); /* 클릭했을 때 테두리 */
+}
+gender_radio_btn_div label:hover {
+    border: solid 1px rgb(0, 0, 0); /* 마우스 가져다댔을 때 테두리 */
+}
+
+
+
+
+
+
+
 
 .text-field input {
     color: #71707d;
-    font-size: 1rem;
+    /* font-size: 1rem; */
     font-weight: 500;
     max-width: 100%;
-    width: 100%;
-    border: 1px solid #71707d;
-    height: 3.125rem;
+    /* width: 100%; */
+    /* border: 1px solid #71707d; */
+    /* height: 3.125rem; */
     color: #383740;
     letter-spacing: .03rem;
-    background-color: transparent;
-    outline: none;
+    /* background-color: transparent; */
     transition: .25s;
-    border-radius: 0.5rem;
+    /* border-radius: 0.5rem; */
     text-indent: 1.25rem;
     margin-top: 0.5rem;
+
+    /*통일시키기*/
+
+
+    width: 100%;
+    padding: 5px;
+    height: 40px;
+    font-size: 15px;
+    border-radius: 50px;
+    border: solid 1px rgb(213, 213, 213);
+    outline: none;
+    padding-left: 10px;
+    background-color: rgb(255, 255, 255);
+
+    
 }
 
 .text-field input:focus {
-    border: 1px solid #625BFE;
+    /* border: 1px solid #625BFE; */
+    /* background: #f7f7f7;  */
+    border: 1px solid #000000;
+
 }
 
-.my-form__button:hover {
-    background-color: #7771f7;
-}
+
 
 .text-field {
     position: relative;

@@ -176,6 +176,9 @@ const CardModal = ({ isOpen, onClose, selectedArticle }) => {
                                         </div>
                                     </div>
                                     <button type="submit" className="report_submit">전송하기</button>
+
+
+
                                     <button type="button" className="report_cancel" onClick={handleCloseForm}>접기</button>
                                 </form>
                             )}
