@@ -4,6 +4,17 @@
     align-items: center;
 }
 
+.Mypage_userinfo_all {
+    max-width: 600px;
+    min-height: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%; /* 모든 container의 너비를 100%로 설정 */
+}
+
 .Mypage_userinfo {
     display: flex;
     flex-direction: column;

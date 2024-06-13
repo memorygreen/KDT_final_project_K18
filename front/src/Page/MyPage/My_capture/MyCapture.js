@@ -19,7 +19,7 @@ const MyCapture = ({ sessionId }) => {
     }, [sessionId]);
 
     return (
-        <div>
+        <div className="Mypage_capture_all">
             
             {captures.map(capture => (
                 <div key={capture.CAPTURE_IDX}>
