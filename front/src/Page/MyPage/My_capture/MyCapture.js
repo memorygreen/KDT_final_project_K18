@@ -21,11 +21,22 @@ const MyCapture = ({ sessionId }) => {
     return (
         <div>
             
+            안녕
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridGap: '10px' }}>
+
             {captures.map(capture => (
                 <div key={capture.CAPTURE_IDX}>
                     <img src={capture.CAPTURE_PATH} alt={capture.MISSING_NAME} />
                 </div>
             ))}
+        </div>
+
+            {/* user가 가진 전체 캡처 나오게 하기*/}
+
+
+
+
+
         </div>
     )
 }

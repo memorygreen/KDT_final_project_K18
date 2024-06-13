@@ -10,11 +10,15 @@ const MyPage = () => {
     const sessionId = sessionStorage.getItem('userId') // session에 있는 id 값 
     const [activeComponent, setActiveComponent] = useState('capture'); // 기본값은 'capture'
 
+    const [missingList, setMissingList] = useState([]); // 자영 
+
+
     const handleIconClick = (component) => {
         console.log('Changing active component to:', component); // 상태 변화 로깅
         setActiveComponent(component);
     };
 
+    
     return (
         <div className="Mypages">
             <header><NevBar /></header>
