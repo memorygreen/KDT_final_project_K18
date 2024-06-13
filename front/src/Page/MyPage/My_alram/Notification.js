@@ -114,7 +114,7 @@ const Notification = ({ sessionId }) => {
     };
 
     return (
-        <div>
+        <div className="Mypage_alram_all">
             <div className="notification-buttons">
                 <button onClick={handleAllButtonClick}>전체 알림</button>
                 <button onClick={handleReportButtonClick}>제보 알림</button>

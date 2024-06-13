@@ -19,7 +19,7 @@ const MyCapture = ({ sessionId }) => {
     }, [sessionId]);
 
     return (
-        <div>
+        <div className="Mypage_capture_all">
             
             안녕
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridGap: '10px' }}>
