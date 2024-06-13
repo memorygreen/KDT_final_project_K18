@@ -1,10 +1,15 @@
 from flask import Blueprint, request, jsonify
 from db import db_con
-
+import requests
+import asyncio
+import aiohttp
+from math import sin, cos, sqrt, atan2, radians
 search_missing_bp = Blueprint('SearchMissing', __name__)
 
+cctv_distances_lock = asyncio.Lock()
+
 @search_missing_bp.route('/SearchMissing', methods=['POST'])
-def search_missing():
+async def search_missing():
     try:
         data = request.json  # JSON 형식으로 데이터를 받음
         print("SearchMissing..py 백으로 이동함 ")
@@ -127,13 +132,16 @@ def search_missing():
 
         print('확인용)실종자 소지품 테이블 삽입 후')
         
-        
+
         conn.commit()
         cursor.close()
         conn.close()
         
         print('확인용)연결 끊기 후')
-
+        
+        # search_and_get_nearest_cctvs 함수를 호출하여 실행
+        cctv=await search_and_get_nearest_cctvs(missing_location_lat, missing_location_lng)
+        print(cctv)
         response = {
             'status': 'success',
             'data': {
@@ -159,10 +167,12 @@ def search_missing():
                 'selected_top_color_kor': selected_top_color_kor,
                 'selected_bottom_kor': selected_bottom_kor,
                 'selected_bottom_color_kor': selected_bottom_color_kor,
-                'selected_belongings_kor': selected_belongings_kor
+                'selected_belongings_kor': selected_belongings_kor,
+
+                
             }
         }
-        return jsonify(response), 200 # DB에 넣는과정 성공시 200 반환
+        return jsonify(response), 200
 
     except Exception as e:
         # 에러 메시지를 상세하게 출력
@@ -172,3 +182,138 @@ def search_missing():
             'message': str(e)
         }
         return jsonify(response), 500
+    
+
+
+#CCTV 정보가져오기   
+async def fetch_cctv_data(session):
+    try:
+        async with session.get('http://localhost:5000/CCTVLocation') as response:
+            data = await response.json()
+            return data
+    except aiohttp.ClientError as e:
+        print(f"Error occurred during CCTV data fetch: {e}")
+        return []
+    
+
+#입력 위치와 가장 가까운 CCTV 찾기        
+async def nearest_cctv(missing_location_lat, missing_location_lng):
+    try:
+        async with aiohttp.ClientSession() as session:
+            cctv_locations = await fetch_cctv_data(session)
+        if not cctv_locations:
+            print("No CCTV data fetched.")
+            return None
+        print("Total CCTV locations fetched:", len(cctv_locations))
+        # 가져온 CCTV 위치 데이터의 총 개수를 출력합니다.
+
+        nearest_cctv = None
+        min_distance = float('inf')
+
+        for cctv_location in cctv_locations:
+            
+            try:
+                # CCTV의 위도와 경도
+                cctv_lat = float(cctv_location['CCTV_LAT'])
+                cctv_lng = float(cctv_location['CCTV_LNG'])
+                distance = calculate_distance(missing_location_lat, missing_location_lng, cctv_lat, cctv_lng)
+                if distance < min_distance:
+                    min_distance = distance
+                    nearest_cctv = cctv_location
+            except (KeyError, ValueError) as e:
+                print(f"Error processing CCTV data: {e}")
+                continue
+                
+
+        if nearest_cctv is not None:
+            print(nearest_cctv)
+            nearest_lat=nearest_cctv['CCTV_LAT']
+            nearest_lng=nearest_cctv['CCTV_LNG']
+            return nearest_lat, nearest_lng
+        else:
+            print("nearest no.")
+            return None    
+    except Exception as e:
+        print(f"Error occurred while finding nearest CCTV: {e}")
+        return None
+#nearest_cctv 위도 경도로 근처 10개 찾기
+async def nearest_cctvs(nearest_lat,nearest_lng):
+    try:
+        async with aiohttp.ClientSession() as session:
+            cctv_locations = await fetch_cctv_data(session)
+        if not cctv_locations:
+            print("No CCTV data fetched.")
+            return None
+       
+        
+
+        # 거리를 기준으로 가장 가까운 10개의 CCTV 정보 선택
+        nearest_cctvs = []
+        min_distances = []
+
+        for cctv_location in cctv_locations:
+            try:
+                cctv_lat = float(cctv_location['CCTV_LAT'])
+                cctv_lng = float(cctv_location['CCTV_LNG'])
+                distance = calculate_distance(nearest_lat, nearest_lng, cctv_lat, cctv_lng)
+                if len(nearest_cctvs) < 10:
+                    nearest_cctvs.append(cctv_location)
+                    min_distances.append(distance)
+                else:
+                    max_distance_index = min_distances.index(max(min_distances))
+                    if distance < min_distances[max_distance_index]:
+                        nearest_cctvs[max_distance_index] = cctv_location
+                        min_distances[max_distance_index] = distance
+            except (KeyError, ValueError) as e:
+                print(f"Error processing CCTV data: {e}")
+                continue
+
+        if nearest_cctvs:
+            print("Nearest 10 CCTV:", nearest_cctvs)
+            return nearest_cctvs
+        else:
+            print("No nearest CCTV found.")
+            return None
+
+    except Exception as e:
+        print(f"Error occurred while finding nearest CCTV: {e}")
+        return None
+
+
+# 두 지점 간의 거리를 계산하는 함수
+def calculate_distance(lat1, lng1, lat2, lng2):
+    R = 6371.0  # 지구 반지름 (킬로미터 단위)
+    lat1_rad = radians(lat1)
+    lng1_rad = radians(lng1)
+    lat2_rad = radians(lat2)
+    lng2_rad = radians(lng2)
+
+    dlat = abs(lat2_rad - lat1_rad)
+    dlng = abs(lng2_rad - lng1_rad)
+
+    a = sin(dlat / 2)**2 + cos(lat1_rad) * cos(lat2_rad) * sin(dlng / 2)**2
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+    distance = R * c
+
+    return distance  
+
+async def search_and_get_nearest_cctvs(missing_location_lat, missing_location_lng):
+    try:
+        # nearest_cctv를 호출하여 가장 가까운 CCTV의 위도와 경도를 가져옴
+        nearest_lat, nearest_lng = await nearest_cctv(missing_location_lat, missing_location_lng)
+
+        if nearest_lat is not None and nearest_lng is not None:
+            # 가져온 위도와 경도를 nearest_cctvs 함수에 전달하여 가장 가까운 10개의 CCTV 정보를 가져옴
+            await nearest_cctvs(nearest_lat, nearest_lng)
+        else:
+            print("Failed to find nearest CCTV.")
+    except Exception as e:
+        print(f"Error occurred while searching and getting nearest CCTV: {e}")
+
+
+
+
+
+        
+
+    
