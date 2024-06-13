@@ -142,6 +142,7 @@ async def search_missing():
         # search_and_get_nearest_cctvs 함수를 호출하여 실행
         cctv=await search_and_get_nearest_cctvs(missing_location_lat, missing_location_lng)
         print(cctv)
+        
         response = {
             'status': 'success',
             'data': {

@@ -196,24 +196,24 @@ const SearchMissing = ({ initialData }) => {
                                 console.error('Error creating poster:', error);
                             }
                         }
-                        // 가장 가까운 CCTV의 위도와 경도 데이터 추출
-                        const nearestCCTV = response.data.nearest_cctv;
-                        if (nearestCCTV) {  // nearest_cctv 데이터가 존재하는 경우에만 /near_cctv 엔드포인트로 데이터 전송
-                            const CCTV_LAT = nearestCCTV.CCTV_LAT;
-                            const CCTV_LNG = nearestCCTV.CCTV_LNG;
+                        // // 가장 가까운 CCTV의 위도와 경도 데이터 추출
+                        // const nearestCCTV = response.data.nearest_cctv;
+                        // if (nearestCCTV) {  // nearest_cctv 데이터가 존재하는 경우에만 /near_cctv 엔드포인트로 데이터 전송
+                        //     const CCTV_LAT = nearestCCTV.CCTV_LAT;
+                        //     const CCTV_LNG = nearestCCTV.CCTV_LNG;
 
-                            // /near_cctv 엔드포인트로 데이터 전송
-                            axios.post('/near_cctv', {
-                                CCTV_LAT: CCTV_LAT,
-                                CCTV_LNG: CCTV_LNG
-                            })
-                                .then(response => {
-                                    //
-                                })
-                                .catch(error => {
-                                    console.error('Failed to send data to /near_cctv:', error);
-                                });
-                        }
+                        //     // /near_cctv 엔드포인트로 데이터 전송
+                        //     axios.post('/near_cctv', {
+                        //         CCTV_LAT: CCTV_LAT,
+                        //         CCTV_LNG: CCTV_LNG
+                        //     })
+                        //         .then(response => {
+                        //             //
+                        //         })
+                        //         .catch(error => {
+                        //             console.error('Failed to send data to /near_cctv:', error);
+                        //         });
+                        // }
                     })
                     .catch(error => {
                         console.error('실종자 정보 등록 실패 에러 Error submitting report:', error);
