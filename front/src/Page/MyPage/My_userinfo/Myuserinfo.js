@@ -8,7 +8,7 @@ import cap from '../assets/cap.png';
 import CardModal from '../../../Components/Cards/CardModal/CardModal'; // CardModal component imported
 import alramck from '../assets/alrck.png'
 
-const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx}) => {
+const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx }) => {
     const [showMissingList, setShowMissingList] = useState(true);
     const [userId, setUserId] = useState(sessionId);
     const [userInfo, setUserInfo] = useState();
@@ -82,7 +82,7 @@ const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx}) => {
     return (
         <div className='Mypage_userinfo_all'>
             <div className='Mypage_userinfo'>
-                <img src={userInfo && userInfo.USER_IMG ? userInfo.USER_IMG : default_profile} alt={default_profile} />
+                <img className='userinfo_img' src={userInfo && userInfo.USER_IMG ? userInfo.USER_IMG : default_profile} alt={default_profile} />
                 <div className='Mypage_userinfo_name'>{userInfo && userInfo.USER_NAME}</div>
             </div>
             <div className='Mypage_userinfo_icon'>
@@ -94,19 +94,18 @@ const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx}) => {
             </div>
             {showMissingList && (
                 <div className='My_missingList'>
-                    <ul>
-                        {missingList.map((missing) => (
-                            // <li key={missing.MISSING_IDX} onClick={() => handleMissingClick(missing)}>
-                            <li key={missing.MISSING_IDX} onClick={() => {setMissingIdx(missing.MISSING_IDX)}}>
-                                {missing.MISSING_NAME}
-                                <button className='Mypage_missing_btn' onClick={() => handleMissingClick(missing)}>상세보기</button>
-                                <button className='Mypage_missing_btn' onClick={() => handleMissingClick(missing)}>삭제</button>
+                    <div className='My_missingList_title'>
+                        실종자 목록
+                    </div>
+                    {missingList.map((missing) => (
+                        // <li key={missing.MISSING_IDX} onClick={() => handleMissingClick(missing)}>
+                        <div key={missing.MISSING_IDX} onClick={() => { setMissingIdx(missing.MISSING_IDX) }}>
+                            {missing.MISSING_NAME}
+                            <button className='Mypage_missing_btn' onClick={() => handleMissingClick(missing)}>상세보기</button>
+                            <button className='Mypage_missing_btn' onClick={() => handleMissingClick(missing)}>삭제</button>
+                        </div>
+                    ))}
 
-
-                            </li>
-                            
-                        ))}
-                    </ul>
                 </div>
             )}
             {isModalOpen && (
