@@ -192,7 +192,9 @@ const Signup = () => {
           </div>
           <div className="my-form__actions">
             {/* <button type="submit" className="my-form__button" >회원가입</button> */}
-            <button type="submit" className="sign_up_btn" >회원가입</button>
+            <div>
+              <button type="submit" className="sign_up_btn" >회원가입</button>
+            </div>
             <div className="my-form__signin">
               <Link to="/Login" title="Login" className='Login'>
                 로그인

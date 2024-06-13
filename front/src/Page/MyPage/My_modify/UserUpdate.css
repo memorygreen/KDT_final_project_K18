@@ -1,13 +1,4 @@
 /* 기존 스타일 유지 */
-.container_update {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 100%; /* 모든 container의 너비를 100%로 설정 */
-}
 
 /* 기타 div에도 너비를 100%로 설정 */
 .delete-confirmation {
@@ -56,9 +47,6 @@
     display: flex;
     justify-content: space-between; /* 버튼을 좌우로 최대한 펼쳐서 배치 */
     width: calc(100% - 130px); /* input-container의 padding이 20px 이므로 전체 너비에서 40px을 빼줍니다. */
-    margin-top: 20px; /* 간격 조정 */
-    margin-left: auto; /* 오른쪽 정렬을 위해 왼쪽 마진을 자동으로 설정합니다. */
-    margin-right: auto; /* 왼쪽 정렬을 위해 오른쪽 마진을 자동으로 설정합니다. */
 }
 
 

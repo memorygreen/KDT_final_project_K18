@@ -19,3 +19,15 @@
     box-sizing: border-box;
     font-family: Mulish, sans-serif;
 }
+::-webkit-scrollbar {
+    display: block;
+}
+::-webkit-scrollbar-track, ::-webkit-scrollbar-button {
+    display: none;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #dddddd;
+    border-radius: 20px;
+    width: 10px;
+    height: 10px;
+}
