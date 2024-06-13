@@ -3,12 +3,11 @@
 .all_header {
     font-family: 'Open Sans', sans-serif;
     font-size: 16px;
-    background-color: #141318;
+    background-color:white;
 }
 
 .header_class {
     width: 100%;
-    border-bottom: 1px solid #000000;
     height: 4rem;
     display: flex;
     align-items: center;
@@ -62,7 +61,7 @@
 }
 
 .navigation>li>a , .admin_button>li>a {
-    color: rgb(255, 255, 255);
+    color: black;
     font-size: 14px;
     font-weight: 600;
     text-decoration: none;
@@ -73,7 +72,7 @@
 }
 
 .navigation>li>button , .admin_button>li>button {
-    color: rgb(255, 255, 255);
+    color: black;
     transition: all 0.3s ease;
     text-decoration: none;
     border: none;
@@ -107,7 +106,7 @@
 }
 
 .navigation>li:hover>button , .admin_button>li:hover>button {
-    color:#fbff00b0;
+    color:#444444b0;
 }
 
 .navigation>li:hover .dropdown , .admin_button>li:hover .dropdown {
@@ -249,14 +248,14 @@
 }
 
 .primary {
-    color: rgb(255, 255, 255);
+    color: black;
     border-radius: 0.5rem;
-    background-color: #0264646e;
     border: 1px solid #2912fc00;
     padding: 0.5rem 1rem;
 }
 
 .primary:hover {
+    color: #5f5f5f;
     background-color: #e2b1ec52;
 }
 
