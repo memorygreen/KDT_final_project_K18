@@ -1,0 +1,13 @@
+/* ViewCCTV.css */
+
+.view-cctv-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* 화면의 전체 높이를 차지 */
+    box-sizing: border-box; /* 패딩을 포함한 전체 크기 계산 */
+}
+
+.video-container {
+    max-width: 80%;
+}

@@ -1,11 +1,17 @@
 /* 기존 스타일 유지 */
 .container {
     max-width: 600px;
-    margin: 0 auto; /* 중앙 정렬을 위해 왼쪽과 오른쪽의 margin을 자동으로 설정 */
+    margin: 0 auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%; /* 모든 container의 너비를 100%로 설정 */
+}
+
+/* 기타 div에도 너비를 100%로 설정 */
+.delete-confirmation {
+    width: 100%;
 }
 
 h1 {
@@ -19,38 +25,69 @@ form {
     align-items: center; /* 추가: 폼 요소들을 중앙으로 정렬 */
 }
 
+.label-container {
+    display: flex; /* 라벨과 인풋을 같은 줄에 위치시키기 위해 플렉스 박스로 설정 */
+    align-items: center; /* 세로 방향 가운데 정렬 */
+    justify-content: space-between; /* 가로 방향으로 각 요소 사이의 공간을 최대로 설정 */
+}
+
 label {
     margin-bottom: 5px;
-    width: 100%; /* 추가: label의 넓이를 100%로 설정하여 중앙 정렬 유지 */
     text-align: left; /* 추가: label의 텍스트를 왼쪽 정렬 */
+}
+
+.input-container {
+    width: calc(100% - 130px); /* 라벨의 너비를 고려하여 인풋의 너비를 설정 */
 }
 
 input[type="text"],
 input[type="password"],
 input[type="date"],
-select {
+input[type="tel"] {
     margin-bottom: 10px;
     padding: 8px;
     border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 100%; /* 추가: input과 select 요소의 넓이를 100%로 설정 */
-    box-sizing: border-box; /* 추가: padding과 border를 포함하여 width를 계산 */
+    border-radius: 50px;
+    width: 100%; 
+    box-sizing: border-box;
+}
+input[type="text"]:hover,
+input[type="password"]:hover,
+input[type="date"]:hover,
+input[type="tel"]:hover {
+    border: solid 1px rgb(0, 0, 0);
 }
 
-button {
+.button-container {
+    display: flex;
+    justify-content: space-between; /* 버튼을 좌우로 최대한 펼쳐서 배치 */
+    width: calc(100% - 130px); /* input-container의 padding이 20px 이므로 전체 너비에서 40px을 빼줍니다. */
+    margin-top: 20px; /* 간격 조정 */
+    margin-left: auto; /* 오른쪽 정렬을 위해 왼쪽 마진을 자동으로 설정합니다. */
+    margin-right: auto; /* 왼쪽 정렬을 위해 오른쪽 마진을 자동으로 설정합니다. */
+}
+
+
+.button {
     margin-top: 10px;
     padding: 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #ccc;
+    border-radius: 50px;
     cursor: pointer;
-    width: 100%; /* 추가: 버튼의 넓이를 100%로 설정 */
-    box-sizing: border-box; /* 추가: padding과 border를 포함하여 width를 계산 */
+    width: 30%; /* 3개 버튼이므로 30%로 설정 */
+    box-sizing: border-box;
+    margin-right: 2%; /* [확인] 버튼과 [취소] 버튼 사이의 간격 조절 */
 }
 
-button:hover {
-    background-color: #0056b3;
+.button:last-child {
+    margin-right: 0; /* 마지막 버튼의 오른쪽 간격 제거 */
+}
+
+
+.button:hover {
+    border: solid 1px rgb(0, 0, 0);
 }
 
 .error-message {
