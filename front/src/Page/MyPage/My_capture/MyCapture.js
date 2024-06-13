@@ -20,6 +20,7 @@ const MyCapture = ({ sessionId }) => {
 
     return (
         <div>
+            
             {captures.map(capture => (
                 <div key={capture.CAPTURE_IDX}>
                     <img src={capture.CAPTURE_PATH} alt={capture.MISSING_NAME} />
