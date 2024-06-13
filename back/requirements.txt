@@ -11,9 +11,8 @@
    bcrypt
    boto3
    matplotlib
-   asyncio
    aiohttp
-
+   asyncio
 # cd back
 # pip install -r requirements.txt
 

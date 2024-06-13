@@ -135,28 +135,28 @@ function UserUpdate() {
         <form className='form_update'>
           <hr />
           <div className="input-container_update">
-            <label>회원 아이디</label>
-            <input type="text" value={userId} readOnly />
+            <label className='label_update'>회원 아이디</label>
+            <input type="text" className="input_update"  value={userId} readOnly />
           </div>
           <div className="input-container_update">
-            <label>사용자 이름</label>
-            <input type="text" value={name} readOnly />
+            <label className='label_update'>사용자 이름</label>
+            <input type="text" className="input_update"  value={name} readOnly />
           </div>
           <div className="input-container_update">
-            <label>생년월일</label>
-            <input type="date" value={dob} readOnly />
+            <label className='label_update'>생년월일</label>
+            <input type="date" className="input_update" value={dob} readOnly />
           </div>
           <div className="input-container_update">
-            <label>성별</label>
-            <input type="text" value={gender} readOnly />
+            <label className='label_update'>성별</label>
+            <input type="text" className="input_update" value={gender} readOnly />
           </div>
           <div className="input-container_update">
-            <label>연락처</label>
-            <input type="tel" value={phone} onChange={handlePhoneChange} maxLength="13" />
+            <label className='label_update'>연락처</label>
+            <input type="tel" className="input_update" value={phone} onChange={handlePhoneChange} maxLength="13" />
           </div>
           <div className="input-container_update">
-            <label>새 비밀번호</label>
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
+            <label className='label_update'>새 비밀번호</label>
+            <input type="password" className="input_update" value={password} onChange={e => setPassword(e.target.value)} />
           </div>
 
           <div className="button-container_update">
@@ -167,13 +167,14 @@ function UserUpdate() {
           
           {showDeleteConfirmation && (
             <div className="delete-confirmation">
-              <label>비밀번호 확인</label>
+              <label className='label_update'>비밀번호 확인</label>
               <input
-                type="password"
+                type="password" 
+                className="input_update"
                 value={deletePassword}
                 onChange={e => setDeletePassword(e.target.value)}
               />
-              <button type="button" className="button" onClick={handleDeleteConfirmation}>탈퇴확인</button>
+              <button type="button" className="button_update" onClick={handleDeleteConfirmation}>탈퇴확인</button>
             </div>
           )}
         </form>

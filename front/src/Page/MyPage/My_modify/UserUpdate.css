@@ -11,7 +11,7 @@
 
 /* 기타 div에도 너비를 100%로 설정 */
 .delete-confirmation {
-    width: 100%;
+    width: 75%;
 }
 
 .h1_update {
@@ -25,13 +25,13 @@
     align-items: center; /* 추가: 폼 요소들을 중앙으로 정렬 */
 }
 
-.label-container {
+.label-container_update {
     display: flex; /* 라벨과 인풋을 같은 줄에 위치시키기 위해 플렉스 박스로 설정 */
     align-items: center; /* 세로 방향 가운데 정렬 */
     justify-content: space-between; /* 가로 방향으로 각 요소 사이의 공간을 최대로 설정 */
 }
 
-label {
+.label_update {
     margin-bottom: 5px;
     text-align: left; /* 추가: label의 텍스트를 왼쪽 정렬 */
 }
@@ -40,10 +40,7 @@ label {
     width: calc(100% - 130px); /* 라벨의 너비를 고려하여 인풋의 너비를 설정 */
 }
 
-input[type="text"],
-input[type="password"],
-input[type="date"],
-input[type="tel"] {
+.input_update {
     margin-bottom: 10px;
     padding: 8px;
     border: 1px solid #ccc;
@@ -51,10 +48,7 @@ input[type="tel"] {
     width: 100%; 
     box-sizing: border-box;
 }
-input[type="text"]:hover,
-input[type="password"]:hover,
-input[type="date"]:hover,
-input[type="tel"]:hover {
+.input_update:hover{
     border: solid 1px rgb(0, 0, 0);
 }
 
@@ -81,7 +75,7 @@ input[type="tel"]:hover {
     margin-right: 2%; /* [확인] 버튼과 [취소] 버튼 사이의 간격 조절 */
 }
 
-.button:last-child {
+.button:last-child_update {
     margin-right: 0; /* 마지막 버튼의 오른쪽 간격 제거 */
 }
 
@@ -96,11 +90,4 @@ input[type="tel"]:hover {
     text-align: center; /* 추가: 에러 메시지를 중앙 정렬 */
 }
 
-span_update {
-    display: block;
-    margin-bottom: 10px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-}
+

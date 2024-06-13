@@ -9,13 +9,9 @@ const UploadMissingImg = (file) => {
     const REGION = process.env.REACT_APP_REGION;
     const ACCESS_KEY = process.env.REACT_APP_ACCESS_KEY;
     const SECRET_ACCESS_KEY = process.env.REACT_APP_SECRET_ACCESS_KEY;
-
-    console.log("아마존 변수들 확인: ", S3_BUCKET, REGION, ACCESS_KEY, SECRET_ACCESS_KEY);
-    
     // aws 환경설정
     AWS.config.update({ accessKeyId: ACCESS_KEY, secretAccessKey: SECRET_ACCESS_KEY, region: REGION });
     const s3 = new AWS.S3();
-
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = () => {
