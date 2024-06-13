@@ -29,8 +29,7 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-# 시크릿 키 설정
-app.secret_key = os.getenv('SECRET_KEY')
+
 
 # 블루프린트 등록
 app.register_blueprint(kakao_bp)
