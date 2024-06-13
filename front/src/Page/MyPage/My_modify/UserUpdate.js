@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+// import './UserUpdate.css'; 
 
 function UserUpdate() {
   const [userId, setUserId] = useState('');
@@ -133,49 +134,46 @@ function UserUpdate() {
         {message && <p className="error-message">{message}</p>}
         <form>
           <hr />
-          <div>
-            <label>회원 아이디:</label>
+          <div className="input-container">
+            <label>회원 아이디</label>
             <input type="text" value={userId} readOnly />
           </div>
-          <div>
-            <label>사용자 이름:</label>
+          <div className="input-container">
+            <label>사용자 이름</label>
             <input type="text" value={name} readOnly />
           </div>
-          <div>
-            <label>생년월일:</label>
+          <div className="input-container">
+            <label>생년월일</label>
             <input type="date" value={dob} readOnly />
           </div>
-          <div>
-            <label>성별:</label>
+          <div className="input-container">
+            <label>성별</label>
             <input type="text" value={gender} readOnly />
           </div>
-          <div>
-            <label>연락처:</label>
+          <div className="input-container">
+            <label>연락처</label>
             <input type="tel" value={phone} onChange={handlePhoneChange} maxLength="13" />
           </div>
-          <div>
-            <label>새 비밀번호:</label>
+          <div className="input-container">
+            <label>새 비밀번호</label>
             <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
-            <hr />
           </div>
+
           <div className="button-container">
-            <div>
-              <button type="button" onClick={handleUpdate}>확인</button>
-              <button type="button" onClick={() => navigate('/')}>취소</button>
-            </div>
-            <div>
-              <button type="button" onClick={handleDeleteClick}>탈퇴</button>
-            </div>
+            <button type="button" className="button" onClick={handleUpdate}>확인</button>
+            <button type="button" className="button" onClick={() => navigate('/')}>취소</button>
+            <button type="button" className="button" onClick={handleDeleteClick}>탈퇴</button>
           </div>
+          
           {showDeleteConfirmation && (
             <div className="delete-confirmation">
-              <label>비밀번호 확인:</label>
+              <label>비밀번호 확인</label>
               <input
                 type="password"
                 value={deletePassword}
                 onChange={e => setDeletePassword(e.target.value)}
               />
-              <button type="button" onClick={handleDeleteConfirmation}>탈퇴확인</button>
+              <button type="button" className="button" onClick={handleDeleteConfirmation}>탈퇴확인</button>
             </div>
           )}
         </form>
