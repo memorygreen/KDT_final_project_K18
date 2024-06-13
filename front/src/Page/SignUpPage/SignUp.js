@@ -94,7 +94,7 @@ const Signup = () => {
                 id="password"
                 type="password"
                 name="password"
-                placeholder="사용하실 비밀번호를 입력해주세요."
+                placeholder="사용하실 비밀번호를 영어+숫자 6글자 이상 입력해주세요."
                 title="Minimum 6 characters at least 1 Alphabet and 1 Number"
                 pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$"
                 value={password}
@@ -165,17 +165,6 @@ const Signup = () => {
               <div className="gender_radio_btn_div">
                 <input
                   type="radio"
-                  id="male"
-                  name="gender"
-                  value="male"
-                  checked={gender === 'male'}
-                  onChange={(e) => setGender(e.target.value)}
-                  required
-                />
-                <label htmlFor="male">남자</label>
-
-                <input
-                  type="radio"
                   id="female"
                   name="gender"
                   value="female"
@@ -184,6 +173,17 @@ const Signup = () => {
                   required
                 />
                 <label htmlFor="female">여자</label>
+
+                <input
+                  type="radio"
+                  id="male"
+                  name="gender"
+                  value="male"
+                  checked={gender === 'male'}
+                  onChange={(e) => setGender(e.target.value)}
+                  required
+                />
+                <label htmlFor="male">남자</label>
               </div>
             </div>
 

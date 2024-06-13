@@ -71,7 +71,7 @@ def signup():
             session['user_id'] = user_id
 
             # 회원가입 성공 응답
-            return jsonify({'message': 'User registered successfully', 'signup': True}), 201
+            return jsonify({'message': '회원가입에 성공했습니다. 로그인페이지로 이동합니다.', 'signup': True}), 201
     except Exception as e:
         # 오류 메시지를 반환
         return jsonify({'message': str(e)}), 500
