@@ -61,7 +61,6 @@ yarn-error.log*
 
 .env
 
-db.py
 __pycache__
 
 venv

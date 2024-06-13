@@ -32,8 +32,7 @@ def get_all_missing_info():
         clothes = cursor.fetchall()
 
         # 포스터 정보 가져오기
-        sql_poster = "SELECT * FROM TB_POSTER WHERE MISSING_IDX=%s "
-        #AND POSTER_SHOW=1 추가하면 1인 포스터만 보임
+        sql_poster = "SELECT * FROM TB_POSTER WHERE MISSING_IDX=%s AND POSTER_SHOW=1 "
         cursor.execute(sql_poster, (missing_idx,))
         poster = cursor.fetchone()
 
@@ -49,8 +48,8 @@ def get_all_missing_info():
                 'MISSING_LOCATION_LAT': missing[6],
                 'MISSING_LOCATION_LON': missing[7],
                 'MISSING_FINDING': missing[8],
-                'MISSING_LOCATION' : missing[9],
-                'MISSING_AGE' : missing[10],
+                'MISSING_LOCATION': missing[9],
+                'MISSING_AGE': missing[10],
                 'MISSING_CLOTHES': [{
                     'MISSING_CLOTHES_IDX': cloth[0],
                     'MISSING_IDX': cloth[1],
@@ -261,8 +260,7 @@ def post_no_show():
         return jsonify({"error": str(e)}), 500
 
 
-
-@post_bp.route('/missing_info_oneuser', methods=['GET','POST'])
+@post_bp.route('/missing_info_oneuser', methods=['GET', 'POST'])
 def get_all_missing_info_oneuser():
     user_id = request.json.get('user_id')
     print(user_id)
@@ -272,7 +270,7 @@ def get_all_missing_info_oneuser():
     db = db_con()
     cursor = db.cursor()
 
-    # 실종자 정보 가져오기 (테이블 이름을 정확하게 확인하고 수정)   
+    # 실종자 정보 가져오기 (테이블 이름을 정확하게 확인하고 수정)
     sql_missing = "SELECT * FROM TB_MISSING WHERE MISSING_FINDING='finding' AND USER_ID=%s"
     cursor.execute(sql_missing, (user_id,))
     missings = cursor.fetchall()
@@ -304,8 +302,8 @@ def get_all_missing_info_oneuser():
                 'MISSING_LOCATION_LAT': missing[6],
                 'MISSING_LOCATION_LON': missing[7],
                 'MISSING_FINDING': missing[8],
-                'MISSING_LOCATION' : missing[9],
-                'MISSING_AGE' : missing[10],
+                'MISSING_LOCATION': missing[9],
+                'MISSING_AGE': missing[10],
                 'MISSING_CLOTHES': [{
                     'MISSING_CLOTHES_IDX': cloth[0],
                     'MISSING_IDX': cloth[1],

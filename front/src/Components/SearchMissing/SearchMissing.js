@@ -123,14 +123,12 @@ const SearchMissing = ({ initialData }) => {
         console.log('handle_submit 들어왔는지 확111')
         event.preventDefault();
         console.log('handle_submit 들어왔는지 확인222')
-
         if (missingImg) {
             console.log('missingImg 들어왔는지 확인')
             try {
                 const uploadedImageUrl = await UploadMissingImg(missingImg); // 업로드 완료될때까지 기다리기
                 setMissingImgUrl(uploadedImageUrl);         
                 console.log("업로드된 이미지 URL:", uploadedImageUrl);
-
                 // missingImgUrl = Url;
                 console.log("업로드된 이미지 URL (확인)):", missingImgUrl); // URL을 로그로 출력
             } catch (error) {
