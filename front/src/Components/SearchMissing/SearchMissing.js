@@ -23,23 +23,23 @@ const SearchMissing = ({ initialData }) => {
 
 
     // 인적사항 변수
-    const [missingName, setMissingName] = useState(initialData?.missingName || '');
-    const [missingAge, setMissingAge] = useState(initialData?.missingAge || '');
-    const [missingGender, setMissingGender] = useState(initialData?.missingGender || '');
-    const [missingLocation, setMissingLocation] = useState(initialData?.missingLocation || '');
-    const [missingLocationLat, setMissingLocationLat] = useState(initialData?.missingLocationLat || '');
-    const [missingLocationLng, setMissingLocationLng] = useState(initialData?.missingLocationLng || '');
-    const [missingImgUrl, setMissingImgUrl] = useState(initialData?.missingImgUrl || '');
+    const [missingName, setMissingName] = useState('');
+    const [missingAge, setMissingAge] = useState('');
+    const [missingGender, setMissingGender] = useState('');
+    const [missingLocation, setMissingLocation] = useState('');
+    const [missingLocationLat, setMissingLocationLat] = useState('');
+    const [missingLocationLng, setMissingLocationLng] = useState('');
+    const [missingImgUrl, setMissingImgUrl] = useState('');
 
     // 인상착의 변수
-    const [selectedTop, setSelectedTop] = useState(initialData?.selectedTop || '');
-    const [selectedTopColor, setSelectedTopColor] = useState(initialData?.selectedTopColor || '');
-    const [selectedBottom, setSelectedBottom] = useState(initialData?.selectedBottom || '');
-    const [selectedBottomColor, setSelectedBottomColor] = useState(initialData?.selectedBottomColor || '');
-    const [selectedBelongings, setSelectedBelongings] = useState(initialData?.selectedBelongings || '');
+    const [selectedTop, setSelectedTop] = useState('');
+    const [selectedTopColor, setSelectedTopColor] = useState('');
+    const [selectedBottom, setSelectedBottom] = useState('');
+    const [selectedBottomColor, setSelectedBottomColor] = useState('');
+    const [selectedBelongings, setSelectedBelongings] = useState('');
 
-    const [missingClothesEtc, setMissingClothesEtc] = useState(initialData?.missingClothesEtc || '');
-    const [missingBelongingsEtc, setMissingBelongingsEtc] = useState(initialData?.missingBelongingsEtc || '');
+    const [missingClothesEtc, setMissingClothesEtc] = useState('');
+    const [missingBelongingsEtc, setMissingBelongingsEtc] = useState('');
     // 실종자 이미지 
     const [missingImg, setMissingImg] = useState([]);
 
@@ -138,6 +138,11 @@ const SearchMissing = ({ initialData }) => {
             } catch (error) {
                 console.error('실종자 이미지 aws 업로드 실패 Failed to upload image');
             }
+
+
+
+
+            
             const prompt = `
             실종자를 찾는 포스터를 생성
             실종자 정보 : 동양인
@@ -149,6 +154,12 @@ const SearchMissing = ({ initialData }) => {
             하의 색상: ${selectedBottomColor}
             해당하는 이미지 생성해줘
             `;
+
+
+
+
+
+
             console.log(prompt);
             if (missingImgUrl) {
                 // 백으로 보내기
@@ -183,7 +194,7 @@ const SearchMissing = ({ initialData }) => {
                 })
                     .then(async (response) => {
                         console.log('실종자 정보 등록 성공 successfully:', response.data);
-                        alert("등록 성공")
+                        alert("등록 성공(포스터 생성 시 완료까지 시간이 소요됩니다)")
                         navigate('/'); // 성공 후 메인 페이지로 리다이렉트
 
                         // 포스터 생성
