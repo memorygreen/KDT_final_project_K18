@@ -81,7 +81,7 @@ const Myuserinfo = ({ sessionId, onIconClick }) => {
     return (
         <div className='Mypage_userinfo_all'>
             <div className='Mypage_userinfo'>
-                <img src={userInfo && userInfo.USER_IMG ? userInfo.USER_IMG : default_profile} alt={default_profile} />
+                <img className='userinfo_img' src={userInfo && userInfo.USER_IMG ? userInfo.USER_IMG : default_profile} alt={default_profile} />
                 <div className='Mypage_userinfo_name'>{userInfo && userInfo.USER_NAME}</div>
             </div>
             <div className='Mypage_userinfo_icon'>
@@ -93,13 +93,14 @@ const Myuserinfo = ({ sessionId, onIconClick }) => {
             </div>
             {showMissingList && (
                 <div className='My_missingList'>
-                    <ul>
-                        {missingList.map((missing) => (
-                            <li key={missing.MISSING_IDX} onClick={() => handleMissingClick(missing)}>
-                                {missing.MISSING_NAME}
-                            </li>
-                        ))}
-                    </ul>
+                    <div className='My_missingList_title'>
+                        실종자 목록
+                    </div>
+                    {missingList.map((missing) => (
+                        <div key={missing.MISSING_IDX} onClick={() => handleMissingClick(missing)}>
+                            {missing.MISSING_NAME}
+                        </div>
+                    ))}
                 </div>
             )}
             {isModalOpen && (
