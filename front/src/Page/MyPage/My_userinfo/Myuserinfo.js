@@ -11,11 +11,11 @@ import alramck from '../assets/alrck.png'
 const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx }) => {
     const [showMissingList, setShowMissingList] = useState(true);
     const [userId, setUserId] = useState(sessionId);
-    const [userInfo, setUserInfo] = useState();
+    const [userInfo, setUserInfo] = useState(null);
     const [missingList, setMissingList] = useState([]);
     const [selectedMissing, setSelectedMissing] = useState(null); // State to store selected missing person info
     const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal open/close
-    const [notificationStatus, setNotificationStatus] = useState('read'); // State to check if notification is read or unread
+    
 
     const handleMissingClick = (missing) => {
         setSelectedMissing(missing); // Store selected missing person info
@@ -30,10 +30,8 @@ const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx }) => {
     // 알람 및 설정 아이콘 클릭 핸들러
     const handleIconClick = (type) => {
         onIconClick(type);
-        setShowMissingList(false);  // Hide missing list
-        if (type === 'notification') {
-            setNotificationStatus('read'); // Set notification as read
-        }
+        setShowMissingList(type !== 'notification');
+        
     }
 
     // 유저 정보 불러오기
@@ -76,7 +74,8 @@ const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx }) => {
         return () => {
             eventSource.close();
         };
-    }, []);
+    }, [userId]);
+    
     const notificationIcon = userInfo && userInfo.USER_NOTIFICATION_STATUS === 'unread' ? alramck : alram;
 
     return (
@@ -87,11 +86,15 @@ const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx }) => {
             </div>
             <div className='Mypage_userinfo_icon'>
                 <div onClick={() => handleIconClick('notification')}>
-                    <img src={notificationIcon} alt="alram" />
+                    <img src={notificationIcon} alt="alarm" />
                 </div>
-                <div onClick={handleCapClick}><img src={cap} alt="cap" /></div>
-                <div onClick={() => handleIconClick('update')}><img src={setting} alt="setting" /></div>
-            </div>
+                <div onClick={handleCapClick}>
+                    <img src={cap} alt="cap" />
+                </div>
+                <div onClick={() => handleIconClick('update')}>
+                    <img src={setting} alt="Settings" />
+                </div>
+                </div>
             {showMissingList && (
                 <div className='My_missingList'>
                     <div className='My_missingList_title'>
@@ -117,6 +120,6 @@ const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx }) => {
             )}
         </div>
     );
-}
+};
 
 export default Myuserinfo;

@@ -133,13 +133,17 @@ def userInfoOne():
     try:
         connection = db_con()
         with connection.cursor() as cursor:
-            sql = "SELECT USER_NAME, USER_BRT_DT, USER_GENDER, USER_PHONE, USER_STATUS, USER_CATE FROM TB_USER WHERE USER_ID = %s"
+            sql = """
+            SELECT USER_NAME, USER_BRT_DT, USER_GENDER, USER_PHONE, USER_STATUS, USER_CATE ,USER_ALARM_CK 
+            FROM TB_USER 
+            WHERE USER_ID = %s
+            """
             cursor.execute(sql, (user_id,))
             user_data = cursor.fetchone()
             if user_data:
                 # 튜플을 딕셔너리로 변환
                 keys = ["USER_NAME", "USER_BRT_DT", "USER_GENDER",
-                        "USER_PHONE", "USER_STATUS", "USER_CATE"]
+                        "USER_PHONE", "USER_STATUS", "USER_CATE","USER_ALARM_CK"]
                 user_data_dict = dict(zip(keys, user_data))
                 return jsonify(user_data_dict), 200
             else:
