@@ -6,7 +6,7 @@ import alram from '../assets/alr.png';
 import setting from '../assets/set.png';
 import cap from '../assets/cap.png';
 import CardModal from '../../../Components/Cards/CardModal/CardModal'; // CardModal component imported
-import alramck from '../assets/alrck.png'
+
 
 const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx }) => {
     const [showMissingList, setShowMissingList] = useState(true);
@@ -30,10 +30,8 @@ const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx }) => {
     // 알람 및 설정 아이콘 클릭 핸들러
     const handleIconClick = (type) => {
         onIconClick(type);
-        setShowMissingList(type !== 'notification');
-
+        setShowMissingList(false);
     }
-
     // 유저 정보 불러오기
     const fetchUserInfo = () => {
         axios.post('/userInfoOne', { user_id: userId })
@@ -45,7 +43,6 @@ const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx }) => {
                 console.error('Error fetching user info:', error);
             });
     };
-
     // 실종자 목록 불러오기
     const fetchMissingData = () => {
         axios.post('/missing_info_oneuser', { user_id: userId })  // 'userId' changed to 'user_id'
@@ -61,22 +58,11 @@ const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx }) => {
     useEffect(() => {
         fetchMissingData();
         fetchUserInfo();
+    }, []);
 
-        // Setup push notification listener
-        const eventSource = new EventSource('http://127.0.0.1:5000/notify');
-        eventSource.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            if (data.user_id === userId) {
-                fetchUserInfo();
-            }
-        };
 
-        return () => {
-            eventSource.close();
-        };
-    }, [userId]);
 
-    const notificationIcon = userInfo && userInfo.USER_NOTIFICATION_STATUS === 'unread' ? alramck : alram;
+
 
     return (
         <div className='Mypage_userinfo_all'>
@@ -85,9 +71,7 @@ const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx }) => {
                 <div className='Mypage_userinfo_name'>{userInfo && userInfo.USER_NAME}</div>
             </div>
             <div className='Mypage_userinfo_icon'>
-                <div onClick={() => handleIconClick('notification')}>
-                    <img src={notificationIcon} alt="alarm" />
-                </div>
+                <div onClick={() => handleIconClick('notification')}><img src={alram} alt="alram" /></div>
                 <div onClick={handleCapClick}>
                     <img src={cap} alt="cap" />
                 </div>
