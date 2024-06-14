@@ -1,1 +1,6 @@
 /* MainPage.css */
+.Main_start{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
