@@ -70,7 +70,7 @@ def notify():
 def send_push_notification(user_id):
     # Send notification to all clients (in a real scenario, you'd send to specific clients)
     clients.append({"user_id": user_id, "message": "You have a new alert"})
-
+    print(f"Notification sent to user {user_id}")  # Add this line for debugging
 
 
 #제보 받은 알람 목록 보기
