@@ -5,27 +5,39 @@ import './MyCapture.css';
 
 const MyCapture = ({ sessionId, missingIdx }) => {
     const [captures, setCaptures] = useState([]);
-    const [missing_idx, set_missing_idx] = useState(missingIdx);
 
-    useEffect(() => {
+    const fetchUserCaptures = () => {
         axios.post('/get_user_captures', {
-            session_id: sessionId,
-            missing_idx: missing_idx
+            user_id: sessionId,
         })
             .then(response => {
-                console.log('실종자idx 넘기기 성공:', response.data);
-                alert("등록 성공(포스터 생성 시 완료까지 시간이 소요됩니다)")
+                setCaptures(response.data);
             })
             .catch(error => {
                 console.error('실종자 idx 넘기기 실패')
-
             });
+    };
+    useEffect(() => {
+        fetchUserCaptures();
+    }, []);
 
-    }, [sessionId]);
+    useEffect(() => {
+        if (missingIdx) {
+            axios.post('/get_captures_by_missing', {
+                MISSING_IDX: missingIdx,
+            })
+                .then(response => {
+                    setCaptures(response.data);
+                })
+                .catch(error => {
+                    console.error('Error fetching capture data:', error);
+                });
+        }
+    }, [missingIdx]);
 
     return (
         <div className="Mypage_capture_all">
-            <div className="Mypage_capture_all_title">
+            <div className="Mypage_capture_all_title" onClick={fetchUserCaptures}>
                 캡처 목록
             </div>
             <div className="Mypage_capture_all_grid" >
@@ -35,13 +47,6 @@ const MyCapture = ({ sessionId, missingIdx }) => {
                     </div>
                 ))}
             </div>
-
-            {/* user가 가진 전체 캡처 나오게 하기*/}
-
-
-
-
-
         </div>
     )
 }
