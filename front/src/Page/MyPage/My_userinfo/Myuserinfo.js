@@ -6,16 +6,16 @@ import alram from '../assets/alr.png';
 import setting from '../assets/set.png';
 import cap from '../assets/cap.png';
 import CardModal from '../../../Components/Cards/CardModal/CardModal'; // CardModal component imported
-import alramck from '../assets/alrck.png'
 
-const Myuserinfo = ({ sessionId, onIconClick }) => {
+
+const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx }) => {
     const [showMissingList, setShowMissingList] = useState(true);
     const [userId, setUserId] = useState(sessionId);
     const [userInfo, setUserInfo] = useState(null);
     const [missingList, setMissingList] = useState([]);
     const [selectedMissing, setSelectedMissing] = useState(null); // State to store selected missing person info
     const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal open/close
-    
+
 
     const handleMissingClick = (missing) => {
         setSelectedMissing(missing); // Store selected missing person info
@@ -30,12 +30,11 @@ const Myuserinfo = ({ sessionId, onIconClick }) => {
     // 알람 및 설정 아이콘 클릭 핸들러
     const handleIconClick = (type) => {
         onIconClick(type);
-        setShowMissingList(type !== 'notification');
-        
-    }
+        setShowMissingList(false);
 
-    // 유저 정보 불러오기
-    const fetchUserInfo = () => {
+    }
+     // 유저 정보 불러오기
+     const fetchUserInfo = () => {
         axios.post('/userInfoOne', { user_id: userId })
             .then(response => {
                 console.log('User info:', response.data);
@@ -45,7 +44,6 @@ const Myuserinfo = ({ sessionId, onIconClick }) => {
                 console.error('Error fetching user info:', error);
             });
     };
-
     // 실종자 목록 불러오기
     const fetchMissingData = () => {
         axios.post('/missing_info_oneuser', { user_id: userId })  // 'userId' changed to 'user_id'
@@ -60,49 +58,39 @@ const Myuserinfo = ({ sessionId, onIconClick }) => {
     useEffect(() => {
         fetchMissingData();
         fetchUserInfo();
-
-        // Setup push notification listener
-        const eventSource = new EventSource('http://127.0.0.1:5000/notify');
-        eventSource.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            if (data.user_id === userId) {
-                fetchUserInfo();
-            }
-        };
-
-        return () => {
-            eventSource.close();
-        };
-    }, [userId]);
+    }, []);
     
-    const notificationIcon = userInfo && userInfo.USER_NOTIFICATION_STATUS === 'unread' ? alramck : alram;
+
 
     return (
         <div className='Mypage_userinfo_all'>
             <div className='Mypage_userinfo'>
-                <img src={userInfo && userInfo.USER_IMG ? userInfo.USER_IMG : default_profile} alt={default_profile} />
+                <img className='userinfo_img' src={userInfo && userInfo.USER_IMG ? userInfo.USER_IMG : default_profile} alt={default_profile} />
                 <div className='Mypage_userinfo_name'>{userInfo && userInfo.USER_NAME}</div>
             </div>
             <div className='Mypage_userinfo_icon'>
-                <div onClick={() => handleIconClick('notification')}>
-                    <img src={notificationIcon} alt="alarm" />
-                </div>
+            <div onClick={() => handleIconClick('notification')}><img src={alram} alt="alram" /></div>
                 <div onClick={handleCapClick}>
                     <img src={cap} alt="cap" />
                 </div>
                 <div onClick={() => handleIconClick('update')}>
                     <img src={setting} alt="Settings" />
                 </div>
-                </div>
+            </div>
             {showMissingList && (
                 <div className='My_missingList'>
-                    <ul>
+                    <div className='My_missingList_title'>
+                        실종자 목록
+                    </div>
+                    <div className='My_missingList_items'>
                         {missingList.map((missing) => (
-                            <li key={missing.MISSING_IDX} onClick={() => handleMissingClick(missing)}>
+                            // <li key={missing.MISSING_IDX} onClick={() => handleMissingClick(missing)}>
+                            <div className='My_missingList_item' key={missing.MISSING_IDX} onClick={() => { setMissingIdx(missing.MISSING_IDX) }}>
                                 {missing.MISSING_NAME}
-                            </li>
+                                <button className='Mypage_missing_btn' onClick={() => handleMissingClick(missing)}></button>
+                            </div>
                         ))}
-                    </ul>
+                    </div>
                 </div>
             )}
             {isModalOpen && (

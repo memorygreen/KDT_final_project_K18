@@ -20,6 +20,7 @@ const NoNotification = ({ sessionId }) => {
                     }, {
                         headers: {
                             'Content-Type': 'application/json'
+                            
                         }
                     }),
                     axios.post('http://localhost:5000/my_report', {
