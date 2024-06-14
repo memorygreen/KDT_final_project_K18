@@ -3,7 +3,6 @@ import './NevBar.css';
 import logo from "./assets/logo.png";
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import NoNotification from '../../Page/MyPage/My_alram/NoNotificaiton';
 
 const NevBar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -39,12 +38,12 @@ const NevBar = () => {
             fetchUserInfo(session); // 초기에 사용자 정보를 가져옴
         }
 
-        // 5초마다 USER_ALARM_CK값이 1일 때 업데이트
+        // 임의로 정한 시간마다 USER_ALARM_CK값이 1일 때 업데이트
         const id = setInterval(() => {
             if (session && userAlarmCk === 1) {
                 fetchUserInfo(session);
             }
-        }, 5000);
+        }, 10000);
 
         setIntervalId(id); // intervalId 저장
 
