@@ -20,44 +20,34 @@ const NevBar = () => {
         const sessionUserCate = sessionStorage.getItem('userCate');
         setIsLoggedIn(session ? true : false);
         setUserCate(sessionUserCate);
-        if (session) {
-            fetchUserInfo(session);
-        }
-        // 5초마다  USER_ALARM_CK값이 1일떄 업데이트 한 번씩 USER_ALARM_CK이  값을 업데이트
-        const id = setInterval(() => {
-            if (session && userAlarmCk === 1) {
-                fetchUserInfo(session);
-            }
-        }, 5000);
-        setIntervalId(id); // Store the interval ID
+        
+        
+
+        const id = setInterval(fetchData, 5000); // 5초마다 fetchData 함수 실행
 
         return () => {
-            clearInterval(intervalId); // Clear interval on component unmount
+            clearInterval(id); // 컴포넌트 언마운트 시 clearInterval
         };
-    }, [userAlarmCk]);
-    const fetchUserInfo = (userId,session) => {
-        axios.post('http://localhost:5000/userInfoOne', { user_id: userId })
+    }, []);
+    const fetchData = () => {
+        axios.post('http://localhost:5000/userInfoOne', { user_id: session })
             .then(response => {
                 setUserAlarmCk(response.data.USER_ALARM_CK);
                 if (response.data.USER_ALARM_CK === 0 && intervalId) {
-                    clearInterval(intervalId); // Clear interval if USER_ALARM_CK is 0
-                } else if (response.data.USER_ALARM_CK === 1 && !intervalId) {
-                    const id = setInterval(() => {
-                        if (session && userAlarmCk === 1) {
-                            fetchUserInfo(session);
-                        }
-                    }, 5000);
-                    setIntervalId(id); // Reset interval if USER_ALARM_CK is 1
+                    clearInterval(intervalId);
                 }
             })
             .catch(error => {
                 console.error('Error fetching user info:', error);
             });
-    };
+    };   
+
+   
     const updateAlarmStatus = (userId) => {
-        axios.post('http://localhost:5000/updateAlarm', { user_id: userId  })
+        axios.post('http://localhost:5000/updateAlarm', { user_id: userId })
             .then(response => {
                 setUserAlarmCk(1); // 사용자 알람 상태를 1로 업데이트
+                
             })
             .catch(error => {
                 console.error('Error updating alarm status:', error);
