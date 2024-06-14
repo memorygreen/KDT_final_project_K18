@@ -2,11 +2,15 @@ import React, { useEffect, useState } from 'react';
 import './NevBar.css';
 import logo from "./assets/logo.png";
 import { Link, useNavigate } from 'react-router-dom';
-
+import axios from 'axios';
+import NoNotification from '../../Page/MyPage/My_alram/NoNotificaiton';
 const NevBar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userCate, setUserCate] = useState(null);
+    const [userAlarmCk, setUserAlarmCk] = useState(1);
+    const [intervalId, setIntervalId] = useState(null); // interval ID를 위한 상태 변수
+    const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 상태를 위한 상태 변수
     const navigate = useNavigate();
 
     const toggleMenu = () => {
@@ -18,12 +22,54 @@ const NevBar = () => {
         const sessionUserCate = sessionStorage.getItem('userCate');
         setIsLoggedIn(session ? true : false);
         setUserCate(sessionUserCate);
+        
+        const fetchData = () => {
+            axios.post('http://localhost:5000/userInfoOne', { user_id: session })
+                .then(response => {
+                    setUserAlarmCk(response.data.USER_ALARM_CK);
+                    if (response.data.USER_ALARM_CK === 0 && intervalId) {
+                        clearInterval(intervalId);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching user info:', error);
+                });
+        };
+
+        const id = setInterval(fetchData, 10000); // 5초마다 fetchData 함수 실행
+
+        return () => {
+            clearInterval(id); // 컴포넌트 언마운트 시 clearInterval
+        };
     }, []);
+        
+
+   
+    const updateAlarmStatus = (userId) => {
+        axios.post('http://localhost:5000/updateAlarm', { user_id: userId })
+            .then(response => {
+                setUserAlarmCk(1); // 사용자 알람 상태를 1로 업데이트
+                setIsModalOpen(true);
+            })
+            .catch(error => {
+                console.error('Error updating alarm status:', error);
+            });
+    };
 
     const handleLogout = () => {
         sessionStorage.clear();
         setIsLoggedIn(false);
         navigate('/Login');
+    };
+
+    const handleNotificationClick = () => {
+        // 모달 열기
+        setIsModalOpen(true);
+    };
+
+    const handleModalClose = () => {
+        // 모달 닫기
+        setIsModalOpen(false);
     };
     return (
         <div className="all_header">
@@ -42,7 +88,9 @@ const NevBar = () => {
                                         <Link to="/MyPage" className="link-button">MyPage</Link>
                                     </li>
                                     <li><Link to='/SearchMissingPage'>실종자등록</Link></li>
-                                    <li><Link to='#'>알림</Link></li>
+                                    <a onClick={() => updateAlarmStatus(sessionStorage.getItem('userId'))}>
+                                            {userAlarmCk === 1 ? '' : '알림'}
+                                    </a>
                                 </ul>
                             )}
                         </nav>
@@ -126,24 +174,6 @@ const NevBar = () => {
                                                         </div>
                                                     </Link>
                                                 </li>
-                                                <li>
-                                                    <Link to="">
-                                                        <div className="icon-wrapper">
-                                                            <svg className="h-5 w-5 group-hover/menu-item:text-foreground group-focus-visible/menu-item:text-foreground"
-                                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                                aria-hidden="true">
-                                                                <path strokeLinecap="round" strokeLinejoin="round"
-                                                                    strokeWidth="1.5"
-                                                                    d="M6.6594 21.8201C8.10788 22.5739 9.75418 23 11.5 23C17.299 23 22 18.299 22 12.5C22 10.7494 21.5716 9.09889 20.8139 7.64754M16.4016 3.21191C14.9384 2.43814 13.2704 2 11.5 2C5.70101 2 1 6.70101 1 12.5C1 14.287 1.44643 15.9698 2.23384 17.4428M2.23384 17.4428C1.81058 17.96 1.55664 18.6211 1.55664 19.3416C1.55664 20.9984 2.89979 22.3416 4.55664 22.3416C6.21349 22.3416 7.55664 20.9984 7.55664 19.3416C7.55664 17.6847 6.21349 16.3416 4.55664 16.3416C3.62021 16.3416 2.78399 16.7706 2.23384 17.4428ZM21.5 5.64783C21.5 7.30468 20.1569 8.64783 18.5 8.64783C16.8432 8.64783 15.5 7.30468 15.5 5.64783C15.5 3.99097 16.8432 2.64783 18.5 2.64783C20.1569 2.64783 21.5 3.99097 21.5 5.64783ZM18.25 12.5C18.25 16.2279 15.2279 19.25 11.5 19.25C7.77208 19.25 4.75 16.2279 4.75 12.5C4.75 8.77208 7.77208 5.75 11.5 5.75C15.2279 5.75 18.25 8.77208 18.25 12.5Z"
-                                                                    stroke="currentColor"></path>
-                                                            </svg>
-                                                        </div>
-                                                        <div className="item-title">
-                                                            <h3>NULL</h3>
-                                                            <p>비할당 버튼</p>
-                                                        </div>
-                                                    </Link>
-                                                </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -169,6 +199,8 @@ const NevBar = () => {
                     </button>
                 </div>
             </header>
+            {/* 모달 */}
+            {isModalOpen && <NoNotification onClose={handleModalClose} />}
         </div>
     );
 };

@@ -27,7 +27,7 @@ const CardModal = ({ isOpen, onClose, selectedArticle }) => {
             });
         }
 
-        // 컴포넌트가 언마운트될 때 overflow 속성을 원��대로 되돌립니다.
+        // 컴포넌트가 언마운트될 때 overflow 속성을 원��로 되돌립니다.
         return () => {
             document.body.style.overflow = 'auto';
         };
@@ -36,8 +36,8 @@ const CardModal = ({ isOpen, onClose, selectedArticle }) => {
     if (!isOpen) return null;
 
     const handleFirstReportClick = () => {
-        setShowReportForm(!showReportForm);
-        setShowFirstButton(false); // 버튼을 숨기도록 설정
+        setShowReportForm(true); // 제보 양식을 보여주도록 설정
+        setShowFirstButton(false); // 초기 버튼을 숨기도록 설정
     };
 
     const handleInputChange = (e) => {
@@ -71,8 +71,19 @@ const CardModal = ({ isOpen, onClose, selectedArticle }) => {
 
     const handleCloseForm = () => {
         setShowReportForm(false);
-        setShowFirstButton(true); // 접기 버튼을 누를 때 제보하기1 버튼 다시 나타나게
+        setShowFirstButton(true); // 접기 버튼을 누를 때 제보하기1 버튼 다�� 나타나게
     };
+
+    const missingInfoDetails = [
+        { label: '이름', value: selectedArticle.MISSING_NAME },
+        { label: '나이', value: selectedArticle.MISSING_AGE },
+        { label: '성별', value: selectedArticle.MISSING_GENDER },
+        { label: '상의 타입', value: selectedArticle.MISSING_CLOTHES[0].MISSING_TOP },
+        { label: '상의 색상', value: selectedArticle.MISSING_CLOTHES[0].MISSING_TOP_COLOR },
+        { label: '하의 타입', value: selectedArticle.MISSING_CLOTHES[0].MISSING_BOTTOMS },
+        { label: '하의 색상', value: selectedArticle.MISSING_CLOTHES[0].MISSING_BOTTOMS_COLOR },
+        { label: '마지막 위치', value: selectedArticle.MISSING_LOCATION }
+    ];
 
     return (
         <div className="modal_backdrop" onClick={onClose}>
@@ -83,105 +94,70 @@ const CardModal = ({ isOpen, onClose, selectedArticle }) => {
                 {selectedArticle && (
                     <figure className='Card_modal'>
                         <div className='Card_missingInfo'>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th colspan="3">실종자 정보</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td rowspan="4">
-                                            <div className='card_img'>
-                                                <img src={selectedArticle.POSTER_INFO.POSTER_IMG_PATH} alt="Poster Image" />
-                                            </div>
-                                        </td>
-                                        <td>이름</td>
-                                        <td>{selectedArticle.MISSING_NAME}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>나이</td>
-                                        <td>{selectedArticle.MISSING_AGE}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>성별</td>
-                                        <td>{selectedArticle.MISSING_GENDER}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>상의타입</td>
-                                        <td>{selectedArticle.MISSING_CLOTHES[0].MISSING_TOP}</td>
-                                    </tr>
-                                    <tr>
-                                        <td rowspan="4">
-                                            <div className='card_img'>
-                                                <img src={selectedArticle.MISSING_IMG} alt="Missing Image" />
-                                            </div>
-                                        </td>
-                                        <td>상의 색상</td>
-                                        <td>{selectedArticle.MISSING_CLOTHES[0].MISSING_TOP_COLOR}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>하의타입</td>
-                                        <td>{selectedArticle.MISSING_CLOTHES[0].MISSING_BOTTOMS}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>하의 색상</td>
-                                        <td>{selectedArticle.MISSING_CLOTHES[0].MISSING_BOTTOMS_COLOR}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>마지막 위치</td>
-                                        <td>{selectedArticle.MISSING_LOCATION}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div className="button-group">
+                            <div className='Card_missingInfo_title'>실종자 정보</div>
+                            <div className='Card_imgs'>
+                                <div className='card_img'>
+                                    <img src={selectedArticle.POSTER_INFO.POSTER_IMG_PATH} alt="Poster Image" />
+                                </div>
+                                <div className='card_img'>
+                                    <img src={selectedArticle.MISSING_IMG} alt="Missing Image" />
+                                </div>
+                            </div>
                             {showFirstButton && (
-                                <button onClick={handleFirstReportClick} className="follow">
-                                    제보하기
-                                </button>
+                                <div className='Card_missingInfo_details'>
+                                    {missingInfoDetails.map((detail, index) => (
+                                        <div key={index} className='Card_missingInfo_detail'>
+                                            <div>{detail.label}</div>
+                                            <div>{detail.value}</div>
+                                        </div>
+                                    ))}
+                                </div>
                             )}
-                            {showReportForm && (
-                                <form className='missing_report' onSubmit={handleReportSubmit}>
-                                    <hr />
-                                    <div className='missing_report_form'>
-                                        <div>발견장소 :</div>
-                                        <div>
-                                            <input
-                                                name="location"
-                                                value={reportDetails.location}
-                                                onChange={handleInputChange}
-                                            />
+                            <div className="button-group">
+                                {showFirstButton && (
+                                    <button onClick={handleFirstReportClick} className="follow">
+                                        제보하기
+                                    </button>
+                                )}
+                                {showReportForm && (
+                                    <form className='missing_report' onSubmit={handleReportSubmit}>
+                                        <hr />
+                                        <div className='missing_report_form'>
+                                            <div>발견장소</div>
+                                            <div>
+                                                <input
+                                                    name="location"
+                                                    value={reportDetails.location}
+                                                    onChange={handleInputChange}
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className='missing_report_form'>
-                                        <div>발견시간 :</div>
-                                        <div>
-                                            <input
-                                                type='datetime-local'
-                                                name="time"
-                                                value={reportDetails.time}
-                                                onChange={handleInputChange}
-                                            />
+                                        <div className='missing_report_form'>
+                                            <div>발견시간</div>
+                                            <div>
+                                                <input
+                                                    type='datetime-local'
+                                                    name="time"
+                                                    value={reportDetails.time}
+                                                    onChange={handleInputChange}
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className='missing_report_form'>
-                                        <div>특이사항 :</div>
-                                        <div>
-                                            <input
-                                                name="details"
-                                                value={reportDetails.details}
-                                                onChange={handleInputChange}
-                                            />
+                                        <div className='missing_report_form'>
+                                            <div>특이사항</div>
+                                            <div>
+                                                <input
+                                                    name="details"
+                                                    value={reportDetails.details}
+                                                    onChange={handleInputChange}
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <button type="submit" className="report_submit">전송하기</button>
-
-
-
-                                    <button type="button" className="report_cancel" onClick={handleCloseForm}>접기</button>
-                                </form>
-                            )}
+                                        <button type="submit" className="report_submit">전송하기</button>
+                                        <button type="button" className="report_cancel" onClick={handleCloseForm}>접기</button>
+                                    </form>
+                                )}
+                            </div>
                         </div>
                     </figure>
                 )}

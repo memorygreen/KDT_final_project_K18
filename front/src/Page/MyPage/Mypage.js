@@ -24,6 +24,7 @@ const MyPage = () => {
 
     return (
         <div className="Mypages">
+
         <header><NevBar /></header>
         <div className='Mypage_main'>
             <div className="Mypage_container">
@@ -46,6 +47,7 @@ const MyPage = () => {
                             <Notification sessionId={sessionId} />
                         </div>
                     )}
+
                 </div>
             </div>
         </div>

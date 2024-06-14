@@ -69,7 +69,7 @@ const Signup = () => {
         <form className="my-form" onSubmit={handleSubmit}>
           <div className="signup-welcome-row">
             <Link to="/">
-              <img className="signup-welcome" alt="Logo" src={logo} />
+              <img className="logo" alt="Logo" src={logo} />
             </Link>
             <h1>회원가입</h1>
           </div>
@@ -186,8 +186,6 @@ const Signup = () => {
                 <label htmlFor="male">남자</label>
               </div>
             </div>
-
-
 
           </div>
           <div className="my-form__actions">
