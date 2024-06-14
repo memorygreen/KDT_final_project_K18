@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import './NevBar.css';
 import logo from "./assets/logo.png";
 import { Link, useNavigate } from 'react-router-dom';
-
+import axios from 'axios';
 const NevBar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userCate, setUserCate] = useState(null);
+    const [userAlarmCk, setUserAlarmCk] = useState(1);
+    const [intervalId, setIntervalId] = useState(null); // interval ID를 위한 상태 변수
     const navigate = useNavigate();
 
     const toggleMenu = () => {
@@ -18,7 +20,49 @@ const NevBar = () => {
         const sessionUserCate = sessionStorage.getItem('userCate');
         setIsLoggedIn(session ? true : false);
         setUserCate(sessionUserCate);
-    }, []);
+        if (session) {
+            fetchUserInfo(session);
+        }
+        // 5초마다  USER_ALARM_CK값이 1일떄 업데이트 한 번씩 USER_ALARM_CK이  값을 업데이트
+        const id = setInterval(() => {
+            if (session && userAlarmCk === 1) {
+                fetchUserInfo(session);
+            }
+        }, 5000);
+        setIntervalId(id); // Store the interval ID
+
+        return () => {
+            clearInterval(intervalId); // Clear interval on component unmount
+        };
+    }, [userAlarmCk]);
+    const fetchUserInfo = (userId,session) => {
+        axios.post('http://localhost:5000/userInfoOne', { user_id: userId })
+            .then(response => {
+                setUserAlarmCk(response.data.USER_ALARM_CK);
+                if (response.data.USER_ALARM_CK === 0 && intervalId) {
+                    clearInterval(intervalId); // Clear interval if USER_ALARM_CK is 0
+                } else if (response.data.USER_ALARM_CK === 1 && !intervalId) {
+                    const id = setInterval(() => {
+                        if (session && userAlarmCk === 1) {
+                            fetchUserInfo(session);
+                        }
+                    }, 5000);
+                    setIntervalId(id); // Reset interval if USER_ALARM_CK is 1
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching user info:', error);
+            });
+    };
+    const updateAlarmStatus = (userId) => {
+        axios.post('http://localhost:5000/updateAlarm', { user_id: userId  })
+            .then(response => {
+                setUserAlarmCk(1); // 사용자 알람 상태를 1로 업데이트
+            })
+            .catch(error => {
+                console.error('Error updating alarm status:', error);
+            });
+    };
 
     const handleLogout = () => {
         sessionStorage.clear();
@@ -42,7 +86,9 @@ const NevBar = () => {
                                         <Link to="/MyPage" className="link-button">MyPage</Link>
                                     </li>
                                     <li><Link to='/SearchMissingPage'>실종자등록</Link></li>
-                                    <li><Link to='#'>알림</Link></li>
+                                    <a to='#' onClick={() => updateAlarmStatus(sessionStorage.getItem('userId'))}>
+                                            {userAlarmCk === 1 ? '' : '알림'}
+                                    </a>
                                 </ul>
                             )}
                         </nav>

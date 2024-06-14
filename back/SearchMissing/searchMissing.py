@@ -7,7 +7,7 @@ from math import sin, cos, sqrt, atan2, radians
 search_missing_bp = Blueprint('SearchMissing', __name__)
 
 cctv_distances_lock = asyncio.Lock()
-
+# 메소드 :search_missing, fetch_cctv_data,nearest_cctvs,calculate_distance
 @search_missing_bp.route('/SearchMissing', methods=['POST'])
 async def search_missing():
     try:
