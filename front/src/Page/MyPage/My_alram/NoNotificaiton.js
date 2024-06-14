@@ -66,7 +66,7 @@ const NoNotification = ({ sessionId }) => {
     useEffect(() => {
         // 모달이 열릴 때 기본적으로 전체 알림을 설정하고 최근 7개만 필터링
         setFilter('all');
-        setFilteredNotifications(notifications.slice(0, 7));
+        setFilteredNotifications(notifications);
     }, [notifications]);
 
 
