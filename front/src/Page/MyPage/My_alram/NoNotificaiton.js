@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './Notification.css';
+
 
 const NoNotification = ({ sessionId }) => {
     const [notifications, setNotifications] = useState([]);
@@ -13,9 +13,10 @@ const NoNotification = ({ sessionId }) => {
 
     useEffect(() => {
         const fetchNotifications = async () => {
+            const userId = sessionStorage.getItem('userId');
             try {
                 const [captureResponse, reportResponse] = await Promise.all([
-                    axios.post('http://localhost:5000/my_capture', {
+                    axios.post('http://localhost:5000/my_no_capture', {
                         user_id: userId
                     }, {
                         headers: {
@@ -23,7 +24,7 @@ const NoNotification = ({ sessionId }) => {
                             
                         }
                     }),
-                    axios.post('http://localhost:5000/my_report', {
+                    axios.post('http://localhost:5000/my_no_report', {
                         user_id: userId
                     }, {
                         headers: {
