@@ -42,7 +42,7 @@ def report_missing_person():
                 USER_ID = result[0]
 
                 # Update the USER_ALARM_CK to 0 for the user
-                update_alarm_query = "UPDATE TB_USER SET USER_ALARM_CK = 0 WHERE USER_ID = %s"
+                update_alarm_query = "UPDATE TB_USER SET USER_ALARM_CK = 0 WHERE USER_ID = %s AND USER_ARARM_CK=1"
                 cursor.execute(update_alarm_query, (USER_ID,))
                 # Commit changes
                 db.commit()
@@ -121,7 +121,7 @@ def my_notification():
 
     return jsonify(result), 200
         
-
+# 안읽은 제보 알람보기
 @report_bp.route('/my_no_report', methods=['POST'])
 def my_no_notification():
     data = request.get_json()
