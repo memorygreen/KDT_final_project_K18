@@ -193,7 +193,7 @@ def create_poster():
 
         scheduler.add_job(disable_poster, 'date', run_date=datetime.now() + timedelta(days=1),
                           args=[user_id, missing_idx])
-        # timedelta(minutes=1) 1분으로 설정
+        # timedelta(minutes=1) 1분으로 설정 timedelta(days=1)
         db.commit()
 
         return jsonify({'message': 'Poster created successfully', 'MISSING_IDX': missing_idx}), 201
