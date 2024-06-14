@@ -42,6 +42,7 @@ const NevBar = () => {
                                         <Link to="/MyPage" className="link-button">MyPage</Link>
                                     </li>
                                     <li><Link to='/SearchMissingPage'>실종자등록</Link></li>
+                                    <li><Link to='#'>알림</Link></li>
                                 </ul>
                             )}
                         </nav>
