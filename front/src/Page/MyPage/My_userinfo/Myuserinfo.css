@@ -12,7 +12,8 @@
     border: 1px solid #ccc;
     border-radius: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 100%; /* 모든 container의 너비를 100%로 설정 */
+    width: 100%;
+    /* 모든 container의 너비를 100%로 설정 */
 }
 
 .Mypage_userinfo {
@@ -27,6 +28,7 @@
     justify-content: space-evenly;
     margin: 10px;
 }
+
 .Mypage_userinfo_icon>div>img {
     width: 40px;
     height: 40px;
@@ -42,25 +44,52 @@
     width: 150px;
     height: 150px;
     border-radius: 50%;
+    align-items: center;
+    
 }
 
 .Mypage_userinfo_name {
     display: flex;
     flex-direction: column;
     align-items: center;
+    font-weight: bold;
+    font-size: 20px;
+    padding: 10px;
 }
-.My_missingList_title{
+
+.My_missingList_title {
     font-size: 20px;
     font-weight: 600;
     width: 100%;
     margin-bottom: 10px;
     text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 20px;
 }
 
-
-.My_missingList div{
-    margin: 5px;
+.My_missingList {
+    width: 100%;
+    height: 100%;
+}
+.My_missingList_items{
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    width: 100%;
+}
+.My_missingList_item{
+    margin: 5px;
+    text-align: center;
+}
+.My_missingList_item button{
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: none;
+    background-color: rgba(0, 0, 255, 0.151);
+    margin-left: 10px;
 }

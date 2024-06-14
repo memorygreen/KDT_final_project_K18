@@ -18,33 +18,35 @@ const MyPage = () => {
     const [missingIdx, setMissingIdx] = useState()
 
 
-    useEffect(()=>{ // idx 호출이 잘 됐는지 확인하는 user effect (only 확인용)
+    useEffect(() => { // idx 호출이 잘 됐는지 확인하는 user effect (only 확인용)
         console.log('missing idx changed', missingIdx)
-    },[missingIdx])
+    }, [missingIdx])
 
     return (
         <div className="Mypages">
             <header><NevBar /></header>
-            <div className="Mypage_container">
-                <div className='Mypage_userinfo'>
-                    <Myuserinfo  setMissingIdx={setMissingIdx} sessionId={sessionId} onIconClick={handleIconClick} />
-                </div>
-                <div className='Mypage_content'>
-                    {activeComponent === 'capture' && (
-                        <div className='Mypage_capture'>
-                            <MyCapture sessionId={sessionId} missingIdx={missingIdx}/>
-                        </div>
-                    )}
-                    {activeComponent === 'update' && (
-                        <div className='Mypage_modify'>
-                            <UserUpdate sessionId={sessionId} />
-                        </div>
-                    )}
-                    {activeComponent === 'notification' && (
-                        <div className='Mypage_alarm'>
-                            <Notification sessionId={sessionId} />
-                        </div>
-                    )}
+            <div className='Mypage_main'>
+                <div className="Mypage_container">
+                    <div className='Mypage_userinfo'>
+                        <Myuserinfo setMissingIdx={setMissingIdx} sessionId={sessionId} onIconClick={handleIconClick} />
+                    </div>
+                    <div className='Mypage_content'>
+                        {activeComponent === 'capture' && (
+                            <div className='Mypage_capture'>
+                                <MyCapture sessionId={sessionId} missingIdx={missingIdx} />
+                            </div>
+                        )}
+                        {activeComponent === 'update' && (
+                            <div className='Mypage_modify'>
+                                <UserUpdate sessionId={sessionId} />
+                            </div>
+                        )}
+                        {activeComponent === 'notification' && (
+                            <div className='Mypage_alarm'>
+                                <Notification sessionId={sessionId} />
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div >

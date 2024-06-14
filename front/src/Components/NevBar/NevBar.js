@@ -164,6 +164,27 @@ const NevBar = () => {
                                                         <div className="item-title">
                                                             <h3>실종자 관리</h3>
                                                             <p>등록된 실종자의 관리</p>
+
+                                                            <p>실종자의 상태 및 정보 관리</p>
+                                                        </div>
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link to='/Admincctv'>
+                                                        <div className="icon-wrapper">
+                                                            <svg className="h-5 w-5 group-hover/menu-item:text-foreground group-focus-visible/menu-item:text-foreground"
+                                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                                aria-hidden="true">
+                                                                <path strokeLinecap="round" strokeLinejoin="round"
+                                                                    strokeWidth="1.5"
+                                                                    d="M20.4997 12.1386V9.15811L14.8463 3.53163H6.43717C5.57423 3.53163 4.87467 4.23119 4.87467 5.09413V9.78087M20.4447 9.13199L14.844 3.53125L14.844 7.56949C14.844 8.43243 15.5436 9.13199 16.4065 9.13199L20.4447 9.13199ZM7.12729 9.78087H4.83398C3.97104 9.78087 3.27148 10.4804 3.27148 11.3434V19.1559C3.27148 20.8818 4.67059 22.2809 6.39648 22.2809H18.8965C20.6224 22.2809 22.0215 20.8818 22.0215 19.1559V13.7011C22.0215 12.8381 21.3219 12.1386 20.459 12.1386H10.8032C10.3933 12.1386 9.99969 11.9774 9.70743 11.6899L8.22312 10.2296C7.93086 9.94202 7.53729 9.78087 7.12729 9.78087Z"
+                                                                    stroke="currentColor"></path>
+                                                            </svg>
+                                                        </div>
+                                                        <div className="item-title">
+                                                            <h3>CCTV 관리</h3>
+                                                            <p>CCTV 상태 및 정보 관리</p>
+
                                                         </div>
                                                     </Link>
                                                 </li>
