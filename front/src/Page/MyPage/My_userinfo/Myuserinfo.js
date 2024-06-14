@@ -15,7 +15,7 @@ const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx }) => {
     const [missingList, setMissingList] = useState([]);
     const [selectedMissing, setSelectedMissing] = useState(null); // State to store selected missing person info
     const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal open/close
-    
+
 
     const handleMissingClick = (missing) => {
         setSelectedMissing(missing); // Store selected missing person info
@@ -31,7 +31,7 @@ const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx }) => {
     const handleIconClick = (type) => {
         onIconClick(type);
         setShowMissingList(type !== 'notification');
-        
+
     }
 
     // 유저 정보 불러오기
@@ -75,7 +75,7 @@ const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx }) => {
             eventSource.close();
         };
     }, [userId]);
-    
+
     const notificationIcon = userInfo && userInfo.USER_NOTIFICATION_STATUS === 'unread' ? alramck : alram;
 
     return (
@@ -94,7 +94,7 @@ const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx }) => {
                 <div onClick={() => handleIconClick('update')}>
                     <img src={setting} alt="Settings" />
                 </div>
-                </div>
+            </div>
             {showMissingList && (
                 <div className='My_missingList'>
                     <div className='My_missingList_title'>
@@ -102,12 +102,12 @@ const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx }) => {
                     </div>
                     <div className='My_missingList_items'>
                         {missingList.map((missing) => (
-                        // <li key={missing.MISSING_IDX} onClick={() => handleMissingClick(missing)}>
-                        <div className='My_missingList_item' key={missing.MISSING_IDX} onClick={() => { setMissingIdx(missing.MISSING_IDX) }}>
-                            {missing.MISSING_NAME}
-                            <button className='Mypage_missing_btn' onClick={() => handleMissingClick(missing)}></button>
-                        </div>
-                    ))}
+                            // <li key={missing.MISSING_IDX} onClick={() => handleMissingClick(missing)}>
+                            <div className='My_missingList_item' key={missing.MISSING_IDX} onClick={() => { setMissingIdx(missing.MISSING_IDX) }}>
+                                {missing.MISSING_NAME}
+                                <button className='Mypage_missing_btn' onClick={() => handleMissingClick(missing)}></button>
+                            </div>
+                        ))}
                     </div>
                 </div>
             )}
