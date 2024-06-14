@@ -3,7 +3,7 @@ from db import db_con
 
 SearchCapture_bp = Blueprint('SearchCapture', __name__)
 
-
+# 해당 실종자에 맞는 캡처 정보 호출하기 (자영 240613 수정)
 @SearchCapture_bp.route('/get_user_captures', methods=['POST'])
 def get_user_captures():
     db = db_con()
@@ -11,10 +11,22 @@ def get_user_captures():
     data = request.json
     user_id = data['user_id']
     query = """
-    SELECT c.CAPTURE_IDX, c.MISSING_IDX, c.CCTV_IDX, c.CAPTURE_FIRST_TIME, 
-           c.CAPTURE_PATH, c.CAPTURE_ALARM_CK, c.CAPTURE_ALARM_CK_TIME,
-           m.MISSING_NAME, m.MISSING_GENDER, m.MISSING_AGE_CATE, m.MISSING_IMG,
-           m.MISSING_LOCATION_LAT, m.MISSING_LOCATION_LON, m.MISSING_FINDING, m.MISSING_LOCATION
+    SELECT 
+       c.CAPTURE_IDX, 
+       c.MISSING_IDX, 
+       c.CCTV_IDX, 
+       c.CAPTURE_FIRST_TIME, 
+       c.CAPTURE_PATH, 
+       c.CAPTURE_ALARM_CK, 
+       c.CAPTURE_ALARM_CK_TIME,
+           m.MISSING_NAME, 
+           m.MISSING_GENDER, 
+           m.MISSING_AGE_CATE, 
+           m.MISSING_IMG,
+           m.MISSING_LOCATION_LAT, 
+           m.MISSING_LOCATION_LON, 
+           m.MISSING_FINDING, 
+           m.MISSING_LOCATION
     FROM TB_CAPTURE c
     JOIN TB_MISSING m ON c.MISSING_IDX = m.MISSING_IDX
     WHERE m.USER_ID = %s
