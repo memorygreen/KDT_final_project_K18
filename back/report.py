@@ -42,12 +42,11 @@ def report_missing_person():
                 USER_ID = result[0]
 
                 # Update the USER_ALARM_CK to 0 for the user
-                update_alarm_query = "UPDATE TB_USER SET USER_ALARM_CK = 0 WHERE USER_ID = %s"
+                update_alarm_query = "UPDATE TB_USER SET USER_ALARM_CK = 0 WHERE USER_ID = %s AND USER_ARARM_CK=1"
                 cursor.execute(update_alarm_query, (USER_ID,))
                 # Commit changes
                 db.commit()
-                # Send push notification to the user
-                send_push_notification(USER_ID)
+               
             # Close cursor and database connection
             cursor.close()
             db.close()
@@ -56,7 +55,7 @@ def report_missing_person():
         except Exception as e:
             return jsonify({"error": str(e)}), 500
         
-#  알림 변동 클릭시 USER_ALARM_CK 1로 (확인상태 )변경        
+#  알람 변동 클릭시 USER_ALARM_CK 1로 (확인상태 )변경          
 @report_bp.route('/updateAlarm', methods=['POST'])
 def update_alarm():
     try:
@@ -75,23 +74,8 @@ def update_alarm():
         return jsonify({"message": "Alarm status updated successfully"}), 200
         
     except Exception as e:
-        return jsonify({"error": str(e)}), 500   
-    
-@report_bp.route('/notify')
-def notify():
-    def event_stream():
-        while True:
-            if clients:
-                for client in clients:
-                    yield f'data: {json.dumps(client)}\n\n'
-            time.sleep(1)  # Adjust the sleep time as needed
+        return jsonify({"error": str(e)}), 500       
 
-    return Response(event_stream(), content_type='text/event-stream')
-
-def send_push_notification(user_id):
-    # Send notification to all clients (in a real scenario, you'd send to specific clients)
-    clients.append({"user_id": user_id, "message": "You have a new alert"})
-    print(f"Notification sent to user {user_id}")  # Add this line for debugging
 
 
 #제보 받은 알람 목록 보기
@@ -137,8 +121,48 @@ def my_notification():
 
     return jsonify(result), 200
         
+# 안읽은 제보 알람보기
+@report_bp.route('/my_no_report', methods=['POST'])
+def my_no_notification():
+    data = request.get_json()
+    user_id = data.get('user_id')
+    if not user_id:
+        return jsonify({'error': 'User is not logged in'}), 401
 
-    #
+    db = db_con()
+    cursor = db.cursor()
+
+    sql_my_report="""
+    SELECT r.REPORT_ID, r.POSTER_IDX, m.MISSING_IDX, m.MISSING_NAME, r.REPORT_TIME, r.REPORT_SIGHTING_TIME, r.REPORT_SIGHTING_PLACE, r.REPORT_ETC, r.REPORT_NOTIFICATION, r.REPORT_CK_TIME
+    FROM TB_REPORT r
+    JOIN TB_POSTER p ON r.POSTER_IDX = p.POSTER_IDX
+    JOIN TB_MISSING m ON p.MISSING_IDX = m.MISSING_IDX
+    WHERE m.USER_ID = %s AND r.REPORT_NOTIFICATION=0
+    """
+    cursor.execute(sql_my_report, (user_id,))
+
+    reports = cursor.fetchall()
+
+    result = []
+    for report in reports:
+        report_info = {
+            'REPORT_ID': report[0],
+            'POSTER_IDX': report[1],
+            'MISSING_IDX': report[2],
+            'MISSING_NAME': report[3],
+            'REPORT_TIME': report[4].strftime('%Y-%m-%d %H:%M:%S'),
+            'REPORT_SIGHTING_TIME': report[5].strftime('%Y-%m-%d %H:%M:%S'),
+            'REPORT_SIGHTING_PLACE': report[6],
+            'REPORT_ETC': report[7],
+            'REPORT_NOTIFICATION': report[8],
+            'REPORT_CK_TIME': report[9],
+        }
+        result.append(report_info)
+
+    cursor.close()
+    db.close()
+
+    return jsonify(result), 200
 
         
             
@@ -219,8 +243,46 @@ def my_capture():
     return jsonify(cresult), 200
         
         
+#cctv 캡처 알람
+@report_bp.route('/my_no_capture',methods=['POST'])
+def my_no_capture():
+    data = request.get_json()
+    user_id = data.get('user_id')
+    if not user_id:
+        return jsonify({'error': 'User is not logged in'}), 401
 
-    #
+    db = db_con()
+    cursor = db.cursor()
+
+    sql_my_capture="""
+    SELECT c.CAPTURE_IDX, m.MISSING_IDX, m.MISSING_NAME, c.CCTV_IDX, c.CAPTURE_FIRST_TIME, c.CAPTURE_PATH, c.CAPTURE_ALARM_CK, c.CAPTURE_ALARM_CK_TIME
+    FROM TB_CAPTURE c
+    JOIN TB_MISSING m ON c.MISSING_IDX = m.MISSING_IDX
+    WHERE m.USER_ID = %s AND c.CAPTURE_ALARM_CK=0
+    """
+    cursor.execute(sql_my_capture, (user_id,))
+
+    captures = cursor.fetchall()
+
+    cresult = []
+    for capture in captures:
+        capture_info = {
+            'CAPTURE_IDX': capture[0],
+            'MISSING_IDX': capture[1],
+            'MISSING_NAME': capture[2],
+            'CCTV_IDX': capture[3],
+            'CAPTURE_FIRST_TIME': capture[4].strftime('%Y-%m-%d %H:%M:%S'),
+            'CAPTURE_PATH': capture[5],
+            'CAPTURE_ALARM_CK': capture[6],
+            'CAPTURE_ALARM_CK_TIME': capture[7],
+        }
+        cresult.append(capture_info)
+
+    cursor.close()
+    db.close()
+
+    return jsonify(cresult), 200    
+
             
 
 
