@@ -7,11 +7,14 @@
     --cigRed2: #D9414E;
     --cigRed: #D94141;
     --cigWhite: #F2F2F2;
-    --cigGrey: #8C7B65;
 
+    --cigGrey: #ccc;
+    --cigGreen: #aaffb1;
     --textBalck: #000000;
     --textWhite: #ffffff;
 }
+
+
 
 * {
     margin: 0;
@@ -19,15 +22,19 @@
     box-sizing: border-box;
     font-family: Mulish, sans-serif;
 }
+
 ::-webkit-scrollbar {
     display: block;
 }
-::-webkit-scrollbar-track, ::-webkit-scrollbar-button {
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-button {
     display: none;
 }
+
 ::-webkit-scrollbar-thumb {
     background-color: #dddddd;
-    border-radius: 20px;
+    border-radius: 0 20px 20px 0; /* 시계방향 순서: 왼쪽 위, 오른쪽 위, 오른쪽 아래, 왼쪽 아래 */
     width: 10px;
     height: 10px;
 }

@@ -31,10 +31,9 @@ const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx }) => {
     const handleIconClick = (type) => {
         onIconClick(type);
         setShowMissingList(false);
-
     }
-     // 유저 정보 불러오기
-     const fetchUserInfo = () => {
+    // 유저 정보 불러오기
+    const fetchUserInfo = () => {
         axios.post('/userInfoOne', { user_id: userId })
             .then(response => {
                 console.log('User info:', response.data);
@@ -55,11 +54,14 @@ const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx }) => {
                 console.error('Error fetching missing data:', error);
             });
     };
+
     useEffect(() => {
         fetchMissingData();
         fetchUserInfo();
     }, []);
-    
+
+
+
 
 
     return (
@@ -69,7 +71,7 @@ const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx }) => {
                 <div className='Mypage_userinfo_name'>{userInfo && userInfo.USER_NAME}</div>
             </div>
             <div className='Mypage_userinfo_icon'>
-            <div onClick={() => handleIconClick('notification')}><img src={alram} alt="alram" /></div>
+                <div onClick={() => handleIconClick('notification')}><img src={alram} alt="alram" /></div>
                 <div onClick={handleCapClick}>
                     <img src={cap} alt="cap" />
                 </div>
