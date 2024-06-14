@@ -6,7 +6,7 @@ import time
 report_bp = Blueprint('report', __name__)
 clients = []
 
-#실종자 알림 제보
+#실종자 알림 제보 및 유저 알람 체크 0으로 변경
 @report_bp.route('/report', methods=['POST'])
 def report_missing_person():
     if request.method == 'POST':
@@ -56,6 +56,27 @@ def report_missing_person():
         except Exception as e:
             return jsonify({"error": str(e)}), 500
         
+#  알림 변동 클릭시 USER_ALARM_CK 1로 (확인상태 )변경        
+@report_bp.route('/updateAlarm', methods=['POST'])
+def update_alarm():
+    try:
+        user_id = request.json.get('user_id')
+        
+        db = db_con()
+        cursor = db.cursor()
+        
+        update_query = "UPDATE TB_USER SET USER_ALARM_CK = 1 WHERE USER_ID = %s"
+        cursor.execute(update_query, (user_id,))
+        db.commit()
+        
+        cursor.close()
+        db.close()
+        
+        return jsonify({"message": "Alarm status updated successfully"}), 200
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500   
+    
 @report_bp.route('/notify')
 def notify():
     def event_stream():
@@ -70,7 +91,7 @@ def notify():
 def send_push_notification(user_id):
     # Send notification to all clients (in a real scenario, you'd send to specific clients)
     clients.append({"user_id": user_id, "message": "You have a new alert"})
-
+    print(f"Notification sent to user {user_id}")  # Add this line for debugging
 
 
 #제보 받은 알람 목록 보기
