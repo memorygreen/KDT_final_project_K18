@@ -8,7 +8,7 @@ import cap from '../assets/cap.png';
 import CardModal from '../../../Components/Cards/CardModal/CardModal'; // CardModal component imported
 import alramck from '../assets/alrck.png'
 
-const Myuserinfo = ({ sessionId, onIconClick }) => {
+const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx }) => {
     const [showMissingList, setShowMissingList] = useState(true);
     const [userId, setUserId] = useState(sessionId);
     const [userInfo, setUserInfo] = useState();
@@ -59,6 +59,7 @@ const Myuserinfo = ({ sessionId, onIconClick }) => {
                 console.error('Error fetching missing data:', error);
             });
     };
+
     useEffect(() => {
         fetchMissingData();
         fetchUserInfo();
@@ -97,10 +98,14 @@ const Myuserinfo = ({ sessionId, onIconClick }) => {
                         실종자 목록
                     </div>
                     {missingList.map((missing) => (
-                        <div key={missing.MISSING_IDX} onClick={() => handleMissingClick(missing)}>
+                        // <li key={missing.MISSING_IDX} onClick={() => handleMissingClick(missing)}>
+                        <div key={missing.MISSING_IDX} onClick={() => { setMissingIdx(missing.MISSING_IDX) }}>
                             {missing.MISSING_NAME}
+                            <button className='Mypage_missing_btn' onClick={() => handleMissingClick(missing)}>상세보기</button>
+                            <button className='Mypage_missing_btn' onClick={() => handleMissingClick(missing)}>삭제</button>
                         </div>
                     ))}
+
                 </div>
             )}
             {isModalOpen && (
