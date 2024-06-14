@@ -18,21 +18,22 @@ const MyPage = () => {
     const [missingIdx, setMissingIdx] = useState()
 
 
-    useEffect(()=>{ // idx 호출이 잘 됐는지 확인하는 user effect (only 확인용)
+    useEffect(() => { // idx 호출이 잘 됐는지 확인하는 user effect (only 확인용)
         console.log('missing idx changed', missingIdx)
-    },[missingIdx])
+    }, [missingIdx])
 
     return (
         <div className="Mypages">
-            <header><NevBar /></header>
+        <header><NevBar /></header>
+        <div className='Mypage_main'>
             <div className="Mypage_container">
                 <div className='Mypage_userinfo'>
-                    <Myuserinfo  setMissingIdx={setMissingIdx} sessionId={sessionId} onIconClick={handleIconClick} />
+                    <Myuserinfo setMissingIdx={setMissingIdx} sessionId={sessionId} onIconClick={handleIconClick} />
                 </div>
                 <div className='Mypage_content'>
                     {activeComponent === 'capture' && (
                         <div className='Mypage_capture'>
-                            <MyCapture sessionId={sessionId} missingIdx={missingIdx}/>
+                            <MyCapture sessionId={sessionId} missingIdx={missingIdx} />
                         </div>
                     )}
                     {activeComponent === 'update' && (
@@ -47,7 +48,9 @@ const MyPage = () => {
                     )}
                 </div>
             </div>
-        </div >
+        </div>
+
+    </div >
     );
 }
 
