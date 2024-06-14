@@ -3,72 +3,86 @@ import './NevBar.css';
 import logo from "./assets/logo.png";
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import NoNotification from '../../Page/MyPage/My_alram/NoNotificaiton';
+
 const NevBar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userCate, setUserCate] = useState(null);
     const [userAlarmCk, setUserAlarmCk] = useState(1);
-    const [intervalId, setIntervalId] = useState(null); // interval ID를 위한 상태 변수
+    const [intervalId, setIntervalId] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
 
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
-    };
-
-    useEffect(() => {
-        const session = sessionStorage.getItem('userId');
-        const sessionUserCate = sessionStorage.getItem('userCate');
-        setIsLoggedIn(session ? true : false);
-        setUserCate(sessionUserCate);
-        if (session) {
-            fetchUserInfo(session);
-        }
-        // 5초마다 USER_ALARM_CK값이 1일떄 업데이트 한 번씩 USER_ALARM_CK이 값을 업데이트
-        const id = setInterval(() => {
-            if (session && userAlarmCk === 1) {
-                fetchUserInfo(session);
-            }
-        }, 5000);
-        setIntervalId(id); // Store the interval ID
-
-        return () => {
-            clearInterval(intervalId); // Clear interval on component unmount
-        };
-    }, [userAlarmCk]);
-    const fetchUserInfo = (userId,session) => {
+    // 사용자 정보를 서버에서 가져오는 함수
+    const fetchUserInfo = (userId) => {
         axios.post('http://localhost:5000/userInfoOne', { user_id: userId })
             .then(response => {
                 setUserAlarmCk(response.data.USER_ALARM_CK);
                 if (response.data.USER_ALARM_CK === 0 && intervalId) {
-                    clearInterval(intervalId); // Clear interval if USER_ALARM_CK is 0
-                } else if (response.data.USER_ALARM_CK === 1 && !intervalId) {
-                    const id = setInterval(() => {
-                        if (session && userAlarmCk === 1) {
-                            fetchUserInfo(session);
-                        }
-                    }, 5000);
-                    setIntervalId(id); // Reset interval if USER_ALARM_CK is 1
+                    clearInterval(intervalId);
                 }
             })
             .catch(error => {
                 console.error('Error fetching user info:', error);
             });
     };
+
+    // 사용자 정보와 로그인 상태를 초기 설정
+    useEffect(() => {
+        const session = sessionStorage.getItem('userId');
+        const sessionUserCate = sessionStorage.getItem('userCate');
+        setIsLoggedIn(!!session); // session이 존재하면 로그인 상태로 설정
+        setUserCate(sessionUserCate);
+
+        if (session) {
+            fetchUserInfo(session); // 초기에 사용자 정보를 가져옴
+        }
+
+        // 5초마다 USER_ALARM_CK값이 1일 때 업데이트
+        const id = setInterval(() => {
+            if (session && userAlarmCk === 1) {
+                fetchUserInfo(session);
+            }
+        }, 5000);
+
+        setIntervalId(id); // intervalId 저장
+
+        // 컴포넌트 언마운트 시 clearInterval
+        return () => {
+            clearInterval(id);
+        };
+    }, [userAlarmCk]); // userAlarmCk가 변경될 때마다 useEffect 재실행
+
+    // 알림 상태를 업데이트하는 함수
     const updateAlarmStatus = (userId) => {
-        axios.post('http://localhost:5000/updateAlarm', { user_id: userId  })
+        axios.post('http://localhost:5000/updateAlarm', { user_id: userId })
             .then(response => {
-                setUserAlarmCk(1); // 사용자 알람 상태를 1로 업데이트
+                setUserAlarmCk(1); // 알림 상태를 1로 업데이트
+                setIsModalOpen(true); // 모달 열기
             })
             .catch(error => {
                 console.error('Error updating alarm status:', error);
             });
     };
 
+    // 로그아웃 처리
     const handleLogout = () => {
-        sessionStorage.clear();
-        setIsLoggedIn(false);
-        navigate('/Login');
+        sessionStorage.clear(); // 세션 스토리지 초기화
+        setIsLoggedIn(false); // 로그인 상태 false로 설정
+        navigate('/Login'); // 로그인 페이지로 이동
     };
+
+    // 모달 닫기 처리
+    const handleModalClose = () => {
+        setIsModalOpen(false);
+    };
+
+    // 메뉴 토글
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
+    };
+
     return (
         <div className="all_header">
             <header className="header_class">
@@ -81,14 +95,13 @@ const NevBar = () => {
                             {isLoggedIn && (
                                 <ul className={`navigation ${isMenuOpen ? '' : 'nevbar_hide'}`}>
                                     <li><Link to='/Mappage'>Map</Link></li>
-                                    <li>
-                                        {/* MyPage link replaced with button */}
-                                        <Link to="/MyPage" className="link-button">MyPage</Link>
-                                    </li>
+                                    <li><Link to="/MyPage" className="link-button">MyPage</Link></li>
                                     <li><Link to='/SearchMissingPage'>실종자등록</Link></li>
-                                    <a to='#' onClick={() => updateAlarmStatus(sessionStorage.getItem('userId'))}>
+                                    <li>
+                                        <button onClick={() => updateAlarmStatus(sessionStorage.getItem('userId'))}>
                                             {userAlarmCk === 1 ? '' : '알림'}
-                                    </a>
+                                        </button>
+                                    </li>
                                 </ul>
                             )}
                         </nav>
@@ -144,49 +157,13 @@ const NevBar = () => {
                                                                 aria-hidden="true">
                                                                 <path strokeLinecap="round" strokeLinejoin="round"
                                                                     strokeWidth="1.5"
-                                                                    d="M5.03305 15.8071H12.7252M5.03305 15.8071V18.884H12.7252V15.8071M5.03305 15.8071V12.7302H12.7252V15.8071M15.0419 8.15385V5.07692C15.0419 3.37759 13.6643 2 11.965 2C10.2657 2 8.88814 3.37759 8.88814 5.07692V8.15385M5 11.2307L5 18.9231C5 20.6224 6.37757 22 8.07689 22H15.769C17.4683 22 18.8459 20.6224 18.8459 18.9231V11.2307C18.8459 9.53142 17.4683 8.15385 15.769 8.15385L8.07689 8.15385C6.37757 8.15385 5 9.53142 5 11.2307Z"
+                                                                    d="M5.03305 15.8071H12.7252M5.03305 15.8071V18.884H12.7252V15.8071M5.03305 15.8071V12.7302H12.7252V15.8071M15.0419 8.15385V5.07692C15.0419 3.37759 13.6643 215.0419 8.15385V5.07692C15.0419 3.37759 13.6643 2.00001 11.956 2.00001H3.05794C1.34967 2.00001 0 3.37759 0 5.07692V8.15385M15.0419 8.15385H18.8304C20.5387 8.15385 21.8876 9.53143 21.8876 11.2308V18.7692C21.8876 20.4686 20.5387 21.8462 18.8304 21.8462H15.0419M15.0419 8.15385C15.0419 9.85319 16.3908 11.2308 18.0991 11.2308C19.8074 11.2308 21.1562 9.85319 21.1562 8.15385C21.1562 6.45452 19.8074 5.07692 18.0991 5.07692C16.3908 5.07692 15.0419 6.45452 15.0419 8.15385Z"
                                                                     stroke="currentColor"></path>
                                                             </svg>
                                                         </div>
                                                         <div className="item-title">
                                                             <h3>실종자 관리</h3>
-                                                            <p>실종자의 상태 및 정보 관리</p>
-                                                        </div>
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link to='/Admincctv'>
-                                                        <div className="icon-wrapper">
-                                                            <svg className="h-5 w-5 group-hover/menu-item:text-foreground group-focus-visible/menu-item:text-foreground"
-                                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                                aria-hidden="true">
-                                                                <path strokeLinecap="round" strokeLinejoin="round"
-                                                                    strokeWidth="1.5"
-                                                                    d="M20.4997 12.1386V9.15811L14.8463 3.53163H6.43717C5.57423 3.53163 4.87467 4.23119 4.87467 5.09413V9.78087M20.4447 9.13199L14.844 3.53125L14.844 7.56949C14.844 8.43243 15.5436 9.13199 16.4065 9.13199L20.4447 9.13199ZM7.12729 9.78087H4.83398C3.97104 9.78087 3.27148 10.4804 3.27148 11.3434V19.1559C3.27148 20.8818 4.67059 22.2809 6.39648 22.2809H18.8965C20.6224 22.2809 22.0215 20.8818 22.0215 19.1559V13.7011C22.0215 12.8381 21.3219 12.1386 20.459 12.1386H10.8032C10.3933 12.1386 9.99969 11.9774 9.70743 11.6899L8.22312 10.2296C7.93086 9.94202 7.53729 9.78087 7.12729 9.78087Z"
-                                                                    stroke="currentColor"></path>
-                                                            </svg>
-                                                        </div>
-                                                        <div className="item-title">
-                                                            <h3>CCTV 관리</h3>
-                                                            <p>CCTV 상태 및 정보 관리</p>
-                                                        </div>
-                                                    </Link>
-                                                </li>
-                                                <li>
-                                                    <Link to="">
-                                                        <div className="icon-wrapper">
-                                                            <svg className="h-5 w-5 group-hover/menu-item:text-foreground group-focus-visible/menu-item:text-foreground"
-                                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                                aria-hidden="true">
-                                                                <path strokeLinecap="round" strokeLinejoin="round"
-                                                                    strokeWidth="1.5"
-                                                                    d="M6.6594 21.8201C8.10788 22.5739 9.75418 23 11.5 23C17.299 23 22 18.299 22 12.5C22 10.7494 21.5716 9.09889 20.8139 7.64754M16.4016 3.21191C14.9384 2.43814 13.2704 2 11.5 2C5.70101 2 1 6.70101 1 12.5C1 14.287 1.44643 15.9698 2.23384 17.4428M2.23384 17.4428C1.81058 17.96 1.55664 18.6211 1.55664 19.3416C1.55664 20.9984 2.89979 22.3416 4.55664 22.3416C6.21349 22.3416 7.55664 20.9984 7.55664 19.3416C7.55664 17.6847 6.21349 16.3416 4.55664 16.3416C3.62021 16.3416 2.78399 16.7706 2.23384 17.4428ZM21.5 5.64783C21.5 7.30468 20.1569 8.64783 18.5 8.64783C16.8432 8.64783 15.5 7.30468 15.5 5.64783C15.5 3.99097 16.8432 2.64783 18.5 2.64783C20.1569 2.64783 21.5 3.99097 21.5 5.64783ZM18.25 12.5C18.25 16.2279 15.2279 19.25 11.5 19.25C7.77208 19.25 4.75 16.2279 4.75 12.5C4.75 8.77208 7.77208 5.75 11.5 5.75C15.2279 5.75 18.25 8.77208 18.25 12.5Z"
-                                                                    stroke="currentColor"></path>
-                                                            </svg>
-                                                        </div>
-                                                        <div className="item-title">
-                                                            <h3>NULL</h3>
-                                                            <p>비할당 버튼</p>
+                                                            <p>등록된 실종자의 관리</p>
                                                         </div>
                                                     </Link>
                                                 </li>
@@ -196,27 +173,51 @@ const NevBar = () => {
                                 </li>
                             )}
                         </div>
-                        {isLoggedIn && (
-                            <button onClick={handleLogout} className="primary">
-                                Logout
-                            </button>
-                        )}
-
+                        <button className="menu__toggle" onClick={toggleMenu}>
+                            <svg
+                                className="h-6 w-6 fill-current"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                            >
+                                {isMenuOpen ? (
+                                    <path
+                                        fillRule="evenodd"
+                                        clipRule="evenodd"
+                                        d="M4 6C4 5.44772 4.44772 5 5 5H19C19.5523 5 20 5.44772 20 6C20 6.55228 19.5523 7 19 7H5C4.44772 7 4 6.55228 4 6ZM5 12C4.44772 12 4 12.4477 4 13C4 13.5523 4.44772 14 5 14H19C19.5523 14 20 13.5523 20 13C20 12.4477 19.5523 12 19 12H5ZM5 18C4.44772 18 4 18.4477 4 19C4 19.5523 4.44772 20 5 20H19C19.5523 20 20 19.5523 20 19C20 18.4477 19.5523 18 19 18H5Z"
+                                    />
+                                ) : (
+                                    <path
+                                        fillRule="evenodd"
+                                        clipRule="evenodd"
+                                        d="M4 6C4 5.44772 4.44772 5 5 5H19C19.5523 5 20 5.44772 20 6C20 6.55228 19.5523 7 19 7H5C4.44772 7 4 6.55228 4 6ZM5 13C4.44772 13 4 12.5523 4 12C4 11.4477 4.44772 11 5 11H19C19.5523 11 20 11.4477 20 12C20 12.5523 19.5523 13 19 13H5ZM5 18C4.44772 18 4 17.5523 4 17C4 16.4477 4.44772 16 5 16H19C19.5523 16 20 16.4477 20 17C20 17.5523 19.5523 18 19 18H5Z"
+                                    />
+                                )}
+                            </svg>
+                        </button>
                     </div>
-                    <button aria-label="Open menu" className="burger-menu" type="button" onClick={toggleMenu}>
-                        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-menu-2" width="24"
-                            height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none"
-                            strokeLinecap="round" strokeLinejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <path d="M4 6l16 0" />
-                            <path d="M4 12l16 0" />
-                            <path d="M4 18l16 0" />
-                        </svg>
-                    </button>
                 </div>
+                {isLoggedIn && (
+                    <div className="user__actions">
+                        <button className="logout__button" onClick={handleLogout}>
+                            로그아웃
+                        </button>
+                    </div>
+                )}
             </header>
+            {isModalOpen && (
+                <div className="modal__background">
+                    <div className="modal__content">
+                        <button className="modal__close" onClick={handleModalClose}>
+                            &times;
+                        </button>
+                        <h2>알림 업데이트 완료</h2>
+                        <p>알림 상태가 업데이트되었습니다.</p>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
 
 export default NevBar;
+
