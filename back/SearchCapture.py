@@ -9,7 +9,11 @@ def get_user_captures():
     db = db_con()
     cursor = db.cursor()
     data = request.json
-    user_id = data['user_id']
+    
+    session_id = data.get('sessionId')
+    
+    
+    print('실종자 캡처 정보 가져오기 all ')
     query = """
     SELECT 
        c.CAPTURE_IDX, 
@@ -32,7 +36,7 @@ def get_user_captures():
     WHERE m.USER_ID = %s
     """
 
-    cursor.execute(query, (user_id,))
+    cursor.execute(query, (session_id,))
     captures = cursor.fetchall()
     print(captures)
     cursor.close()
@@ -46,18 +50,18 @@ def get_captures_by_missing():
     db = db_con()
     cursor = db.cursor()
     data = request.json
-    missing_id = data['missing_id']
-
+    missing_idx = data.get('missing_idx')
+    
     query = """
     SELECT c.CAPTURE_IDX, c.MISSING_IDX, c.CCTV_IDX, c.CAPTURE_FIRST_TIME, 
            c.CAPTURE_PATH, c.CAPTURE_ALARM_CK, c.CAPTURE_ALARM_CK_TIME
-    FROM CAPTURE c
+    FROM TB_CAPTURE c
     WHERE c.MISSING_IDX = %s
     """
 
-    cursor.execute(query, (missing_id,))
-    captures = cursor.fetchall()
+    cursor.execute(query, (missing_idx,))
+    captures_missing = cursor.fetchall()
     cursor.close()
     db.close()
 
-    return jsonify(captures)
+    return jsonify(captures_missing)
