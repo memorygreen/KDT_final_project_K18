@@ -23,7 +23,7 @@ const NevBar = () => {
         if (session) {
             fetchUserInfo(session);
         }
-        // 5초마다  USER_ALARM_CK값이 1일떄 업데이트 한 번씩 USER_ALARM_CK이  값을 업데이트
+        // 5초마다 USER_ALARM_CK값이 1일떄 업데이트 한 번씩 USER_ALARM_CK이 값을 업데이트
         const id = setInterval(() => {
             if (session && userAlarmCk === 1) {
                 fetchUserInfo(session);
