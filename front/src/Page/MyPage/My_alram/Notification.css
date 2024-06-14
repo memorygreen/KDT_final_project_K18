@@ -1,6 +1,8 @@
 .notification-container {
     color: black;
     /* 기본 글자색을 검정색으로 설정 */
+    overflow: scroll;
+    height: 500px;   
 }
 
 .notification {

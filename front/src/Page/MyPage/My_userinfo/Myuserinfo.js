@@ -97,15 +97,15 @@ const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx }) => {
                     <div className='My_missingList_title'>
                         실종자 목록
                     </div>
-                    {missingList.map((missing) => (
+                    <div className='My_missingList_items'>
+                        {missingList.map((missing) => (
                         // <li key={missing.MISSING_IDX} onClick={() => handleMissingClick(missing)}>
-                        <div key={missing.MISSING_IDX} onClick={() => { setMissingIdx(missing.MISSING_IDX) }}>
+                        <div className='My_missingList_item' key={missing.MISSING_IDX} onClick={() => { setMissingIdx(missing.MISSING_IDX) }}>
                             {missing.MISSING_NAME}
-                            <button className='Mypage_missing_btn' onClick={() => handleMissingClick(missing)}>상세보기</button>
-                            <button className='Mypage_missing_btn' onClick={() => handleMissingClick(missing)}>삭제</button>
+                            <button className='Mypage_missing_btn' onClick={() => handleMissingClick(missing)}></button>
                         </div>
                     ))}
-
+                    </div>
                 </div>
             )}
             {isModalOpen && (
