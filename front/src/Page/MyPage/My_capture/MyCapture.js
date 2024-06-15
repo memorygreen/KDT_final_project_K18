@@ -8,6 +8,7 @@ const MyCapture = ({ sessionId, missingIdx }) => {
     const [captures, setCaptures] = useState([]);
     const [selectedCapture, setSelectedCapture] = useState(null);
 
+
     const fetchUserCaptures = () => {
         axios.post('/get_user_captures', {
             user_id: sessionId,
@@ -16,13 +17,19 @@ const MyCapture = ({ sessionId, missingIdx }) => {
                 setCaptures(response.data);
             })
             .catch(error => {
+<<<<<<< HEAD
                 console.error('실종자 idx 넘기기 실패');
+=======
+                alert("실종자 idx 넘기기 실패")
+                console.error('실종자 idx 넘기기 실패')
+>>>>>>> 4cd91c785b1377bf72b6e1dbbb171a4a3b72ca26
             });
     };
 
     useEffect(() => {
         fetchUserCaptures();
     }, []);
+
 
     useEffect(() => {
         if (missingIdx) {
@@ -38,9 +45,11 @@ const MyCapture = ({ sessionId, missingIdx }) => {
         }
     }, [missingIdx]);
 
+
     const handleCaptureClick = (capture) => {
         setSelectedCapture(capture);
     };
+
 
     return (
         <div className="Mypage_capture_all">
