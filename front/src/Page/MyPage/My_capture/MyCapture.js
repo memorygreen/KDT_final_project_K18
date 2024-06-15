@@ -17,12 +17,10 @@ const MyCapture = ({ sessionId, missingIdx }) => {
                 setCaptures(response.data);
             })
             .catch(error => {
-<<<<<<< HEAD
                 console.error('실종자 idx 넘기기 실패');
-=======
+
                 alert("실종자 idx 넘기기 실패")
                 console.error('실종자 idx 넘기기 실패')
->>>>>>> 4cd91c785b1377bf72b6e1dbbb171a4a3b72ca26
             });
     };
 
