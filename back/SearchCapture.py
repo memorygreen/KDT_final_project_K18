@@ -12,7 +12,7 @@ def get_user_captures():
     cursor = db.cursor()
     data = request.json
     
-    session_id = data.get('sessionId')
+    session_id = data.get('user_id')
     
     
     print('실종자 캡처 정보 가져오기 all ')

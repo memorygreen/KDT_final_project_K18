@@ -3,85 +3,74 @@ import './NevBar.css';
 import logo from "./assets/logo.png";
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
+import NoNotification from '../../Page/MyPage/My_alram/NoNotificaiton';
 const NevBar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userCate, setUserCate] = useState(null);
     const [userAlarmCk, setUserAlarmCk] = useState(1);
-    const [intervalId, setIntervalId] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [intervalId, setIntervalId] = useState(null); // interval ID를 위한 상태 변수
+    const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 상태를 위한 상태 변수
     const navigate = useNavigate();
 
-    // 사용자 정보를 서버에서 가져오는 함수
-    const fetchUserInfo = (userId) => {
-        axios.post('http://localhost:5000/userInfoOne', { user_id: userId })
-            .then(response => {
-                setUserAlarmCk(response.data.USER_ALARM_CK);
-                if (response.data.USER_ALARM_CK === 0 && intervalId) {
-                    clearInterval(intervalId);
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching user info:', error);
-            });
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
     };
 
-    // 사용자 정보와 로그인 상태를 초기 설정
     useEffect(() => {
         const session = sessionStorage.getItem('userId');
         const sessionUserCate = sessionStorage.getItem('userCate');
-        setIsLoggedIn(!!session); // session이 존재하면 로그인 상태로 설정
+        setIsLoggedIn(session ? true : false);
         setUserCate(sessionUserCate);
-
-        if (session) {
-            fetchUserInfo(session); // 초기에 사용자 정보를 가져옴
-        }
-
-        // 임의로 정한 시간마다 USER_ALARM_CK값이 1일 때 업데이트
-        const id = setInterval(() => {
-            if (session && userAlarmCk === 1) {
-                fetchUserInfo(session);
-            }
-        }, 10000);
-
-        setIntervalId(id); // intervalId 저장
-
-        // 컴포넌트 언마운트 시 clearInterval
-        return () => {
-            clearInterval(id);
+        
+        const fetchData = () => {
+            axios.post('http://localhost:5000/userInfoOne', { user_id: session })
+                .then(response => {
+                    setUserAlarmCk(response.data.USER_ALARM_CK);
+                    if (response.data.USER_ALARM_CK === 0 && intervalId) {
+                        clearInterval(intervalId);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching user info:', error);
+                });
         };
-    }, [userAlarmCk]); // userAlarmCk가 변경될 때마다 useEffect 재실행
 
-    // 알림 상태를 업데이트하는 함수
+        const id = setInterval(fetchData, 10000); // 5초마다 fetchData 함수 실행
+
+        return () => {
+            clearInterval(id); // 컴포넌트 언마운트 시 clearInterval
+        };
+    }, []);
+        
+
+   
     const updateAlarmStatus = (userId) => {
         axios.post('http://localhost:5000/updateAlarm', { user_id: userId })
             .then(response => {
-                setUserAlarmCk(1); // 알림 상태를 1로 업데이트
-                setIsModalOpen(true); // 모달 열기
+                setUserAlarmCk(1); // 사용자 알람 상태를 1로 업데이트
+                setIsModalOpen(true);
             })
             .catch(error => {
                 console.error('Error updating alarm status:', error);
             });
     };
 
-    // 로그아웃 처리
     const handleLogout = () => {
-        sessionStorage.clear(); // 세션 스토리지 초기화
-        setIsLoggedIn(false); // 로그인 상태 false로 설정
-        navigate('/Login'); // 로그인 페이지로 이동
+        sessionStorage.clear();
+        setIsLoggedIn(false);
+        navigate('/Login');
     };
 
-    // 모달 닫기 처리
+    const handleNotificationClick = () => {
+        // 모달 열기
+        setIsModalOpen(true);
+    };
+
     const handleModalClose = () => {
+        // 모달 닫기
         setIsModalOpen(false);
     };
-
-    // 메뉴 토글
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
-    };
-
     return (
         <div className="all_header">
             <header className="header_class">
@@ -94,13 +83,14 @@ const NevBar = () => {
                             {isLoggedIn && (
                                 <ul className={`navigation ${isMenuOpen ? '' : 'nevbar_hide'}`}>
                                     <li><Link to='/Mappage'>Map</Link></li>
-                                    <li><Link to="/MyPage" className="link-button">MyPage</Link></li>
-                                    <li><Link to='/SearchMissingPage'>실종자등록</Link></li>
                                     <li>
-                                        <button onClick={() => updateAlarmStatus(sessionStorage.getItem('userId'))}>
-                                            {userAlarmCk === 1 ? '' : '알림'}
-                                        </button>
+                                        {/* MyPage link replaced with button */}
+                                        <Link to="/MyPage" className="link-button">MyPage</Link>
                                     </li>
+                                    <li><Link to='/SearchMissingPage'>실종자등록</Link></li>
+                                    <a onClick={() => updateAlarmStatus(sessionStorage.getItem('userId'))}>
+                                            {userAlarmCk === 1 ? '' : '알림'}
+                                    </a>
                                 </ul>
                             )}
                         </nav>
@@ -156,14 +146,12 @@ const NevBar = () => {
                                                                 aria-hidden="true">
                                                                 <path strokeLinecap="round" strokeLinejoin="round"
                                                                     strokeWidth="1.5"
-                                                                    d="M5.03305 15.8071H12.7252M5.03305 15.8071V18.884H12.7252V15.8071M5.03305 15.8071V12.7302H12.7252V15.8071M15.0419 8.15385V5.07692C15.0419 3.37759 13.6643 215.0419 8.15385V5.07692C15.0419 3.37759 13.6643 2.00001 11.956 2.00001H3.05794C1.34967 2.00001 0 3.37759 0 5.07692V8.15385M15.0419 8.15385H18.8304C20.5387 8.15385 21.8876 9.53143 21.8876 11.2308V18.7692C21.8876 20.4686 20.5387 21.8462 18.8304 21.8462H15.0419M15.0419 8.15385C15.0419 9.85319 16.3908 11.2308 18.0991 11.2308C19.8074 11.2308 21.1562 9.85319 21.1562 8.15385C21.1562 6.45452 19.8074 5.07692 18.0991 5.07692C16.3908 5.07692 15.0419 6.45452 15.0419 8.15385Z"
+                                                                    d="M5.03305 15.8071H12.7252M5.03305 15.8071V18.884H12.7252V15.8071M5.03305 15.8071V12.7302H12.7252V15.8071M15.0419 8.15385V5.07692C15.0419 3.37759 13.6643 2 11.965 2C10.2657 2 8.88814 3.37759 8.88814 5.07692V8.15385M5 11.2307L5 18.9231C5 20.6224 6.37757 22 8.07689 22H15.769C17.4683 22 18.8459 20.6224 18.8459 18.9231V11.2307C18.8459 9.53142 17.4683 8.15385 15.769 8.15385L8.07689 8.15385C6.37757 8.15385 5 9.53142 5 11.2307Z"
                                                                     stroke="currentColor"></path>
                                                             </svg>
                                                         </div>
                                                         <div className="item-title">
                                                             <h3>실종자 관리</h3>
-                                                            <p>등록된 실종자의 관리</p>
-
                                                             <p>실종자의 상태 및 정보 관리</p>
                                                         </div>
                                                     </Link>
@@ -183,7 +171,6 @@ const NevBar = () => {
                                                         <div className="item-title">
                                                             <h3>CCTV 관리</h3>
                                                             <p>CCTV 상태 및 정보 관리</p>
-
                                                         </div>
                                                     </Link>
                                                 </li>
@@ -193,51 +180,29 @@ const NevBar = () => {
                                 </li>
                             )}
                         </div>
-                        <button className="menu__toggle" onClick={toggleMenu}>
-                            <svg
-                                className="h-6 w-6 fill-current"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24"
-                            >
-                                {isMenuOpen ? (
-                                    <path
-                                        fillRule="evenodd"
-                                        clipRule="evenodd"
-                                        d="M4 6C4 5.44772 4.44772 5 5 5H19C19.5523 5 20 5.44772 20 6C20 6.55228 19.5523 7 19 7H5C4.44772 7 4 6.55228 4 6ZM5 12C4.44772 12 4 12.4477 4 13C4 13.5523 4.44772 14 5 14H19C19.5523 14 20 13.5523 20 13C20 12.4477 19.5523 12 19 12H5ZM5 18C4.44772 18 4 18.4477 4 19C4 19.5523 4.44772 20 5 20H19C19.5523 20 20 19.5523 20 19C20 18.4477 19.5523 18 19 18H5Z"
-                                    />
-                                ) : (
-                                    <path
-                                        fillRule="evenodd"
-                                        clipRule="evenodd"
-                                        d="M4 6C4 5.44772 4.44772 5 5 5H19C19.5523 5 20 5.44772 20 6C20 6.55228 19.5523 7 19 7H5C4.44772 7 4 6.55228 4 6ZM5 13C4.44772 13 4 12.5523 4 12C4 11.4477 4.44772 11 5 11H19C19.5523 11 20 11.4477 20 12C20 12.5523 19.5523 13 19 13H5ZM5 18C4.44772 18 4 17.5523 4 17C4 16.4477 4.44772 16 5 16H19C19.5523 16 20 16.4477 20 17C20 17.5523 19.5523 18 19 18H5Z"
-                                    />
-                                )}
-                            </svg>
-                        </button>
+                        {isLoggedIn && (
+                            <button onClick={handleLogout} className="primary">
+                                Logout
+                            </button>
+                        )}
+
                     </div>
+                    <button aria-label="Open menu" className="burger-menu" type="button" onClick={toggleMenu}>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-menu-2" width="24"
+                            height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none"
+                            strokeLinecap="round" strokeLinejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M4 6l16 0" />
+                            <path d="M4 12l16 0" />
+                            <path d="M4 18l16 0" />
+                        </svg>
+                    </button>
                 </div>
-                {isLoggedIn && (
-                    <div className="user__actions">
-                        <button className="logout__button" onClick={handleLogout}>
-                            로그아웃
-                        </button>
-                    </div>
-                )}
             </header>
-            {isModalOpen && (
-                <div className="modal__background">
-                    <div className="modal__content">
-                        <button className="modal__close" onClick={handleModalClose}>
-                            &times;
-                        </button>
-                        <h2>알림 업데이트 완료</h2>
-                        <p>알림 상태가 업데이트되었습니다.</p>
-                    </div>
-                </div>
-            )}
+            {/* 모달 */}
+            {isModalOpen && <NoNotification onClose={handleModalClose} />}
         </div>
     );
 };
 
 export default NevBar;
-
