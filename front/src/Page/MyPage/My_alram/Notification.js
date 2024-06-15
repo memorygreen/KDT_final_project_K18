@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Notification.css';
 
-const Notification = ({ sessionId }) => {
+const Notification = ({ sessionId, selectedCapture }) => {
     const [notifications, setNotifications] = useState([]);
     const [cctvAddresses, setCctvAddresses] = useState({});
     const [selectedNotification, setSelectedNotification] = useState(null);
@@ -40,8 +39,16 @@ const Notification = ({ sessionId }) => {
 
                 setNotifications(combinedNotifications);
 
+                fetchCCTVAddresses(captureResponse.data);
+            } catch (error) {
+                console.error('Error fetching notifications:', error);
+            }
+        };
 
-                for (const notification of captureResponse.data) {
+        const fetchCCTVAddresses = async (captures) => {
+            try {
+                const addresses = {};
+                for (const notification of captures) {
                     const cctvResponse = await axios.post('http://localhost:5000/capture_address', {
                         cctv_idx: notification.CCTV_IDX
                     }, {
@@ -50,23 +57,27 @@ const Notification = ({ sessionId }) => {
                         }
                     });
 
-                    setCctvAddresses(prevState => ({
-                        ...prevState,
-                        [notification.CCTV_IDX]: cctvResponse.data.CCTV_LOAD_ADDRESS
-                    }));
+                    addresses[notification.CCTV_IDX] = cctvResponse.data.CCTV_LOAD_ADDRESS;
                 }
+                setCctvAddresses(addresses);
             } catch (error) {
-                console.error('Error fetching notifications:', error);
+                console.error('Error fetching CCTV addresses:', error);
             }
         };
+
         fetchNotifications();
-    }, []);
+    }, [userId]);
+
     useEffect(() => {
-        
+        if (selectedCapture) {
+            setSelectedNotification({ ...selectedCapture, type: 'capture' });
+        }
+    }, [selectedCapture]);
+
+    useEffect(() => {
         setFilter('all');
         setFilteredNotifications(notifications);
     }, [notifications]);
-
 
     const handleDetailClick = async (notification) => {
         if (notification.type === 'capture') {
@@ -91,9 +102,8 @@ const Notification = ({ sessionId }) => {
             }
         }
         setSelectedNotification(notification);
-
-
     };
+
     const handleCloseModal = () => {
         setSelectedNotification(null);
     };

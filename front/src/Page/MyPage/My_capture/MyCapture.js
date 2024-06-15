@@ -1,10 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Notification from "../My_alram/Notification";
 import './MyCapture.css';
 
 
 const MyCapture = ({ sessionId, missingIdx }) => {
     const [captures, setCaptures] = useState([]);
+    const [selectedCapture, setSelectedCapture] = useState(null);
 
 
     const fetchUserCaptures = () => {
@@ -15,10 +17,15 @@ const MyCapture = ({ sessionId, missingIdx }) => {
                 setCaptures(response.data);
             })
             .catch(error => {
+<<<<<<< HEAD
+                console.error('실종자 idx 넘기기 실패');
+=======
                 alert("실종자 idx 넘기기 실패")
                 console.error('실종자 idx 넘기기 실패')
+>>>>>>> 4cd91c785b1377bf72b6e1dbbb171a4a3b72ca26
             });
     };
+
     useEffect(() => {
         fetchUserCaptures();
     }, []);
@@ -39,19 +46,26 @@ const MyCapture = ({ sessionId, missingIdx }) => {
     }, [missingIdx]);
 
 
+    const handleCaptureClick = (capture) => {
+        setSelectedCapture(capture);
+    };
+
+
     return (
         <div className="Mypage_capture_all">
             <div className="Mypage_capture_all_title" onClick={fetchUserCaptures}>
                 캡처 목록
             </div>
-            <div className="Mypage_capture_all_grid" >
+            <div className="Mypage_capture_all_grid">
                 {captures.map(capture => (
-                    <div className="Mypage_capture_all_grid_item" key={capture.CAPTURE_IDX}>
+                    <div className="Mypage_capture_all_grid_item" key={capture.CAPTURE_IDX} onClick={() => handleCaptureClick(capture)}>
                         <img src={capture.CAPTURE_PATH} alt={capture.MISSING_NAME} />
                     </div>
                 ))}
             </div>
+            <Notification sessionId={sessionId} selectedCapture={selectedCapture} />
         </div>
-    )
-}
+    );
+};
+
 export default MyCapture;
