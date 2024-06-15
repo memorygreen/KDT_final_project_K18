@@ -51,9 +51,10 @@ const NevBar = () => {
         }
     }, [userAlarmCk]);
 
-    const updateAlarmStatus = (userId) => {
+    const ckNoti = (userId) => {
         axios.post('http://localhost:5000/updateAlarm', { user_id: userId })
             .then(response => {
+                setNotiIcon('alarm_imgOff'); //알림 이미지 정지로 변경
                 setUserAlarmCk(1); // 사용자 알람 상태를 1로 업데이트
                 setIsModalOpen(true);
             })
@@ -78,10 +79,7 @@ const NevBar = () => {
         setIsModalOpen(false);
     };
 
-    const ckNoti = () => {
-        setNotiIcon('alarm_imgOff');
-        setIsModalOpen(true); // 모달을 열기 위해 상태를 true로 설정
-    }
+    
 
     return (
         <div className="all_header">
