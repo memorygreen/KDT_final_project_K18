@@ -46,9 +46,12 @@ const MyPage = () => {
                             </div>
                         )}
                     </div>
+
                 </div>
             </div>
-        </div >
+        </div>
+
+    
     );
 }
 

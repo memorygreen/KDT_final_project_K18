@@ -6,6 +6,7 @@ import './MyCapture.css';
 const MyCapture = ({ sessionId, missingIdx }) => {
     const [captures, setCaptures] = useState([]);
 
+
     const fetchUserCaptures = () => {
         axios.post('/get_user_captures', {
             user_id: sessionId,
@@ -14,12 +15,14 @@ const MyCapture = ({ sessionId, missingIdx }) => {
                 setCaptures(response.data);
             })
             .catch(error => {
+                alert("실종자 idx 넘기기 실패")
                 console.error('실종자 idx 넘기기 실패')
             });
     };
     useEffect(() => {
         fetchUserCaptures();
     }, []);
+
 
     useEffect(() => {
         if (missingIdx) {
@@ -34,6 +37,7 @@ const MyCapture = ({ sessionId, missingIdx }) => {
                 });
         }
     }, [missingIdx]);
+
 
     return (
         <div className="Mypage_capture_all">
