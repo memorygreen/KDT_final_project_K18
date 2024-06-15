@@ -1,10 +1,11 @@
 .missing-sidebar {
     width: 150px;
-    height: 100%;
     background-color: #f4f4f4;
     padding: 10px;
     box-shadow: 2px 0 5px rgba(0,0,0,0.1);
     overflow-y: auto;
+    text-align: center;
+    border-radius: 10px;
   }
   
   .missing-sidebar-title {
@@ -21,10 +22,7 @@
     border-radius: 4px;
     transition: background-color 0.3s ease;
   }
-  .missing-sidebar-container {
-    background-color: #f4f4f4;
-  }
-  
+ 
   .missing-sidebar-item:hover {
     background-color: #e0e0e0;
   }

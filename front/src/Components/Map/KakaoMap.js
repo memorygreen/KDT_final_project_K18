@@ -36,7 +36,7 @@ const KakaoMap = () => {
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
 
-    
+
     console.log("디버그(selectedMarker) : ", selectedMarker); //자영(2406605) 선택된 마커(CCTV) 내용 확인
 
     return (
@@ -78,24 +78,25 @@ const KakaoMap = () => {
                             <div className="body">
                                 <div className="desc">
                                     <div className="ellipsis">
-                                        
+
                                         {`위치 : ${selectedMarker.CCTV_LOAD_ADDRESS}`}
                                         <br />
                                         {`위도: ${selectedMarker.CCTV_LAT}, 경도: ${selectedMarker.CCTV_LNG}`}
                                     </div>
-                                    <div>
-                                        {/**자영(240605) 추가 CCTv 상세보기 페이지로 이동 */}
-                                        <a
-                                            href={`/ViewCCTVPage/${selectedMarker.CCTV_IDX}`}
-                                            className="link"
-                                            rel="noreferrer"
-                                        >
-                                            CCTV 상세보기
-                                        </a>
 
-                                        
-                                        
-                                    </div>
+                                    {/* 세션 스토리지에 userCate 값이 INDI 가 아니면 상세보기 링크 표시 */}
+                                    {sessionStorage.getItem('userCate') !== 'INDI' && (
+                                        <div>
+                                            <a
+                                                href={`/ViewCCTVPage/${selectedMarker.CCTV_IDX}`}
+                                                className="link"
+                                                rel="noreferrer"
+                                            >
+                                                CCTV 상세보기
+                                            </a>
+                                        </div>
+                                    )}
+
                                 </div>
                             </div>
                         </div>
