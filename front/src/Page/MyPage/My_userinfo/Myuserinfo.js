@@ -8,14 +8,13 @@ import cap from '../assets/cap.png';
 import CardModal from '../../../Components/Cards/CardModal/CardModal'; // CardModal component imported
 
 
-const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx }) => {
+const Myuserinfo = ({ sessionId, onIconClick, onDivClick }) => {
     const [showMissingList, setShowMissingList] = useState(true);
     const [userId, setUserId] = useState(sessionId);
     const [userInfo, setUserInfo] = useState(null);
     const [missingList, setMissingList] = useState([]);
     const [selectedMissing, setSelectedMissing] = useState(null); // State to store selected missing person info
     const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal open/close
-
 
     const handleMissingClick = (missing) => {
         setSelectedMissing(missing); // Store selected missing person info
@@ -31,6 +30,9 @@ const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx }) => {
     const handleIconClick = (type) => {
         onIconClick(type);
         setShowMissingList(false);
+    }
+    const handleDivClick = (missing) => {
+        onDivClick(missing);
     }
     // 유저 정보 불러오기
     const fetchUserInfo = () => {
@@ -60,10 +62,6 @@ const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx }) => {
         fetchUserInfo();
     }, []);
 
-
-
-
-
     return (
         <div className='Mypage_userinfo_all'>
             <div className='Mypage_userinfo'>
@@ -84,16 +82,15 @@ const Myuserinfo = ({ sessionId, onIconClick, setMissingIdx }) => {
                     <div className='My_missingList_title'>
                         실종자 목록
                     </div>
+                    <div className='My_missingList_items'>
                         {missingList.map((missing) => (
-                            // <li key={missing.MISSING_IDX} onClick={() => handleMissingClick(missing)}>
-                            <div key={missing.MISSING_IDX} onClick={() => { setMissingIdx(missing.MISSING_IDX) }}>
+                            <div className='My_missingList_item' key={missing.MISSING_IDX} onClick={() => handleDivClick(missing)}>
                                 {missing.MISSING_NAME}
-                                <button className='Mypage_missing_btn' onClick={() => handleMissingClick(missing)}>상세보기</button>
-                                <button className='Mypage_missing_btn' onClick={() => handleMissingClick(missing)}>삭제</button>
+                                <button className='Mypage_missing_btn' onClick={() => handleMissingClick(missing)}></button>
                             </div>
                         ))}
                     </div>
-                
+                </div>
             )}
             {isModalOpen && (
                 <CardModal

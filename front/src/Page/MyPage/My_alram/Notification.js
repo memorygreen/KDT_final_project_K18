@@ -149,7 +149,6 @@ const Notification = ({ sessionId }) => {
                                 <p>캡쳐 CCTV: CCTV{selectedNotification.CCTV_IDX}</p>
                                 <p>캡쳐 장소: {cctvAddresses[selectedNotification.CCTV_IDX] || 'Loading address...'}</p>
                                 <p>캡쳐 시간: {selectedNotification.CAPTURE_FIRST_TIME}</p>
-                                <p>사진:</p>
                                 <img src={selectedNotification.CAPTURE_PATH} alt="Capture" style={{ maxWidth: '100%' }} />
                             </>
                         ) : (
