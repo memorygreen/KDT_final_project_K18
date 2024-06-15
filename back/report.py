@@ -14,7 +14,7 @@ def report_missing_person():
             # Connect to the database
             db = db_con()
             cursor = db.cursor()
-
+            print(request.json)
             # Get data from request
             data = request.json
 
@@ -42,7 +42,7 @@ def report_missing_person():
                 USER_ID = result[0]
 
                 # Update the USER_ALARM_CK to 0 for the user
-                update_alarm_query = "UPDATE TB_USER SET USER_ALARM_CK = 0 WHERE USER_ID = %s AND USER_ARARM_CK=1"
+                update_alarm_query = "UPDATE TB_USER SET USER_ALARM_CK = 0 WHERE USER_ID = %s AND USER_ALARM_CK=1"
                 cursor.execute(update_alarm_query, (USER_ID,))
                 # Commit changes
                 db.commit()

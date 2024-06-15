@@ -34,7 +34,7 @@ def get_all_missing_info():
         # 포스터 정보 가져오기
         sql_poster = "SELECT * FROM TB_POSTER WHERE MISSING_IDX=%s AND POSTER_SHOW=1 "
 
-        #AND POSTER_SHOW=1 추가하면 1인 포스터만 보임
+        # AND POSTER_SHOW=1 추가하면 1인 포스터만 보임
 
         cursor.execute(sql_poster, (missing_idx,))
         poster = cursor.fetchone()
@@ -232,10 +232,11 @@ def disable_poster(user_id, missing_idx):
 
 
 # 포스터 비활성화 poster_show 1>0
-@post_bp.route('/post_no_show')
+@post_bp.route('/post_no_show', methods=['POST'])
 def post_no_show():
     try:
-        poster_idx = request.json.get('poster_idx')
+        poster_idx = request.json.get('POSTER_IDX')
+        print(poster_idx)
         if not poster_idx:
             return jsonify({"error": "capture IDX is missing"}), 400
         db = db_con()
@@ -243,17 +244,14 @@ def post_no_show():
 
         cursor.execute(
             "SELECT POSTER_SHOW FROM TB_POSTER WHERE POSTER_IDX = %s", (poster_idx,))
-        current_notification = cursor.fetchone()
 
-        if current_notification and current_notification[0] == 0:
-            # REPORT_NOTIFICATION이 0인 경우에만 업데이트
-            sql_poster_update = """
+        sql_poster_update = """
             UPDATE TB_POSTER
             SET POSTER_SHOW =0
             WHERE POSTER_IDX = %s
             """
-            cursor.execute(sql_poster_update, (poster_idx,))
-            db.commit()
+        cursor.execute(sql_poster_update, (poster_idx,))
+        db.commit()
 
         cursor.close()
         db.close()
@@ -272,8 +270,6 @@ def get_all_missing_info_oneuser():
 
     db = db_con()
     cursor = db.cursor()
-
-    # 실종자 정보 가져오기 (테이블 이름을 정확하게 확인하고 수정)
     sql_missing = "SELECT * FROM TB_MISSING WHERE MISSING_FINDING='finding' AND USER_ID=%s"
     cursor.execute(sql_missing, (user_id,))
     missings = cursor.fetchall()
