@@ -4,6 +4,7 @@ import logo from "./assets/logo.png";
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NoNotification from '../../Page/MyPage/My_alram/NoNotificaiton';
+import alarm from './assets/noti1.png';
 const NevBar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -11,6 +12,7 @@ const NevBar = () => {
     const [userAlarmCk, setUserAlarmCk] = useState(1);
     const [intervalId, setIntervalId] = useState(null); // interval ID를 위한 상태 변수
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 상태를 위한 상태 변수
+    const [notiIcon, setNotiIcon] = useState('alarm_imgOff');
     const navigate = useNavigate();
 
     const toggleMenu = () => {
@@ -22,12 +24,12 @@ const NevBar = () => {
         const sessionUserCate = sessionStorage.getItem('userCate');
         setIsLoggedIn(session ? true : false);
         setUserCate(sessionUserCate);
-        
+
         const fetchData = () => {
             axios.post('http://localhost:5000/userInfoOne', { user_id: session })
                 .then(response => {
                     setUserAlarmCk(response.data.USER_ALARM_CK);
-                    if (response.data.USER_ALARM_CK === 0 && intervalId) {
+                    if (userAlarmCk === 0 && intervalId) {
                         clearInterval(intervalId);
                     }
                 })
@@ -42,9 +44,13 @@ const NevBar = () => {
             clearInterval(id); // 컴포넌트 언마운트 시 clearInterval
         };
     }, []);
-        
 
-   
+    useEffect(() => {
+        if (userAlarmCk === 0) {
+            setNotiIcon('alarm_imgOn');
+        }
+    }, [userAlarmCk]);
+
     const updateAlarmStatus = (userId) => {
         axios.post('http://localhost:5000/updateAlarm', { user_id: userId })
             .then(response => {
@@ -71,6 +77,12 @@ const NevBar = () => {
         // 모달 닫기
         setIsModalOpen(false);
     };
+
+    const ckNoti = () => {
+        setNotiIcon('alarm_imgOff');
+        setIsModalOpen(true); // 모달을 열기 위해 상태를 true로 설정
+    }
+
     return (
         <div className="all_header">
             <header className="header_class">
@@ -88,9 +100,12 @@ const NevBar = () => {
                                         <Link to="/MyPage" className="link-button">MyPage</Link>
                                     </li>
                                     <li><Link to='/SearchMissingPage'>실종자등록</Link></li>
-                                    <a onClick={() => updateAlarmStatus(sessionStorage.getItem('userId'))}>
+                                    {/* <a onClick={() => updateAlarmStatus(sessionStorage.getItem('userId'))}>
                                             {userAlarmCk === 1 ? '' : '알림'}
-                                    </a>
+                                    </a> */}
+                                    <li>
+                                        <img src={alarm} className={notiIcon} onClick={() => ckNoti()} ></img>
+                                    </li>
                                 </ul>
                             )}
                         </nav>
@@ -181,11 +196,12 @@ const NevBar = () => {
                             )}
                         </div>
                         {isLoggedIn && (
-                            <button onClick={handleLogout} className="primary">
-                                Logout
-                            </button>
+                            <div>
+                                <button onClick={handleLogout} className="primary">
+                                    Logout
+                                </button>
+                            </div>
                         )}
-
                     </div>
                     <button aria-label="Open menu" className="burger-menu" type="button" onClick={toggleMenu}>
                         <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-menu-2" width="24"
@@ -199,8 +215,14 @@ const NevBar = () => {
                     </button>
                 </div>
             </header>
-            {/* 모달 */}
-            {isModalOpen && <NoNotification onClose={handleModalClose} />}
+            {isModalOpen &&
+                <div className='noti_div'>
+                    <div>
+                        읽지 않은 알람 개가 있습니다.
+                    </div>
+                    <Link to='/MyPage'> 페이지이동 </Link>
+                </div>
+            }
         </div>
     );
 };

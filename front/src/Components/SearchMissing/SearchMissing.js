@@ -120,11 +120,8 @@ const SearchMissing = ({ initialData }) => {
     const [posterGenerating, setPosterGenerating] = useState('');
 
     const handle_submit = async (event) => {
-        console.log('handle_submit 들어왔는지 확111')
         event.preventDefault();
-        console.log('handle_submit 들어왔는지 확인222')
         if (missingImg) {
-            console.log('missingImg 들어왔는지 확인')
             try {
                 const uploadedImageUrl = await UploadMissingImg(missingImg); // 업로드 완료될때까지 기다리기
                 setMissingImgUrl(uploadedImageUrl);
@@ -134,10 +131,6 @@ const SearchMissing = ({ initialData }) => {
             } catch (error) {
                 console.error('실종자 이미지 aws 업로드 실패 Failed to upload image');
             }
-
-
-
-
 
             const prompt = `
             실종자를 찾는 포스터를 생성
@@ -150,11 +143,6 @@ const SearchMissing = ({ initialData }) => {
             하의 색상: ${selectedBottomColor}
             해당하는 이미지 생성해줘
             `;
-
-
-
-
-
 
             console.log(prompt);
             if (missingImgUrl) {
@@ -292,8 +280,6 @@ const SearchMissing = ({ initialData }) => {
 
     // 인적사항 구분
     const missing_info_box = () => {
-
-
         return (
             <div className="search_missing_cate_group">
                 <div className="search_missing_cate_content">
@@ -568,8 +554,6 @@ const SearchMissing = ({ initialData }) => {
                         onChange={handleBelongingsEtcChange}
                         placeholder="소지품 특이사항 입력"
                     />
-
-
                 </div>
 
             </div>
@@ -586,10 +570,7 @@ const SearchMissing = ({ initialData }) => {
         selectedComponent = missing_bottoms_box();
     } else if (selectBox === '소지품') {
         selectedComponent = missing_belongings_box();
-    } else {
-        selectedComponent = null;
     }
-
 
 
     return (

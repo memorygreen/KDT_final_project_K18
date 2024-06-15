@@ -3,7 +3,7 @@
 .all_header {
     font-family: 'Open Sans', sans-serif;
     font-size: 16px;
-    background-color:white;
+    background-color: white;
 }
 
 .header_class {
@@ -39,6 +39,7 @@
 .logo_nev img {
     height: 3rem;
 }
+
 .logo_nev img:hover {
     transform: rotate(360deg);
     transition: transform 0.2s ease-in-out;
@@ -56,7 +57,8 @@
 }
 
 
-.navigation>li , .admin_button>li {
+.navigation>li,
+.admin_button>li {
     display: flex;
     position: relative;
     cursor: pointer;
@@ -64,7 +66,8 @@
     min-height: 2.25rem;
 }
 
-.navigation>li>a , .admin_button>li>a {
+.navigation>li>a,
+.admin_button>li>a {
     color: black;
     font-size: 18px;
     font-weight: 600;
@@ -72,11 +75,36 @@
     font-family: 'Open Sans', sans-serif;
 }
 
-.navigation>li>a:hover , .admin_button>li>a:hover {
+.navigation>li>a:hover,
+.admin_button>li>a:hover {
     color: #333333b0;
 }
 
-.navigation>li>button , .admin_button>li>button {
+@keyframes shake {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-10deg);
+    }
+    75% {
+        transform: rotate(10deg);
+    }
+}
+
+.alarm_imgOn {
+    width: 25px;
+    height: 25px;
+    animation: shake 0.3s ease infinite;
+}
+.alarm_imgOff {
+    width: 25px;
+    height: 25px;
+}
+
+
+.navigation>li>button,
+.admin_button>li>button {
     color: black;
     transition: all 0.3s ease;
     text-decoration: none;
@@ -99,22 +127,26 @@
     transition: all 0.2s ease-in-out;
 }
 
-.navigation>li>button>svg , .admin_button>li>button>svg {
+.navigation>li>button>svg,
+.admin_button>li>button>svg {
     margin-top: 2px;
     fill: rgb(255, 0, 0);
     transition: all 0.2s ease-in-out;
-} */
+}
 
-.navigation>li:hover>button svg , .admin_button>li:hover>button svg {
+*/ .navigation>li:hover>button svg,
+.admin_button>li:hover>button svg {
     fill: #8276ec00;
     transform: rotate(0.5turn);
 }
 
-.navigation>li:hover>button , .admin_button>li:hover>button {
-    color:#444444b0;
+.navigation>li:hover>button,
+.admin_button>li:hover>button {
+    color: #444444b0;
 }
 
-.navigation>li:hover .dropdown , .admin_button>li:hover .dropdown {
+.navigation>li:hover .dropdown,
+.admin_button>li:hover .dropdown {
     display: block;
 }
 
@@ -154,7 +186,7 @@
     list-style-type: none;
     width: 100%;
     gap: 2rem;
-    padding: 0.75rem;
+    padding: 0.5rem;
 }
 
 .list-items-with-description li {
@@ -233,7 +265,7 @@
     background: #ffffff;
     color: var(--cigGrey);
     outline: none;
-    border-radius: 0.5rem;    
+    border-radius: 0.5rem;
 }
 
 .secondary:hover {
@@ -250,7 +282,7 @@
     background: #ffffff;
     color: var(--cigGrey);
     outline: none;
-    border-radius: 0.5rem; 
+    border-radius: 0.5rem;
     border: none;
 }
 
@@ -304,9 +336,39 @@
     align-items: center;
     justify-content: center;
     position: fixed;
-    top: 50%; /* 상단에서 50% 위치 */
-    left: 50%; /* 좌측에서 50% 위치 */
-    transform: translate(-50%, -50%); /* X축과 Y축을 각각 50%만큼 이동하여 중앙 정렬 */
+    top: 50%;
+    /* 상단에서 50% 위치 */
+    left: 50%;
+    /* 좌측에서 50% 위치 */
+    transform: translate(-50%, -50%);
+    /* X축과 Y축을 각각 50%만큼 이동하여 중앙 정렬 */
     z-index: 1000;
 }
 
+
+.noti_div {
+    position: fixed;
+    top: 20%;
+    left: 40%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    padding: 10px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    z-index: 1000;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.noti_div div {
+    font-size: 16px;
+    color: #333;
+}
+
+.noti_div a {
+    display: inline-block;
+    padding: 10px 10px;
+    color: blue;
+    text-decoration: none;
+    text-align: end;
+}
