@@ -77,14 +77,14 @@ const CardModal = ({ isOpen, onClose, selectedArticle }) => {
     const missingInfoDetails = [
         { label: '이름', value: selectedArticle.MISSING_NAME },
         { label: '나이', value: selectedArticle.MISSING_AGE },
-        { label: '성별', value: selectedArticle.MISSING_GENDER },
-        { label: '상의 타입', value: selectedArticle.MISSING_CLOTHES[0].MISSING_TOP },
-        { label: '상의 색상', value: selectedArticle.MISSING_CLOTHES[0].MISSING_TOP_COLOR },
-        { label: '하의 타입', value: selectedArticle.MISSING_CLOTHES[0].MISSING_BOTTOMS },
-        { label: '하의 색상', value: selectedArticle.MISSING_CLOTHES[0].MISSING_BOTTOMS_COLOR },
+        { label: '성별',  value: selectedArticle.MISSING_GENDER === 'male' ? '남자' : selectedArticle.MISSING_GENDER === 'female' ? '여자' : selectedArticle.MISSING_GENDER },
+        { label: '상의 타입', value: selectedArticle.MISSING_CLOTHES[0].MISSING_TOP_KOR },
+        { label: '상의 색상', value: selectedArticle.MISSING_CLOTHES[0].MISSING_TOP_COLOR_KOR },
+        { label: '하의 타입', value: selectedArticle.MISSING_CLOTHES[0].MISSING_BOTTOMS_KOR },
+        { label: '하의 색상', value: selectedArticle.MISSING_CLOTHES[0].MISSING_BOTTOMS_COLOR_KOR },
         { label: '마지막 위치', value: selectedArticle.MISSING_LOCATION }
     ];
-
+    
     return (
         <div className="modal_backdrop" onClick={onClose}>
             <div className="modal_content" onClick={(e) => e.stopPropagation()}>

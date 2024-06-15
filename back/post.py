@@ -5,13 +5,12 @@ from datetime import datetime, timedelta
 from db import db_con
 import logging
 from apscheduler.schedulers.background import BackgroundScheduler
+
 post_bp = Blueprint('post', __name__)
-# BackgroundScheduler 인스턴스 생성
 scheduler = BackgroundScheduler()
 scheduler.start()
+
 # 포스터 조회
-
-
 @post_bp.route('/missing_info', methods=['GET'])
 def get_all_missing_info():
     db = db_con()
@@ -27,15 +26,19 @@ def get_all_missing_info():
         missing_idx = missing[0]
 
         # 실종자 옷 정보 가져오기
-        sql_clothes = "SELECT * FROM TB_MISSING_CLOTHES WHERE MISSING_IDX=%s"
+        sql_clothes = """
+            SELECT MISSING_CLOTHES_IDX, MISSING_IDX, MISSING_TOP_KOR, MISSING_TOP_COLOR_KOR,
+                   MISSING_BOTTOMS_KOR, MISSING_BOTTOMS_COLOR_KOR, MISSING_CLOTHES_ETC
+            FROM TB_MISSING_CLOTHES
+            WHERE MISSING_IDX = %s
+        """
         cursor.execute(sql_clothes, (missing_idx,))
         clothes = cursor.fetchall()
 
         # 포스터 정보 가져오기
-        sql_poster = "SELECT * FROM TB_POSTER WHERE MISSING_IDX=%s AND POSTER_SHOW=1 "
-
-        #AND POSTER_SHOW=1 추가하면 1인 포스터만 보임
-
+        sql_poster = """
+            SELECT * FROM TB_POSTER WHERE MISSING_IDX=%s AND POSTER_SHOW=1
+        """
         cursor.execute(sql_poster, (missing_idx,))
         poster = cursor.fetchone()
 
@@ -56,10 +59,10 @@ def get_all_missing_info():
                 'MISSING_CLOTHES': [{
                     'MISSING_CLOTHES_IDX': cloth[0],
                     'MISSING_IDX': cloth[1],
-                    'MISSING_TOP': cloth[2],
-                    'MISSING_TOP_COLOR': cloth[3],
-                    'MISSING_BOTTOMS': cloth[4],
-                    'MISSING_BOTTOMS_COLOR': cloth[5],
+                    'MISSING_TOP_KOR': cloth[2],
+                    'MISSING_TOP_COLOR_KOR': cloth[3],
+                    'MISSING_BOTTOMS_KOR': cloth[4],
+                    'MISSING_BOTTOMS_COLOR_KOR': cloth[5],
                     'MISSING_CLOTHES_ETC': cloth[6]
                 } for cloth in clothes],
                 'POSTER_INFO': {
@@ -78,15 +81,13 @@ def get_all_missing_info():
 
     return jsonify(result)
 
-
 # 작성한 실종자 정보 가져오기
 @post_bp.route('/user_missing', methods=['GET'])
 def user_missing():
-    # 세션에서 사용자의 ID 가져오기
     user_id = session.get('user_id')
 
     if not user_id:
-        return jsonify({'error': 'User is not logged in'}), 401
+        return jsonify({'error': '사용자가 로그인되어 있지 않습니다.'}), 401
 
     db = db_con()
     cursor = db.cursor()
@@ -107,12 +108,19 @@ def user_missing():
             missing_idx = missing[0]
 
             # 해당 실종자의 옷 정보 조회
-            sql_clothes = "SELECT * FROM TB_MISSING_CLOTHES WHERE MISSING_IDX=%s"
+            sql_clothes = """
+                SELECT MISSING_CLOTHES_IDX, MISSING_IDX, MISSING_TOP_KOR, MISSING_TOP_COLOR_KOR,
+                       MISSING_BOTTOMS_KOR, MISSING_BOTTOMS_COLOR_KOR, MISSING_CLOTHES_ETC
+                FROM TB_MISSING_CLOTHES
+                WHERE MISSING_IDX = %s
+            """
             cursor.execute(sql_clothes, (missing_idx,))
             clothes = cursor.fetchall()
 
             # 해당 실종자의 포스터 정보 조회
-            sql_poster = "SELECT * FROM TB_POSTER WHERE MISSING_IDX=%s"
+            sql_poster = """
+                SELECT * FROM TB_POSTER WHERE MISSING_IDX=%s
+            """
             cursor.execute(sql_poster, (missing_idx,))
             poster = cursor.fetchone()
 
@@ -129,10 +137,10 @@ def user_missing():
                 'MISSING_CLOTHES': [{
                     'MISSING_CLOTHES_IDX': cloth[0],
                     'MISSING_IDX': cloth[1],
-                    'MISSING_TOP': cloth[2],
-                    'MISSING_TOP_COLOR': cloth[3],
-                    'MISSING_BOTTOMS': cloth[4],
-                    'MISSING_BOTTOMS_COLOR': cloth[5],
+                    'MISSING_TOP_KOR': cloth[2],
+                    'MISSING_TOP_COLOR_KOR': cloth[3],
+                    'MISSING_BOTTOMS_KOR': cloth[4],
+                    'MISSING_BOTTOMS_COLOR_KOR': cloth[5],
                     'MISSING_CLOTHES_ETC': cloth[6]
                 } for cloth in clothes],
                 'POSTER_INFO': {
@@ -154,7 +162,6 @@ def user_missing():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-
 # 포스터 생성 기능
 @post_bp.route('/create_poster', methods=['POST'])
 def create_poster():
@@ -162,7 +169,7 @@ def create_poster():
         user_id = request.json.get('user_id')
         poster_img_path = request.json.get('poster_img_path')
         if not user_id:
-            return jsonify({'error': 'User is not logged in'}), 401
+            return jsonify({'error': '사용자가 로그인되어 있지 않습니다.'}), 401
 
         db = db_con()
         cursor = db.cursor()
@@ -178,7 +185,7 @@ def create_poster():
         missing = cursor.fetchone()
 
         if not missing:
-            return jsonify({'error': 'No missing person information found for the logged-in user'}), 404
+            return jsonify({'error': '로그인한 사용자에 대한 실종자 정보가 없습니다.'}), 404
 
         missing_idx = missing[0]
 
@@ -193,51 +200,26 @@ def create_poster():
 
         scheduler.add_job(disable_poster, 'date', run_date=datetime.now() + timedelta(days=1),
                           args=[user_id, missing_idx])
-        # timedelta(minutes=1) 1분으로 설정 timedelta(days=1)
+
         db.commit()
 
-        return jsonify({'message': 'Poster created successfully', 'MISSING_IDX': missing_idx}), 201
+        return jsonify({'message': '포스터가 성공적으로 생성되었습니다.', 'MISSING_IDX': missing_idx}), 201
 
     except Exception as e:
-        logging.error("Error creating poster: %s", str(e))
+        logging.error("포스터 생성 중 오류 발생: %s", str(e))
         db.rollback()
-        return jsonify({'error': 'An error occurred while creating the poster. Please try again later.'}), 500
+        return jsonify({'error': '포스터 생성 중 오류가 발생했습니다. 나중에 다시 시도해주세요.'}), 500
     finally:
         cursor.close()
         db.close()
 
-# 30일후 포스터 자동 업데이트 Poster_show=1>0 현재는 1분으로 설정되어있음
-
-
-def disable_poster(user_id, missing_idx):
-    try:
-
-        db = db_con()
-        cursor = db.cursor()
-
-        sql_update_poster = """
-            UPDATE TB_POSTER SET POSTER_SHOW=0
-            WHERE MISSING_IDX=%s
-        """
-        cursor.execute(sql_update_poster, (missing_idx))
-        db.commit()
-        logging.info(f"Poster updated successfully for USER_ID: {
-                     user_id}, MISSING_IDX: {missing_idx}")
-    except Exception as e:
-        logging.error("Error disabling poster: %s", str(e))
-        db.rollback()
-    finally:
-        cursor.close()
-        db.close()
-
-
-# 포스터 비활성화 poster_show 1>0
-@post_bp.route('/post_no_show')
+# 포스터 비활성화
+@post_bp.route('/post_no_show', methods=['POST'])
 def post_no_show():
     try:
         poster_idx = request.json.get('poster_idx')
         if not poster_idx:
-            return jsonify({"error": "capture IDX is missing"}), 400
+            return jsonify({"error": "포스터 IDX가 누락되었습니다."}), 400
         db = db_con()
         cursor = db.cursor()
 
@@ -246,10 +228,10 @@ def post_no_show():
         current_notification = cursor.fetchone()
 
         if current_notification and current_notification[0] == 0:
-            # REPORT_NOTIFICATION이 0인 경우에만 업데이트
+            # POSTER_SHOW가 0인 경우에만 업데이트
             sql_poster_update = """
             UPDATE TB_POSTER
-            SET POSTER_SHOW =0
+            SET POSTER_SHOW = 0
             WHERE POSTER_IDX = %s
             """
             cursor.execute(sql_poster_update, (poster_idx,))
@@ -258,23 +240,23 @@ def post_no_show():
         cursor.close()
         db.close()
 
-        return jsonify({"message": "capture updated successfully"}), 200
+        return jsonify({"message": "포스터가 성공적으로 업데이트되었습니다."}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
-@post_bp.route('/missing_info_oneuser', methods=['GET', 'POST'])
+@post_bp.route('/missing_info_oneuser', methods=['POST'])
 def get_all_missing_info_oneuser():
     user_id = request.json.get('user_id')
-    print(user_id)
     if not user_id:
-        return jsonify({'error': 'User is not logged in'}), 401
+        return jsonify({'error': '사용자가 로그인되어 있지 않습니다.'}), 401
 
     db = db_con()
     cursor = db.cursor()
 
-    # 실종자 정보 가져오기 (테이블 이름을 정확하게 확인하고 수정)
-    sql_missing = "SELECT * FROM TB_MISSING WHERE MISSING_FINDING='finding' AND USER_ID=%s"
+    # 사용자의 실종자 정보 가져오기
+    sql_missing = """
+        SELECT * FROM TB_MISSING WHERE MISSING_FINDING='finding' AND USER_ID=%s
+    """
     cursor.execute(sql_missing, (user_id,))
     missings = cursor.fetchall()
 
@@ -282,18 +264,24 @@ def get_all_missing_info_oneuser():
     for missing in missings:
         missing_idx = missing[0]
 
-        # 실종자 옷 정보 가져오기
-        sql_clothes = "SELECT * FROM TB_MISSING_CLOTHES WHERE MISSING_IDX=%s"
+        # 해당 실종자의 옷 정보 조회
+        sql_clothes = """
+            SELECT MISSING_CLOTHES_IDX, MISSING_IDX, MISSING_TOP_KOR, MISSING_TOP_COLOR_KOR,
+                   MISSING_BOTTOMS_KOR, MISSING_BOTTOMS_COLOR_KOR, MISSING_CLOTHES_ETC
+            FROM TB_MISSING_CLOTHES
+            WHERE MISSING_IDX = %s
+        """
         cursor.execute(sql_clothes, (missing_idx,))
         clothes = cursor.fetchall()
 
-        # 포스터 정보 가져오기
-        sql_poster = "SELECT * FROM TB_POSTER WHERE MISSING_IDX=%s"
-        # sql_poster = "SELECT * FROM TB_POSTER WHERE MISSING_IDX=%s AND POSTER_SHOW=1" 이렇게 바꾸면 show=1인 포스터만 보임
+        # 해당 실종자의 포스터 정보 조회
+        sql_poster = """
+            SELECT * FROM TB_POSTER WHERE MISSING_IDX=%s
+        """
         cursor.execute(sql_poster, (missing_idx,))
         poster = cursor.fetchone()
 
-        # POSTER_IMG_PATH가 null이 아닌 경우만 결과에 추가
+        # 포스터가 존재하는 경우에만 결과에 추가
         if poster:
             poster_info = {
                 'POSTER_IDX': poster[0],
@@ -312,6 +300,7 @@ def get_all_missing_info_oneuser():
                 'POSTER_IMG_PATH': None,
                 'POSTER_SHOW': None
             }
+
         missing_info = {
             'MISSING_IDX': missing[0],
             'USER_ID': missing[1],
@@ -327,10 +316,10 @@ def get_all_missing_info_oneuser():
             'MISSING_CLOTHES': [{
                 'MISSING_CLOTHES_IDX': cloth[0],
                 'MISSING_IDX': cloth[1],
-                'MISSING_TOP': cloth[2],
-                'MISSING_TOP_COLOR': cloth[3],
-                'MISSING_BOTTOMS': cloth[4],
-                'MISSING_BOTTOMS_COLOR': cloth[5],
+                'MISSING_TOP_KOR': cloth[2],
+                'MISSING_TOP_COLOR_KOR': cloth[3],
+                'MISSING_BOTTOMS_KOR': cloth[4],
+                'MISSING_BOTTOMS_COLOR_KOR': cloth[5],
                 'MISSING_CLOTHES_ETC': cloth[6]
             } for cloth in clothes],
             'POSTER_INFO': poster_info
