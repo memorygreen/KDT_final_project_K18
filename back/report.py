@@ -14,7 +14,7 @@ def report_missing_person():
             # Connect to the database
             db = db_con()
             cursor = db.cursor()
-
+            print(request.json)
             # Get data from request
             data = request.json
 

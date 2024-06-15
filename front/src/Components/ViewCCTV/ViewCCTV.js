@@ -10,7 +10,7 @@ const ViewCCTV = () => {
     useEffect(() => {
         console.log("CCTV_IDX : ", cctvId);
 
-        // cctvId 를 백에 넘기고 그 값에 해당하는 CCTV 영상 db에서  url 불러오는 코드 
+        // cctvId 를 백에 넘기고 그 값에 해당하는 CCTV 영상 db에서 url 불러오는 코드 
         const fetchCCTVData = async () => {
             try {
                 const response = await axios.post('/getCCTVurl', {

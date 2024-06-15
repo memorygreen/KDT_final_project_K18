@@ -87,6 +87,12 @@
     padding-bottom: 10px;
 
 }
+.Card_missingInfo_button{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
 
 .Card_missingInfo_detail div {
     width: 100%;
