@@ -19,7 +19,7 @@ def get_all_missing_info():
     cursor = db.cursor()
 
     # 실종자 정보 가져오기 (테이블 이름을 정확하게 확인하고 수정).
-    sql_missing = "SELECT * FROM TB_MISSING WHERE MISSING_FINDING='finding'"
+    sql_missing = "SELECT * FROM TB_MISSING WHERE MISSING_FINDING='finding'ORDER BY MISSING_IDX DESC"
     cursor.execute(sql_missing)
     missings = cursor.fetchall()
 
