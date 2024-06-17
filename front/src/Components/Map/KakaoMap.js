@@ -130,7 +130,6 @@ const KakaoMap = ({ missingIdx }) => {
                                             </a>
                                         </div>
                                     )}
-
                                 </div>
                             </div>
                         </div>

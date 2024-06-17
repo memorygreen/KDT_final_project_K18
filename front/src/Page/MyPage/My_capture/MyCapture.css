@@ -8,12 +8,12 @@
     margin-bottom: 10px;
 }
 
+
 .Mypage_capture_all_grid {
     display: grid;
     padding: 0.5rem;
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 20px;
-    overflow: hidden;
     border-radius: 10px;
     height: 450px;
     overflow-y: auto;
@@ -22,7 +22,6 @@
 .Mypage_capture_all_grid_item {
     border-radius: 10px;
     width: 100%;
-    height: 100%;
 }
 
 .Mypage_capture_all_grid_item img {
