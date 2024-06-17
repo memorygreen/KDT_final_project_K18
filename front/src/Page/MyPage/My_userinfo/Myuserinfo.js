@@ -6,7 +6,7 @@ import alram from '../assets/alr.png';
 import setting from '../assets/set.png';
 import cap from '../assets/cap.png';
 import CardModal from '../../../Components/Cards/CardModal/CardModal'; // CardModal component imported
-
+import MyCapture from '../My_capture/MyCapture';
 
 const Myuserinfo = ({ sessionId, onIconClick, onDivClick }) => {
     const [showMissingList, setShowMissingList] = useState(true);
@@ -21,7 +21,6 @@ const Myuserinfo = ({ sessionId, onIconClick, onDivClick }) => {
         setIsModalOpen(true); // Open modal
     };
 
-
     // 알람 및 설정 아이콘 클릭 핸들러
     const handleIconClick = (type) => {
         if (type === 'capture' || type === 'notification') {
@@ -31,10 +30,13 @@ const Myuserinfo = ({ sessionId, onIconClick, onDivClick }) => {
             setShowMissingList(false);
         }
         onIconClick(type);
-    }
+    };
+
     const handleDivClick = (missing) => {
         onDivClick(missing);
-    }
+        setSelectedMissing(missing); // Update selected missing person
+    };
+
     // 유저 정보 불러오기
     const fetchUserInfo = () => {
         axios.post('/userInfoOne', { user_id: userId })
@@ -46,6 +48,7 @@ const Myuserinfo = ({ sessionId, onIconClick, onDivClick }) => {
                 console.error('Error fetching user info:', error);
             });
     };
+
     // 실종자 목록 불러오기
     const fetchMissingData = () => {
         axios.post('/missing_info_oneuser', { user_id: userId })  // 'userId' changed to 'user_id'
@@ -102,6 +105,7 @@ const Myuserinfo = ({ sessionId, onIconClick, onDivClick }) => {
                     selectedArticle={selectedMissing}
                 />
             )}
+            
         </div>
     );
 };

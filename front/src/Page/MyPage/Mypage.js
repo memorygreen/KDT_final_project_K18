@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import './Mypage.css';
 import Myuserinfo from './My_userinfo/Myuserinfo';
 import Notification from './My_alram/Notification';
@@ -7,9 +7,10 @@ import UserUpdate from './My_modify/UserUpdate';
 import NevBar from '../../Components/NevBar/NevBar';
 
 const MyPage = () => {
-    const sessionId = sessionStorage.getItem('userId') // session에 있는 id 값 
+    const sessionId = sessionStorage.getItem('userId'); // session에 있는 id 값 
     const [activeComponent, setActiveComponent] = useState('capture'); // 기본값은 'capture'
-    const [missingIdx, setMissingIdx] = useState()
+    const [missingIdx, setMissingIdx] = useState(null);
+    const [selectedMissing, setSelectedMissing] = useState(null);
 
     const handleIconClick = (component) => {
         console.log('Changing active component to:', component); // 상태 변화 로깅
@@ -19,7 +20,13 @@ const MyPage = () => {
     const handleDivClick = (missing) => {
         console.log('missing', missing);
         setMissingIdx(missing.MISSING_IDX);
-    }
+        setSelectedMissing(missing); // Update selected missing person
+    };
+
+    const handleMissingClick = (missing) => {
+        setSelectedMissing(missing); // Update selected missing person
+        setMissingIdx(missing ? missing.MISSING_IDX : null); // Update missingIdx
+    };
 
     return (
         <div className="Mypages">
@@ -32,7 +39,7 @@ const MyPage = () => {
                     <div className='Mypage_content'>
                         {activeComponent === 'capture' && (
                             <div className='Mypage_capture'>
-                                <MyCapture sessionId={sessionId} missingIdx={missingIdx} />
+                                <MyCapture sessionId={sessionId} missingIdx={missingIdx} selectedMissing={selectedMissing} onMissingClick={handleMissingClick} />
                             </div>
                         )}
                         {activeComponent === 'update' && (
@@ -48,8 +55,8 @@ const MyPage = () => {
                     </div>
                 </div>
             </div>
-        </div >
+        </div>
     );
-}
+};
 
 export default MyPage;
