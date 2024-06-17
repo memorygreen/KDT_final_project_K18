@@ -89,6 +89,10 @@
     gap: 0.5rem;
 }
 
+.signup-welcome-row a {
+    border: none;
+}
+
 .sign_up_btn {
     /*회원가입 버튼 (원래 이름 my-form__button)*/
     background-color: var(--cigBlue);
@@ -282,6 +286,7 @@ gender_radio_btn_div label:hover {
     font-weight: 700;
     text-decoration: none;
     font-size: 1.125rem;
+    border: none;
 }
 
 .my-form__signin .Login:hover {

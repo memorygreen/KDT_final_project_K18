@@ -289,15 +289,3 @@
 .collapsed .expand-btn svg {
     transform: rotate(-360deg);
 }
-
-/* @keyframes fadeIn {
-    from {
-        width: 4rem;
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-        width: 100%;
-    }
-} */
