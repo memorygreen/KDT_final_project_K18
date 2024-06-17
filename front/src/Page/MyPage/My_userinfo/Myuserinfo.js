@@ -89,7 +89,7 @@ const Myuserinfo = ({ sessionId, onIconClick, onDivClick }) => {
                         {missingList.map((missing) => (
                             <div className='My_missingList_item' key={missing.MISSING_IDX} onClick={() => handleDivClick(missing)}>
                                 {missing.MISSING_NAME}
-                                <button className='Mypage_missing_btn' onClick={() => handleMissingClick(missing)}></button>
+                                <button className='Mypage_missing_btn' onClick={() => handleMissingClick(missing)}>정보</button>
                             </div>
                         ))}
                     </div>

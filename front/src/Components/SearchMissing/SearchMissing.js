@@ -175,7 +175,7 @@ const SearchMissing = ({ initialData }) => {
                     .then(response => {
                         console.log('실종자 정보 등록 성공 successfully:', response.data);
                         alert("등록 성공(포스터 생성 시 완료까지 시간이 소요됩니다)")
-                        navigate('/Map'); // 성공 후 메인 페이지로 리다이렉트
+                        navigate('/Mappage'); // 성공 후 메인 페이지로 리다이렉트
 
                         // 포스터 생성
                         if (posterGenerating) {
