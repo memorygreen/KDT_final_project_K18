@@ -269,12 +269,12 @@ async def update_nearest_cctvs_to_db(missing_id, nearest_cctvs):
 def calculate_distance(lat1, lng1, lat2, lng2):
     R = 6371.0  # 지구 반지름 (킬로미터 단위)
     lat1_rad = radians(lat1)
-    lng1_rad = radians(lat1)
+    lng1_rad = radians(lng1)
     lat2_rad = radians(lat2)
-    lng2_rad = radians(lat2)
+    lng2_rad = radians(lng2)
 
     dlat = abs(lat2_rad - lat1_rad)
-    dlng = abs(lat2_rad - lat1_rad)
+    dlng = abs(lng2_rad - lng1_rad)
 
     a = sin(dlat / 2) ** 2 + cos(lat1_rad) * cos(lat2_rad) * sin(dlng / 2) ** 2
     c = 2 * atan2(sqrt(a), sqrt(1 - a))
