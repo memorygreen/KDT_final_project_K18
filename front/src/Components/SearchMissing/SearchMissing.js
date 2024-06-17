@@ -137,6 +137,7 @@ const SearchMissing = () => {
             상의 색상: ${selectedTopColor}
             하의 타입: ${selectedBottom}
             하의 색상: ${selectedBottomColor}
+            인상착의 특이사항 : ${missingClothesEtc}
             해당하는 이미지 생성해줘
             `;
 
