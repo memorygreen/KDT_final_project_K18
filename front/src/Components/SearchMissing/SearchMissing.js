@@ -138,7 +138,6 @@ const SearchMissing = ({ initialData }) => {
             상의 색상: ${selectedTopColor}
             하의 타입: ${selectedBottom}
             하의 색상: ${selectedBottomColor}
-            인상착의 특이사항 : ${missingClothesEtc}
             해당하는 이미지 생성해줘
             `;
 
@@ -336,9 +335,6 @@ const SearchMissing = ({ initialData }) => {
                             id="missing_img"
                             onChange={handleImgChange}
                         />
-                        <button onClick={handle_submit} disabled={isUploading}>
-                            {isUploading ? '업로드 중...' : '이미지 업로드'}
-                        </button>
                     </div>
                     {/** 미리보기 */}
                     {missingImg && (
