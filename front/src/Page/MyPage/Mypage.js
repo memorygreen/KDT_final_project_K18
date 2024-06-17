@@ -27,7 +27,7 @@ const MyPage = () => {
             <div className='Mypage_main'>
                 <div className="Mypage_container">
                     <div className='Mypage_userinfo'>
-                        <Myuserinfo sessionId={sessionId} onIconClick={handleIconClick} onDivClick={handleDivClick}/>
+                        <Myuserinfo sessionId={sessionId} onIconClick={handleIconClick} onDivClick={handleDivClick} />
                     </div>
                     <div className='Mypage_content'>
                         {activeComponent === 'capture' && (
@@ -42,7 +42,7 @@ const MyPage = () => {
                         )}
                         {activeComponent === 'notification' && (
                             <div className='Mypage_alarm'>
-                                <Notification sessionId={sessionId} />
+                                <Notification sessionId={sessionId} missingIdx={missingIdx} />
                             </div>
                         )}
                     </div>

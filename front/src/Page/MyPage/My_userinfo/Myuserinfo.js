@@ -21,15 +21,16 @@ const Myuserinfo = ({ sessionId, onIconClick, onDivClick }) => {
         setIsModalOpen(true); // Open modal
     };
 
-    const handleCapClick = () => {
-        onIconClick('capture');  // Call external function
-        setShowMissingList(true);  // Always set to true to show My_missingList
-    }
 
     // 알람 및 설정 아이콘 클릭 핸들러
     const handleIconClick = (type) => {
+        if (type === 'capture' || type === 'notification') {
+            setShowMissingList(true);
+        }
+        else {
+            setShowMissingList(false);
+        }
         onIconClick(type);
-        setShowMissingList(false);
     }
     const handleDivClick = (missing) => {
         onDivClick(missing);
@@ -69,8 +70,10 @@ const Myuserinfo = ({ sessionId, onIconClick, onDivClick }) => {
                 <div className='Mypage_userinfo_name'>{userInfo && userInfo.USER_NAME}</div>
             </div>
             <div className='Mypage_userinfo_icon'>
-                <div onClick={() => handleIconClick('notification')}><img src={alram} alt="alram" /></div>
-                <div onClick={handleCapClick}>
+                <div onClick={() => handleIconClick('notification')}>
+                    <img src={alram} alt="alram" />
+                </div>
+                <div onClick={() => handleIconClick('capture')}>
                     <img src={cap} alt="cap" />
                 </div>
                 <div onClick={() => handleIconClick('update')}>

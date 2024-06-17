@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Notification.css';
 
-const Notification = ({ sessionId }) => {
+const Notification = ({ sessionId, missingIdx }) => {
     const [notifications, setNotifications] = useState([]);
     const [cctvAddresses, setCctvAddresses] = useState({});
     const [selectedNotification, setSelectedNotification] = useState(null);
@@ -62,7 +62,7 @@ const Notification = ({ sessionId }) => {
         fetchNotifications();
     }, []);
     useEffect(() => {
-        
+
         setFilter('all');
         setFilteredNotifications(notifications);
     }, [notifications]);
@@ -160,7 +160,7 @@ const Notification = ({ sessionId }) => {
                             </>
                         )}
                     </div>
-                    <button onClick={handleCloseModal}>Close</button>
+                    <button className='close-button' onClick={handleCloseModal}>닫기</button>
                 </div>
             )}
         </div>

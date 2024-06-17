@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // 상단에 import 추가
 import closeIcon from '../assets/xxx.png';
 import axios from 'axios'; // Import Axios
 import './CardModal.css'; // 모달 스타일이 필요하면 추가
 
 const CardModal = ({ isOpen, onClose, selectedArticle }) => {
+    const navigate = useNavigate(); // useNavigate 훅 사용
     const [showReportForm, setShowReportForm] = useState(false);
     const [showFirstButton, setShowFirstButton] = useState(true);
     const [reportDetails, setReportDetails] = useState({
@@ -77,7 +79,7 @@ const CardModal = ({ isOpen, onClose, selectedArticle }) => {
 
     const handleHidePost = () => {
         axios.post('/missing_finding_change', // 엔드포인트 변경
-            { 
+            {
                 idx: selectedArticle.MISSING_IDX,
                 user_id: selectedArticle.USER_ID,
                 newfinding: 'stop' // MISSING_FINDING 값을 'stop'으로 설정
@@ -96,14 +98,14 @@ const CardModal = ({ isOpen, onClose, selectedArticle }) => {
     const missingInfoDetails = [
         { label: '이름', value: selectedArticle.MISSING_NAME },
         { label: '나이', value: selectedArticle.MISSING_AGE },
-        { label: '성별',  value: selectedArticle.MISSING_GENDER === 'male' ? '남자' : selectedArticle.MISSING_GENDER === 'female' ? '여자' : selectedArticle.MISSING_GENDER },
+        { label: '성별', value: selectedArticle.MISSING_GENDER === 'male' ? '남자' : selectedArticle.MISSING_GENDER === 'female' ? '여자' : selectedArticle.MISSING_GENDER },
         { label: '상의 타입', value: selectedArticle.MISSING_CLOTHES[0].MISSING_TOP_KOR },
         { label: '상의 색상', value: selectedArticle.MISSING_CLOTHES[0].MISSING_TOP_COLOR_KOR },
         { label: '하의 타입', value: selectedArticle.MISSING_CLOTHES[0].MISSING_BOTTOMS_KOR },
         { label: '하의 색상', value: selectedArticle.MISSING_CLOTHES[0].MISSING_BOTTOMS_COLOR_KOR },
         { label: '마지막 위치', value: selectedArticle.MISSING_LOCATION }
     ];
-    
+
     return (
         <div className="modal_backdrop" onClick={onClose}>
             <div className="modal_content" onClick={(e) => e.stopPropagation()}>
@@ -135,7 +137,9 @@ const CardModal = ({ isOpen, onClose, selectedArticle }) => {
                             <div className="button-group">
                                 {isOwner ? (
                                     <div className='Card_missingInfo_button'>
-                                        <button className="follow">수정</button>
+                                        <button className="follow" onClick={() => {
+                                            navigate('/EditMissing', { state: { missingIdx: selectedArticle.MISSING_IDX } });
+                                        }}>수정</button>
                                         <button className="follow" onClick={() => {
                                             if (window.confirm('확인시 실종자 정보가 삭제 됩니다 삭제 하시겠습니까?')) {
                                                 handleHidePost();

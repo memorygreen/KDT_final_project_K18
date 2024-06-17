@@ -24,12 +24,12 @@ const CaptureDetail = ({ capture, onClose }) => {
     return (
         <div className="modal-detail">
             <div>
-                <p>캡쳐 CCTV: CCTV{capture.CCTV_IDX}</p>
+                <p>캡쳐 CCTV: {capture.CCTV_IDX}</p>
                 <p>캡쳐 장소: {cctvAddress || '주소 불러오는 중...'}</p>
                 <p>캡쳐 시간: {capture.CAPTURE_FIRST_TIME}</p>
                 <img src={capture.CAPTURE_PATH} alt="Capture" style={{ maxWidth: '100%' }} />
             </div>
-            <button onClick={onClose}>닫기</button>
+            <button className='close-button' onClick={onClose}>닫기</button>
         </div>
     );
 };
