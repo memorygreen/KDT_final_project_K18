@@ -7,7 +7,7 @@ import { createPoster } from '../Poster/CreatePost';
 import { MissingAvatar } from './MissingAvatar';
 import { useNavigate } from 'react-router-dom';
 import './SearchMissing.css';
-// import defaultProfileImage from './assets/default_profile.jpeg';
+import defaultProfileImage from './assets/default_profile.jpeg';
 const SearchMissing = () => {
     const navigate = useNavigate(); // 리다이렉트를 위한 navigate 함수 사용
 
