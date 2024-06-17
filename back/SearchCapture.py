@@ -36,6 +36,7 @@ def get_user_captures():
     FROM TB_CAPTURE c
     JOIN TB_MISSING m ON c.MISSING_IDX = m.MISSING_IDX
     WHERE m.USER_ID = %s
+    ORDER BY c.CAPTURE_FIRST_TIME DESC
     """
 
     cursor.execute(query, (session_id,))

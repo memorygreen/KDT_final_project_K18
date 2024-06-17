@@ -126,7 +126,7 @@ const NoNotification = ({ sessionId }) => {
                 {filteredNotifications.map(notification => (
                     <div key={notification.id} className={`notification ${notification.REPORT_NOTIFICATION === 1 || notification.CAPTURE_ALARM_CK === 1 ? 'notification-gray' : ''}`} onClick={() => handleDetailClick(notification)}>
                         <div className="notification-header">
-                            <b>{notification.type === 'capture' ? `${notification.MISSING_NAME} 추정 캡쳐 알림` : `${notification.MISSING_NAME} 추정 제보 알림`}</b>
+                            <b>{notification.type === 'capture' ? `${notification.MISSING_NAME} 추정 캡처 알림` : `${notification.MISSING_NAME} 추정 제보 알림`}</b>
                         </div>
                         <div className={`notification-content ${notification.REPORT_NOTIFICATION === 1 || notification.CAPTURE_ALARM_CK === 1 ? 'notification-content-gray-text' : ''}`}>
                             {notification.type === 'capture' ?
@@ -148,9 +148,9 @@ const NoNotification = ({ sessionId }) => {
                     <div>
                         {selectedNotification.type === 'capture' ? (
                             <>
-                                <p>캡쳐 CCTV: CCTV{selectedNotification.CCTV_IDX}</p>
-                                <p>캡쳐 장소: {cctvAddresses[selectedNotification.CCTV_IDX] || 'Loading address...'}</p>
-                                <p>캡쳐 시간: {selectedNotification.CAPTURE_FIRST_TIME}</p>
+                                <p>캡처 CCTV: CCTV{selectedNotification.CCTV_IDX}</p>
+                                <p>캡처 장소: {cctvAddresses[selectedNotification.CCTV_IDX] || 'Loading address...'}</p>
+                                <p>캡처 시간: {selectedNotification.CAPTURE_FIRST_TIME}</p>
                                 <p>사진:</p>
                                 <img src={selectedNotification.CAPTURE_PATH} alt="Capture" style={{ maxWidth: '100%' }} />
                             </>
