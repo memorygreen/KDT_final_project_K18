@@ -33,7 +33,7 @@ const Mappage = () => {
       <header className='nevibar'> <NevBar /></header>
       <div className="main-container">
       <div className="map-container">
-          <KakaoMap />
+          <KakaoMap missingIdx={missingIdx} />
           <div className="missing-sidebar-container">
             <MissingSidebar missingList={missingList} setMissingIdx={setMissingIdx} />
           </div>

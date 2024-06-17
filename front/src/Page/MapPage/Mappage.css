@@ -1,6 +1,7 @@
 /* Main.css */
 .main-main-container{
   height: 100vh; 
+  /* overflow: hidden; */
 }
 
 
@@ -10,21 +11,10 @@
   z-index: 1; /* 맵의 z-index를 설정하여 사이드바 위로 나타나도록 합니다. */
 }
 
-.sidebar1 {
+.missing-sidebar-container {
   position: absolute;
   top: 0;
   left: 0; /* 왼쪽에서부터의 거리를 0으로 설정합니다. */
   z-index: 2;
   /* 다른 스타일 설정 */
-}
-
-.missing-sidebar-container {
-  background-color: #f4f4f4;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  overflow-y: auto;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-  z-index: 10;
 }

@@ -203,10 +203,6 @@ def create_poster():
             ) VALUES (%s, %s)
         """
         cursor.execute(sql_insert_poster, (missing_idx, poster_img_path))
-
-        scheduler.add_job(disable_poster, 'date', run_date=datetime.now() + timedelta(days=1),
-                          args=[user_id, missing_idx])
-
         db.commit()
 
         return jsonify({'message': '포스터가 성공적으로 생성되었습니다.', 'MISSING_IDX': missing_idx}), 201
@@ -223,7 +219,7 @@ def create_poster():
 
 
 @post_bp.route('/post_no_show', methods=['POST'])
-def post_no_show():
+def disable_poster():
     try:
         poster_idx = request.json.get('poster_idx')
         if not poster_idx:

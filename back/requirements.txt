@@ -13,6 +13,8 @@
    matplotlib
    aiohttp
    asyncio
+   celery 
+   redis
 # cd back
 # pip install -r requirements.txt
 
