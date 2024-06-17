@@ -50,6 +50,9 @@
     margin-bottom: 1rem;
     text-align: center;
 }
+.login-welcome-row a {
+    border: none;
+}
 
 .welcome-message {
     max-width: 24rem;
@@ -251,6 +254,7 @@ input_field_re:hover, :focus{
     color: var(--cigRed);
     font-weight: 600;
     text-decoration: none;
+    border: none;
 }
 
 .my-form__actions .SignUp:hover {
