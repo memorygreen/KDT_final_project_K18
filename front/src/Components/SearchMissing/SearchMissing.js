@@ -205,7 +205,7 @@ const SearchMissing = ({ initialData }) => {
         setSelectedTop(event.target.value);
         setSelectedTopKor(selectedOption ? selectedOption.label : '');
     };
-
+    
     const handleTopColorChange = (event) => {
         const selectedOption = topColorOptions.find(option => option.id === event.target.value);
         setSelectedTopColor(event.target.value);
