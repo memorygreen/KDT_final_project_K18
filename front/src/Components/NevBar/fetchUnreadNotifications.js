@@ -11,7 +11,7 @@ const fetchUnreadNotifications = () => {
         axios.post('http://localhost:5000/count_notification', data)
             .then(response => {
                 const unreadNotifications = response.data.unread_notifications;
-                console.log(unreadNotifications);
+                //console.log(unreadNotifications);
                 resolve(unreadNotifications);
             })
             .catch(error => {
