@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NoNotification from '../../Page/MyPage/My_alram/NoNotificaiton';
 import alarm from './assets/noti1.png';
+import fetchUnreadNotifications from './fetchUnreadNotifications';
 const NevBar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -13,6 +14,7 @@ const NevBar = () => {
     const [intervalId, setIntervalId] = useState(null); // interval ID를 위한 상태 변수
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 상태를 위한 상태 변수
     const [notiIcon, setNotiIcon] = useState('alarm_imgOff');
+    const [unreadNotifications, setUnreadNotifications] = useState(0); // 알림 개수 상태 추가
     const navigate = useNavigate();
 
     const toggleMenu = () => {
@@ -37,9 +39,8 @@ const NevBar = () => {
                     console.error('Error fetching user info:', error);
                 });
         };
-
         const id = setInterval(fetchData, 10000); // 5초마다 fetchData 함수 실행
-
+        setIntervalId(id);
         return () => {
             clearInterval(id); // 컴포넌트 언마운트 시 clearInterval
         };
@@ -48,6 +49,8 @@ const NevBar = () => {
     useEffect(() => {
         if (userAlarmCk === 0) {
             setNotiIcon('alarm_imgOn');
+        } else {
+            setNotiIcon('alarm_imgOff');
         }
     }, [userAlarmCk]);
 
@@ -71,6 +74,10 @@ const NevBar = () => {
     const handleNotificationClick = () => {
         // 모달 열기
         setIsModalOpen(true);
+        ckNoti();
+        fetchUnreadNotifications().then(unreadCount => {
+            setUnreadNotifications(unreadCount);
+        });
     };
 
     const handleModalClose = () => {
@@ -78,18 +85,21 @@ const NevBar = () => {
         setIsModalOpen(false);
     };
 
-    const handleModalToggle = () => {
-        setIsModalOpen(!isModalOpen);
+    const ckNoti = () => {
+        const userId = sessionStorage.getItem('userId');
+        axios.post('http://localhost:5000/updateAlarm', { user_id: userId })
+            .then(response => {
+                setNotiIcon('alarm_imgOff'); //알림 이미지 정지로 변경
+                setUserAlarmCk(1); // 사용자 알람 상태를 1로 업데이트
+            })
+            .catch(error => {
+                console.error('Error updating alarm status:', error);
+            });
     };
 
-    const ckNoti = () => {
-        setNotiIcon('alarm_imgOff');
-        handleModalToggle(); // 모달 토글 함수 호출
-    }
-
     return (
-        <div className="all_header" onClick={handleModalToggle}> {/* 모달 밖 클릭 시 모달 토글 */}
-            <header className="header_class" onClick={(e) => e.stopPropagation()}> {/* 이벤트 버블링 방지 */}
+        <div className="all_header">
+            <header className="header_class">
                 <div className="menu__wrapper">
                     <div className="menu__bar">
                         <Link to="/" className="logo_nev">
@@ -108,10 +118,13 @@ const NevBar = () => {
                                             {userAlarmCk === 1 ? '' : '알림'}
                                     </a> */}
                                     <li>
-                                        <img src={alarm} className={notiIcon} onClick={(e) => {
-                                            e.stopPropagation(); // 이벤트 버블링 방지
-                                            ckNoti();
-                                        }} ></img>
+                                        <img src={alarm} alt="Notification Icon" className={notiIcon} onClick={() => {
+                                            if (!isModalOpen) {
+                                                handleNotificationClick();
+                                            } else {
+                                                handleModalClose();
+                                            }
+                                        }} />
                                     </li>
                                 </ul>
                             )}
@@ -225,7 +238,7 @@ const NevBar = () => {
             {isModalOpen &&
                 <div className='noti_div'>
                     <div>
-                        읽지 않은 알람 개가 있습니다.
+                        읽지 않은 알람 <span style={{ color: 'red' }}>{unreadNotifications}</span>개가 있습니다.
                     </div>
                     <Link to='/MyPage'> 페이지이동 </Link>
                 </div>

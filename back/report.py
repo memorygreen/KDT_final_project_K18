@@ -317,6 +317,49 @@ def capture_detail():
         return jsonify({"message": "capture updated successfully"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+
+
+#안읽은 알람 수 확인
+@report_bp.route('/count_notification',methods=['POST'])
+def count_notification():
+
+    try:
+        user_id = request.json.get('user_id')
+        db=db_con()
+        cursor=db.cursor()
+        print(user_id)
+        report_notification_count = """
+            SELECT COUNT(*)
+            FROM TB_REPORT R
+            JOIN TB_POSTER P ON R.POSTER_IDX = P.POSTER_IDX
+            JOIN TB_MISSING M ON P.MISSING_IDX = M.MISSING_IDX
+            WHERE M.USER_ID = %s AND R.REPORT_NOTIFICATION = 0
+        """
+        cursor.execute(report_notification_count, (user_id,))
+        report_notification_count = cursor.fetchone()[0]
+        print(report_notification_count)
+        # 미확인 캡쳐 알람 수 가져오기
+        capture_alarm_count = """
+            SELECT COUNT(*)
+            FROM TB_CAPTURE C
+            JOIN TB_MISSING M ON C.MISSING_IDX = M.MISSING_IDX
+            WHERE M.USER_ID = %s AND C.CAPTURE_ALARM_CK = 0
+        """
+        cursor.execute(capture_alarm_count, (user_id,))
+        capture_alarm_count = cursor.fetchone()[0]
+        print(capture_alarm_count)
+        # 총 미확인 알림 수 계산
+        total_unread_notifications = report_notification_count + capture_alarm_count
+        print(total_unread_notifications)
+        cursor.close()
+        db.close()
+        return jsonify({
+            "unread_notifications": total_unread_notifications
+        })
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 
