@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Notification.css';
 
@@ -40,7 +39,6 @@ const Notification = ({ sessionId, missingIdx }) => {
 
                 setNotifications(combinedNotifications);
 
-
                 for (const notification of captureResponse.data) {
                     const cctvResponse = await axios.post('http://localhost:5000/capture_address', {
                         cctv_idx: notification.CCTV_IDX
@@ -60,13 +58,64 @@ const Notification = ({ sessionId, missingIdx }) => {
             }
         };
         fetchNotifications();
-    }, []);
-    useEffect(() => {
+    }, [userId]);
 
+    useEffect(() => {
+        if (missingIdx) {
+            const fetchNotifications = async () => {
+                try {
+                    const [captureResponse, reportResponse] = await Promise.all([
+                        axios.post('http://localhost:5000/one_capture', {
+                            MISSING_IDX: missingIdx
+                        }, {
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        }),
+                        axios.post('http://localhost:5000/one_report', {
+                            MISSING_IDX: missingIdx
+                        }, {
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                    ]);
+
+                    const combinedNotifications = [
+                        ...captureResponse.data.map(notification => ({ ...notification, type: 'capture' })),
+                        ...reportResponse.data.map(notification => ({ ...notification, type: 'report' }))
+                    ];
+
+                    combinedNotifications.sort((a, b) => new Date(b.CAPTURE_FIRST_TIME || b.REPORT_TIME) - new Date(a.CAPTURE_FIRST_TIME || a.REPORT_TIME));
+
+                    setNotifications(combinedNotifications);
+
+                    for (const notification of captureResponse.data) {
+                        const cctvResponse = await axios.post('http://localhost:5000/capture_address', {
+                            cctv_idx: notification.CCTV_IDX
+                        }, {
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        });
+
+                        setCctvAddresses(prevState => ({
+                            ...prevState,
+                            [notification.CCTV_IDX]: cctvResponse.data.CCTV_LOAD_ADDRESS
+                        }));
+                    }
+                } catch (error) {
+                    console.error('Error fetching notifications:', error);
+                }
+            };
+            fetchNotifications();
+        }
+    }, [missingIdx]);
+
+    useEffect(() => {
         setFilter('all');
         setFilteredNotifications(notifications);
     }, [notifications]);
-
 
     const handleDetailClick = async (notification) => {
         if (notification.type === 'capture') {
@@ -91,9 +140,8 @@ const Notification = ({ sessionId, missingIdx }) => {
             }
         }
         setSelectedNotification(notification);
-
-
     };
+
     const handleCloseModal = () => {
         setSelectedNotification(null);
     };
@@ -136,8 +184,7 @@ const Notification = ({ sessionId, missingIdx }) => {
                                 </>
                                 :
                                 <div>{notification.REPORT_TIME}에 온 제보입니다</div>
-                            }
-                        </div>
+                            }                        </div>
                     </div>
                 ))}
             </div>
