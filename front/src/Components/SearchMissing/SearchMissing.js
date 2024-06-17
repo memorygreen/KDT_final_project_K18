@@ -6,10 +6,9 @@ import UploadMissingImg from './UploadMissingImg';
 import { createPoster } from '../Poster/CreatePost';
 import { MissingAvatar } from './MissingAvatar';
 import { useNavigate } from 'react-router-dom';
-
 import './SearchMissing.css';
 
-const SearchMissing = ({ initialData }) => {
+const SearchMissing = () => {
     const navigate = useNavigate(); // 리다이렉트를 위한 navigate 함수 사용
 
     const sessionId = sessionStorage.getItem('userId') // session에 있는 id 값 
@@ -144,7 +143,7 @@ const SearchMissing = ({ initialData }) => {
             console.log(prompt);
 
             // missingImgUrl이 설정된 후에만 백엔드로 데이터 전송
-            if (uploadedImageUrl) {
+            if (uploadedImageUrl || posterGenerating) {
                 axios.post('/SearchMissing', {
                     session_id: sessionId,
 
