@@ -7,14 +7,9 @@ const ViewCCTVPage = () => {
 
     return (
 
-        <div className="Nev-Card">
-            <header className='nevibar_card'> <NevBar /></header>
-            
-            <div className='Main_start'>
-                    
-            </div>
-            
-            <div className='Main_card' >
+        <div className="CCTVpage_Main">
+            <header className='nevibar_card'> <NevBar /></header>      
+            <div className='CCTVpage_component' >
                <ViewCCTV />
             </div>
         </div>

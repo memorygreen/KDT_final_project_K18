@@ -339,7 +339,7 @@ const SearchMissing = () => {
                     {missingImg && (
                         <div>
                             {missingImg instanceof File && (
-                                <img src={URL.createObjectURL(missingImg)} alt="Uploaded" style={{ width: '100px', height: '100px' }} />
+                                <img src={URL.createObjectURL(missingImg)} alt="Uploaded" style={{ width: '200px', height: '200px' }} />
                             )}
                         </div>
                     )}

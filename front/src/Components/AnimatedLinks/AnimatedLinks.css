@@ -37,6 +37,7 @@
 }
 .menu a {
     text-decoration: none;
+    border: none;
 }
 
 .menu__link {
@@ -89,6 +90,7 @@
 
 .menu--wave .menu__link {
     margin-bottom: 4rem;
+    
 }
 
 .menu--wave .menu__link-deco {
