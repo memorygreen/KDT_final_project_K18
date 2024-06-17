@@ -16,13 +16,25 @@
 
 .CCTV_modal-content {
     background-color: #fefefe;
-    margin: auto;
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
     max-width: 500px;
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.CCTV_modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+.CCTV_modal-content button {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #888;
+    border-radius: 8px;
+    cursor: pointer;
 }
 
 .CCTV_close {
