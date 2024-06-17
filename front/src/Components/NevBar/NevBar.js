@@ -78,14 +78,18 @@ const NevBar = () => {
         setIsModalOpen(false);
     };
 
+    const handleModalToggle = () => {
+        setIsModalOpen(!isModalOpen);
+    };
+
     const ckNoti = () => {
         setNotiIcon('alarm_imgOff');
-        setIsModalOpen(true); // 모달을 열기 위해 상태를 true로 설정
+        handleModalToggle(); // 모달 토글 함수 호출
     }
 
     return (
-        <div className="all_header">
-            <header className="header_class">
+        <div className="all_header" onClick={handleModalToggle}> {/* 모달 밖 클릭 시 모달 토글 */}
+            <header className="header_class" onClick={(e) => e.stopPropagation()}> {/* 이벤트 버블링 방지 */}
                 <div className="menu__wrapper">
                     <div className="menu__bar">
                         <Link to="/" className="logo_nev">
@@ -104,7 +108,10 @@ const NevBar = () => {
                                             {userAlarmCk === 1 ? '' : '알림'}
                                     </a> */}
                                     <li>
-                                        <img src={alarm} className={notiIcon} onClick={() => ckNoti()} ></img>
+                                        <img src={alarm} className={notiIcon} onClick={(e) => {
+                                            e.stopPropagation(); // 이벤트 버블링 방지
+                                            ckNoti();
+                                        }} ></img>
                                     </li>
                                 </ul>
                             )}
