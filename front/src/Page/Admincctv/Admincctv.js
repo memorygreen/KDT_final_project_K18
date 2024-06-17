@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './Admincctv.css'; // 여기에서 경로와 파일 이름이 일치하도록 합니다.
+import './Admincctv.css';
 import NevBar from '../../Components/NevBar/NevBar';
 import axios from 'axios';
 
@@ -7,15 +7,16 @@ const Admincctv = () => {
     const [cctv, setCctv] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [currentGroup, setCurrentGroup] = useState(1);
-    const [searchField, setSearchField] = useState(''); // 검색 필드 상태 변수
-    const [searchText, setSearchText] = useState(''); // 검색 텍스트 상태 변수
-    const [showModal, setShowModal] = useState(false); // 모달 상태 변수 추가
-    const [newCctv, setNewCctv] = useState({ latitude: '', longitude: '', location: '', status: '' }); // 새로운 CCTV 상태 변수
-    const [validationError, setValidationError] = useState(''); // 유효성 검사 에러 메시지 상태 변수
-    const itemsPerPage = 25; // 25개씩 출력
-    const pagesPerGroup = 10; // 10페이지씩 출력
-    const searchOptions = ['번호', '위도', '경도', '설치장소', '상태']; // 검색 옵션
-    const statusOptions = ['Active', 'Break', 'Stop']; // 상태 옵션
+    const [searchField, setSearchField] = useState('');
+    const [searchText, setSearchText] = useState('');
+    const [showModal, setShowModal] = useState(false);
+    const [newCctv, setNewCctv] = useState({ latitude: '', longitude: '', location: '', status: '', videoUrl: '' });
+    const [validationError, setValidationError] = useState('');
+    const [videoModal, setVideoModal] = useState({ show: false, videoUrl: '' });
+    const itemsPerPage = 25;
+    const pagesPerGroup = 10;
+    const searchOptions = ['번호', '설치장소', '상태'];
+    const statusOptions = ['Active', 'Break', 'Stop'];
 
     useEffect(() => {
         axios.get('/Admincctv')
@@ -58,7 +59,6 @@ const Admincctv = () => {
         ));
     };
 
-    // CCTV 상태 변경 
     const handle_cctv = (chg_cctvidx, chg_cctv) => {
         axios.post('/user_cctv_change', { chg_cctvidx, chg_cctv })
             .then(response => {
@@ -72,7 +72,6 @@ const Admincctv = () => {
             });
     };
 
-    // 검색 
     const handleSearch = () => {
         axios.get('/Admincctv')
             .then(response => {
@@ -80,10 +79,6 @@ const Admincctv = () => {
                     switch (searchField) {
                         case '번호':
                             return item.CCTV_IDX.toString() === searchText;
-                        case '위도':
-                            return item.CCTV_LAT.toString().includes(searchText);
-                        case '경도':
-                            return item.CCTV_LNG.toString().includes(searchText);
                         case '설치장소':
                             return item.CCTV_LOAD_ADDRESS.includes(searchText);
                         case '상태':
@@ -93,62 +88,62 @@ const Admincctv = () => {
                     }
                 });
                 setCctv(filteredData);
-                setCurrentPage(1); // 검색 후 첫 페이지로 이동
-                setCurrentGroup(1); // 검색 후 첫 그룹으로 이동
+                setCurrentPage(1);
+                setCurrentGroup(1);
             })
             .catch(error => console.error('Error fetching CCTV data:', error));
     };
 
-    // 엔터키 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             handleSearch();
         }
     };
 
-    // 모달 열기 
     const openModal = () => {
         setShowModal(true);
     };
 
-    // 모달 닫기 
     const closeModal = () => {
         setShowModal(false);
-        setValidationError(''); // 모달 닫을 때 유효성 검사 에러 메시지 초기화
+        setValidationError('');
     };
 
-    // 새로운 CCTV 입력
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setNewCctv({ ...newCctv, [name]: value });
     };
 
-    // 새로운 CCTV 생성
-    const handleCreateCctv = (e) => {
+    const handleCreateCctv = async (e) => {
         e.preventDefault();
-        const { latitude, longitude, location, status } = newCctv;
+        const { latitude, longitude, location, status, videoUrl } = newCctv;
 
-        // 값이 입력되었는지 확인
-        if (!latitude || !longitude || !location || !status) {
+        if (!latitude || !longitude || !location || !status || !videoUrl) {
             setValidationError('모든 값을 입력해주세요.');
             return;
         }
 
-        axios.post('/create_cctv', newCctv)
-            .then(response => {
-                console.log(response.data.message);
-                setShowModal(false);
-                setNewCctv({ latitude: '', longitude: '', location: '', status: '' });
-                axios.get('/Admincctv')
-                    .then(response => setCctv(response.data))
-                    .catch(error => console.error('에러', error));
-            })
-            .catch(error => {
-                console.error('에러', error);
-            });
+        try {
+            const response = await axios.post('/create_cctv', newCctv);
+            console.log(response.data.message);
+            setShowModal(false);
+            setNewCctv({ latitude: '', longitude: '', location: '', status: '', videoUrl: '' });
+            axios.get('/Admincctv')
+                .then(response => setCctv(response.data))
+                .catch(error => console.error('에러', error));
+        } catch (error) {
+            console.error('에러', error);
+        }
     };
 
-    // 현재 페이지에 맞는 CCTV 데이터를 계산합니다.
+    const openVideoModal = (videoUrl) => {
+        setVideoModal({ show: true, videoUrl });
+    };
+
+    const closeVideoModal = () => {
+        setVideoModal({ show: false, videoUrl: '' });
+    };
+
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = cctv.slice(indexOfFirstItem, indexOfLastItem);
@@ -187,15 +182,16 @@ const Admincctv = () => {
                             <th>경도</th>
                             <th>설치장소</th>
                             <th>상태</th>
+                            <th>영상 보기</th>
                         </tr>
                     </thead>
                     <tbody>
                         {currentItems.map(item => (
                             <tr key={item.CCTV_IDX}>
-                                <td>{item.CCTV_IDX}</td> 
-                                <td>{item.CCTV_LAT}</td> 
-                                <td>{item.CCTV_LNG}</td> 
-                                <td>{item.CCTV_LOAD_ADDRESS}</td> 
+                                <td>{item.CCTV_IDX}</td>
+                                <td>{item.CCTV_LAT}</td>
+                                <td>{item.CCTV_LNG}</td>
+                                <td>{item.CCTV_LOAD_ADDRESS}</td>
                                 <td>
                                     <select
                                         value={item.CCTV_STATUS}
@@ -208,7 +204,10 @@ const Admincctv = () => {
                                             </option>
                                         ))}
                                     </select>
-                                </td> 
+                                </td>
+                                <td>
+                                    <button onClick={() => openVideoModal(item.CCTV_PATH)}>영상 보기</button>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
@@ -271,8 +270,30 @@ const Admincctv = () => {
                                         ))}
                                     </select>
                                 </label>
+                                <label>
+                                    CCTV 영상 URL :
+                                    <input
+                                        type="text"
+                                        name="videoUrl"
+                                        value={newCctv.videoUrl}
+                                        onChange={handleInputChange}
+                                    />
+                                </label>
                                 <button type="submit">생성</button>
                             </form>
+                        </div>
+                    </div>
+                )}
+
+                {videoModal.show && (
+                    <div className="CCTV_modal">
+                        <div className="CCTV_modal-content">
+                            <span className="CCTV_close" onClick={closeVideoModal}>&times;</span>
+                            <h2>영상 보기</h2>
+                            <video width="100%" controls>
+                                <source src={videoModal.videoUrl} type="video/mp4" />
+                                브라우저가 video 태그를 지원하지 않습니다.
+                            </video>
                         </div>
                     </div>
                 )}
