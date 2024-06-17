@@ -6,6 +6,9 @@ import axios from 'axios';
 import NoNotification from '../../Page/MyPage/My_alram/NoNotificaiton';
 import alarm from './assets/noti1.png';
 import fetchUnreadNotifications from './fetchUnreadNotifications';
+import cctv from './assets/cctv.png';
+import user from './assets/user.png';
+import missing from './assets/missing.png';
 const NevBar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -158,14 +161,7 @@ const NevBar = () => {
                                                 <li>
                                                     <Link to="/Adminpage">
                                                         <div className="icon-wrapper">
-                                                            <svg className="h-5 w-5 group-hover/menu-item:text-foreground group-focus-visible/menu-item:text-foreground"
-                                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                                aria-hidden="true">
-                                                                <path strokeLinecap="round" strokeLinejoin="round"
-                                                                    strokeWidth="1.5"
-                                                                    d="M5.18625 8.66531H19.5035V15.331H5.18625V8.66531Z M4 17.0007C4 16.0804 4.7461 15.3343 5.66645 15.3343H18.9984C19.9187 15.3343 20.6648 16.0804 20.6648 17.0007V20.3335C20.6648 21.2539 19.9187 22 18.9984 22H5.66646C4.7461 22 4 21.2539 4 20.3335V17.0007Z M4 3.66646C4 2.7461 4.7461 2 5.66645 2H18.9984C19.9187 2 20.6648 2.7461 20.6648 3.66645V6.99926C20.6648 7.91962 19.9187 8.66572 18.9984 8.66572H5.66646C4.7461 8.66572 4 7.91962 4 6.99926V3.66646Z"
-                                                                    stroke="currentColor"></path>
-                                                            </svg>
+                                                            <img src={user} alt="user" />
                                                         </div>
                                                         <div className="item-title">
                                                             <h3>유저 관리</h3>
@@ -176,14 +172,7 @@ const NevBar = () => {
                                                 <li>
                                                     <Link to='/Adminmissing'>
                                                         <div className="icon-wrapper">
-                                                            <svg className="h-5 w-5 group-hover/menu-item:text-foreground group-focus-visible/menu-item:text-foreground"
-                                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                                aria-hidden="true">
-                                                                <path strokeLinecap="round" strokeLinejoin="round"
-                                                                    strokeWidth="1.5"
-                                                                    d="M5.03305 15.8071H12.7252M5.03305 15.8071V18.884H12.7252V15.8071M5.03305 15.8071V12.7302H12.7252V15.8071M15.0419 8.15385V5.07692C15.0419 3.37759 13.6643 2 11.965 2C10.2657 2 8.88814 3.37759 8.88814 5.07692V8.15385M5 11.2307L5 18.9231C5 20.6224 6.37757 22 8.07689 22H15.769C17.4683 22 18.8459 20.6224 18.8459 18.9231V11.2307C18.8459 9.53142 17.4683 8.15385 15.769 8.15385L8.07689 8.15385C6.37757 8.15385 5 9.53142 5 11.2307Z"
-                                                                    stroke="currentColor"></path>
-                                                            </svg>
+                                                            <img src={missing} alt="missing" />
                                                         </div>
                                                         <div className="item-title">
                                                             <h3>실종자 관리</h3>
@@ -194,14 +183,7 @@ const NevBar = () => {
                                                 <li>
                                                     <Link to='/Admincctv'>
                                                         <div className="icon-wrapper">
-                                                            <svg className="h-5 w-5 group-hover/menu-item:text-foreground group-focus-visible/menu-item:text-foreground"
-                                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                                aria-hidden="true">
-                                                                <path strokeLinecap="round" strokeLinejoin="round"
-                                                                    strokeWidth="1.5"
-                                                                    d="M20.4997 12.1386V9.15811L14.8463 3.53163H6.43717C5.57423 3.53163 4.87467 4.23119 4.87467 5.09413V9.78087M20.4447 9.13199L14.844 3.53125L14.844 7.56949C14.844 8.43243 15.5436 9.13199 16.4065 9.13199L20.4447 9.13199ZM7.12729 9.78087H4.83398C3.97104 9.78087 3.27148 10.4804 3.27148 11.3434V19.1559C3.27148 20.8818 4.67059 22.2809 6.39648 22.2809H18.8965C20.6224 22.2809 22.0215 20.8818 22.0215 19.1559V13.7011C22.0215 12.8381 21.3219 12.1386 20.459 12.1386H10.8032C10.3933 12.1386 9.99969 11.9774 9.70743 11.6899L8.22312 10.2296C7.93086 9.94202 7.53729 9.78087 7.12729 9.78087Z"
-                                                                    stroke="currentColor"></path>
-                                                            </svg>
+                                                            <img src={cctv} alt="cctv" />
                                                         </div>
                                                         <div className="item-title">
                                                             <h3>CCTV 관리</h3>

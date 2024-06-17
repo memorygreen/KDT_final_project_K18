@@ -30,8 +30,13 @@
 }
 
 .Mypage_userinfo_icon>div>img {
+    border-radius: 50%;
     width: 40px;
     height: 40px;
+}
+.Mypage_userinfo_icon img:hover{
+    background-color: rgba(0, 0, 255, 0.171);
+    cursor: pointer;
 }
 
 .My_missingList {
@@ -87,13 +92,23 @@
 .My_missingList_item {
     margin: 5px;
     text-align: center;
+    border-radius: 20px;
+}
+.My_missingList_item:hover {
+    background-color: #f2f2f2; /* 호버 시 배경색 변경 */
+    cursor: pointer; /* 마우스 오버 시 커서 모양을 포인터로 변경 */
 }
 
+
 .My_missingList_item button {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
+    height: 100%;
+    border-radius: 20px;
+    padding: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border: none;
-    background-color: rgba(0, 0, 255, 0.151);
+    background-color: rgba(0, 0, 255, 0.068);
     margin-left: 10px;
+}
+.My_missingList_item button:hover{
+    background-color: rgba(0, 0, 255, 0.151);
 }

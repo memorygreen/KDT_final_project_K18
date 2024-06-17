@@ -51,7 +51,7 @@
 .search_bar_cate_radio:checked + .search_bar_cate_label{
     border-radius: 50px; /* 픽셀(px)로 지정 */
     padding: 10px;
-    background-color: #ffffff;
+    background-color: rgba(158, 158, 158, 0.459);
     border: solid 1px #EBEBEB;
 }
 
