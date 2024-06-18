@@ -132,6 +132,11 @@ const CardModal = ({ isOpen, onClose, selectedArticle }) => {
                             </div>
                         )}
                         <div className="button-group">
+                            {(selectedArticle.USER_ID !== sessionStorage.getItem('userId')) && (
+                                <button onClick={handleFirstReportClick} className="follow">
+                                    제보하기
+                                </button>
+                            )}
                             {selectedArticle.USER_ID === sessionStorage.getItem('userId') && (
                                 <div className='Card_missingInfo_button'>
                                     <button className="follow" onClick={() => {
@@ -181,11 +186,6 @@ const CardModal = ({ isOpen, onClose, selectedArticle }) => {
                                     <button type="submit" className="report_submit">전송하기</button>
                                     <button type="button" className="report_cancel" onClick={handleCloseForm}>접기</button>
                                 </form>
-                            )}
-                            {showFirstButton && (
-                                <button onClick={handleFirstReportClick} className="follow">
-                                    제보하기
-                                </button>
                             )}
                         </div>
                     </div>
