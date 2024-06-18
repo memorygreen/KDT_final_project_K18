@@ -225,9 +225,12 @@ const Notification = ({ sessionId, missingIdx }) => {
                         <div className={`notification-content ${notification.REPORT_NOTIFICATION === 1 || notification.CAPTURE_ALARM_CK === 1 ? 'notification-content-gray-text' : ''}`}>
                             {notification.type === 'capture' ?
                                 <>
-                                    <div>{cctvAddresses[notification.CCTV_IDX] || 'Loading address...'} 의 CCTV {notification.CCTV_IDX} 에서</div>
+                                    <div>{cctvAddresses[notification.CCTV_IDX] || 'Loading address...'} 의 CCTV  에서 발견</div>
                                     <div>
-                                        {notification.CAPTURE_FIRST_TIME}에 온 <img src={notification.CAPTURE_PATH} alt="Capture" style={{ maxWidth: '100%' }} />입니다.
+                                        발견 시간 :{notification.CAPTURE_FIRST_TIME} 
+                                    </div>
+                                    <div>
+                                        <img src={notification.CAPTURE_PATH} alt="Capture" style={{ maxWidth: '100%' }} />
                                     </div>
                                 </>
                                 :
