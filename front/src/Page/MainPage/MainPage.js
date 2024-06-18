@@ -12,21 +12,10 @@ const MainPage = () => {
     const handleOpenModal = (article) => {
         setSelectedArticle(article);
         setShowModal(true);
-        document.addEventListener('wheel', handleScroll, { passive: false });
     };
 
     const handleCloseModal = () => {
         setShowModal(false);
-        document.removeEventListener('wheel', handleScroll);
-    };
-
-    const handleScroll = (event) => {
-        event.preventDefault();
-        document.querySelector('.Card_modals').scrollBy({
-            top: event.deltaY,
-            left: event.deltaX,
-            behavior: 'smooth'
-        });
     };
 
     return (
