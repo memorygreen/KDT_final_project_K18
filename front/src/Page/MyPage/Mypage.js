@@ -8,7 +8,7 @@ import NevBar from '../../Components/NevBar/NevBar';
 
 const MyPage = () => {
     const sessionId = sessionStorage.getItem('userId'); // session에 있는 id 값 
-    const [activeComponent, setActiveComponent] = useState('notification');
+    const [activeComponent, setActiveComponent] = useState('capture'); // 기본값은 'capture'
     const [missingIdx, setMissingIdx] = useState(null);
     const [selectedMissing, setSelectedMissing] = useState(null);
 
@@ -19,7 +19,7 @@ const MyPage = () => {
 
     const handleDivClick = (missing) => {
         console.log('missing', missing);
-        setMissingIdx(missing ? missing.MISSING_IDX : null);
+        setMissingIdx(missing ? missing.MISSING_IDX : null); // missing이 null이면 missingIdx도 null로 설정
         setSelectedMissing(missing); // Update selected missing person
     };
 
