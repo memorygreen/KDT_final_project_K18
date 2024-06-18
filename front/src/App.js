@@ -53,7 +53,7 @@ function App() {
           <Route path="/Nevbar" element={<Nevbar />} />
           <Route path="/Login/Kakao" element={<KakaoLogin />} />
           <Route path='/Card' element={<Card />} />
-        
+                
 
         </Routes>
       </Router>
