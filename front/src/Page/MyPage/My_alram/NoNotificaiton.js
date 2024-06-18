@@ -142,6 +142,7 @@ const NoNotification = ({ sessionId }) => {
                         </div>
                     </div>
                 ))}
+                
             </div>
             {selectedNotification && (
                 <div className="modal-detail">

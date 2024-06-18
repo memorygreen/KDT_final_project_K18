@@ -1,10 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import NevBar from '../../Components/NevBar/NevBar';
 import './MainPage.css';
 import Card from '../../Components/Cards/Card/Card';
 import AnimatedLinks from '../../Components/AnimatedLinks/AnimatedLinks';
+import CardModal from '../../Components/Cards/CardModal/CardModal';
 
 const MainPage = () => {
+    const [showModal, setShowModal] = useState(false);
+    const [selectedArticle, setSelectedArticle] = useState(null);
+
+    const handleOpenModal = (article) => {
+        setSelectedArticle(article);
+        setShowModal(true);
+        document.addEventListener('wheel', handleScroll, { passive: false });
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        document.removeEventListener('wheel', handleScroll);
+    };
+
+    const handleScroll = (event) => {
+        event.preventDefault();
+        document.querySelector('.Card_modals').scrollBy({
+            top: event.deltaY,
+            left: event.deltaX,
+            behavior: 'smooth'
+        });
+    };
+
     return (
         <div className="Nev-Card">
             <header className='nevibar_card'> <NevBar /></header>
@@ -12,7 +36,10 @@ const MainPage = () => {
                 <AnimatedLinks />
             </div>
             <div className='Main_card' >
-                <Card />
+                <Card onImageClick={handleOpenModal} />
+            </div>
+            <div className='Card_modals'>
+                <CardModal isOpen={showModal} onClose={handleCloseModal} selectedArticle={selectedArticle} />
             </div>
         </div>
     );

@@ -27,3 +27,7 @@
   .missing-sidebar-item:hover {
     background-color: #e0e0e0;
   }
+
+  .missing-sidebar-item.active {
+    background-color: #b0b0b0; /* 선택된 아이템의 배경색 */
+  }
