@@ -6,7 +6,7 @@ const Notification = ({ sessionId, missingIdx }) => {
     const [notifications, setNotifications] = useState([]);
     const [cctvAddresses, setCctvAddresses] = useState({});
     const [selectedNotification, setSelectedNotification] = useState(null);
-    const [filter, setFilter] = useState('all'); // 'all', 'report', 'capture'
+    const [filter, setFilter] = useState('all');
     const [filteredNotifications, setFilteredNotifications] = useState([]);
     const [userId, setUserId] = useState(sessionId);
 
@@ -57,12 +57,13 @@ const Notification = ({ sessionId, missingIdx }) => {
                 console.error('Error fetching notifications:', error);
             }
         };
+
         fetchNotifications();
     }, [userId]);
 
     useEffect(() => {
         if (missingIdx) {
-            const fetchNotifications = async () => {
+            const fetchNotificationsForMissing = async () => {
                 try {
                     const [captureResponse, reportResponse] = await Promise.all([
                         axios.post('http://localhost:5000/one_capture', {
@@ -108,9 +109,59 @@ const Notification = ({ sessionId, missingIdx }) => {
                     console.error('Error fetching notifications:', error);
                 }
             };
+
+            fetchNotificationsForMissing();
+        } else {
+            const fetchNotifications = async () => {
+                try {
+                    const [captureResponse, reportResponse] = await Promise.all([
+                        axios.post('http://localhost:5000/my_capture', {
+                            user_id: userId
+                        }, {
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        }),
+                        axios.post('http://localhost:5000/my_report', {
+                            user_id: userId
+                        }, {
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                    ]);
+
+                    const combinedNotifications = [
+                        ...captureResponse.data.map(notification => ({ ...notification, type: 'capture' })),
+                        ...reportResponse.data.map(notification => ({ ...notification, type: 'report' }))
+                    ];
+
+                    combinedNotifications.sort((a, b) => new Date(b.CAPTURE_FIRST_TIME || b.REPORT_TIME) - new Date(a.CAPTURE_FIRST_TIME || a.REPORT_TIME));
+
+                    setNotifications(combinedNotifications);
+
+                    for (const notification of captureResponse.data) {
+                        const cctvResponse = await axios.post('http://localhost:5000/capture_address', {
+                            cctv_idx: notification.CCTV_IDX
+                        }, {
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        });
+
+                        setCctvAddresses(prevState => ({
+                            ...prevState,
+                            [notification.CCTV_IDX]: cctvResponse.data.CCTV_LOAD_ADDRESS
+                        }));
+                    }
+                } catch (error) {
+                    console.error('Error fetching notifications:', error);
+                }
+            };
+
             fetchNotifications();
         }
-    }, [missingIdx]);
+    }, [missingIdx, userId]);
 
     useEffect(() => {
         setFilter('all');
@@ -157,7 +208,7 @@ const Notification = ({ sessionId, missingIdx }) => {
         setFilter('report');
     };
     const handleAllButtonClick = () => {
-        setFilteredNotifications(notifications.slice(0, 7));
+        setFilteredNotifications(notifications);
         setFilter('all');
     };
 
@@ -184,7 +235,8 @@ const Notification = ({ sessionId, missingIdx }) => {
                                 </>
                                 :
                                 <div>{notification.REPORT_TIME}에 온 제보입니다</div>
-                            }                        </div>
+                            }                        
+                        </div>
                     </div>
                 ))}
             </div>
