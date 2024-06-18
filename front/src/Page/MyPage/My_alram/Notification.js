@@ -174,6 +174,8 @@ const Notification = ({ sessionId, missingIdx }) => {
                 await axios.post('http://localhost:5000/capture_detail', {
                     capture_idx: notification.CAPTURE_IDX
                 });
+                // 클릭 후 바로 회색으로 변경
+                notification.CAPTURE_ALARM_CK = 1;
             } catch (error) {
                 console.error('Error updating capture detail:', error);
             }
@@ -186,11 +188,15 @@ const Notification = ({ sessionId, missingIdx }) => {
                         'Content-Type': 'application/json'
                     }
                 });
+                // 클릭 후 바로 회색으로 변경
+                notification.REPORT_NOTIFICATION = 1;
             } catch (error) {
                 console.error('Error updating report detail:', error);
             }
         }
         setSelectedNotification(notification);
+        // 상태 업데이트를 통해 UI를 강제로 리렌더링
+        setNotifications([...notifications]);
     };
 
     const handleCloseModal = () => {

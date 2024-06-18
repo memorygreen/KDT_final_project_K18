@@ -8,7 +8,7 @@ import NevBar from '../../Components/NevBar/NevBar';
 
 const MyPage = () => {
     const sessionId = sessionStorage.getItem('userId'); // session에 있는 id 값 
-    const [activeComponent, setActiveComponent] = useState('capture'); // 기본값은 'capture'
+    const [activeComponent, setActiveComponent] = useState('notification');
     const [missingIdx, setMissingIdx] = useState(null);
     const [selectedMissing, setSelectedMissing] = useState(null);
 

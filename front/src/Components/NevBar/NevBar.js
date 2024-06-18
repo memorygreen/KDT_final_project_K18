@@ -17,7 +17,7 @@ const NevBar = () => {
     const [intervalId, setIntervalId] = useState(null); // interval ID를 위한 상태 변수
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 상태를 위한 상태 변수
     const [notiIcon, setNotiIcon] = useState('alarm_imgOff');
-    const [unreadNotifications, setUnreadNotifications] = useState(0); // 알림 개수 상태 추가
+    const [unreadNotifications, setUnreadNotifications] = useState(''); // 알림 개수 상태 추가
     const navigate = useNavigate();
 
     const toggleMenu = () => {
@@ -29,12 +29,13 @@ const NevBar = () => {
         const sessionUserCate = sessionStorage.getItem('userCate');
         setIsLoggedIn(session ? true : false);
         setUserCate(sessionUserCate);
-
+        fetchUnreadNotifications();
+        
         const fetchData = () => {
             axios.post('http://localhost:5000/userInfoOne', { user_id: session })
                 .then(response => {
                     setUserAlarmCk(response.data.USER_ALARM_CK);
-                    if (userAlarmCk === 0 && intervalId) {
+                    if (response.data.USER_ALARM_CK === 0 && intervalId) {
                         clearInterval(intervalId);
                     }
                 })
@@ -42,8 +43,12 @@ const NevBar = () => {
                     console.error('Error fetching user info:', error);
                 });
         };
-        const id = setInterval(fetchData, 10000); // 5초마다 fetchData 함수 실행
+
+        fetchData(); // 컴포넌트가 처음 마운트될 때 fetchData 실행
+
+        const id = setInterval(fetchData, 10000); // 10초마다 fetchData 함수 실행
         setIntervalId(id);
+        
         return () => {
             clearInterval(id); // 컴포넌트 언마운트 시 clearInterval
         };
@@ -57,15 +62,22 @@ const NevBar = () => {
         }
     }, [userAlarmCk]);
 
-    const updateAlarmStatus = (userId) => {
-        axios.post('http://localhost:5000/updateAlarm', { user_id: userId })
-            .then(response => {
-                setUserAlarmCk(1); // 사용자 알람 상태를 1로 업데이트
-                setIsModalOpen(true);
-            })
-            .catch(error => {
-                console.error('Error updating alarm status:', error);
-            });
+    const fetchUnreadNotifications = () => {
+        return new Promise((resolve, reject) => {
+            const userId = sessionStorage.getItem('userId');
+            const data = {
+                user_id: userId
+            };
+
+            axios.post('http://localhost:5000/count_notification', data)
+                .then(response => {
+                    setUnreadNotifications(response.data.unread_notifications);
+                })
+                .catch(error => {
+                    console.error('Error fetching unread notifications:', error);
+                    reject(error);
+                });
+        });
     };
 
     const handleLogout = () => {
@@ -78,9 +90,6 @@ const NevBar = () => {
         // 모달 열기
         setIsModalOpen(true);
         ckNoti();
-        fetchUnreadNotifications().then(unreadCount => {
-            setUnreadNotifications(unreadCount);
-        });
     };
 
     const handleModalClose = () => {
@@ -221,7 +230,7 @@ const NevBar = () => {
                 <div className='noti_div'>
                     <div>
                         읽지 않은 알람 <span style={{ color: 'red' }}>{unreadNotifications}</span>개가 있습니다.
-                    </div>
+                    </div >
                     <Link to='/MyPage'> 페이지이동 </Link>
                 </div>
             }

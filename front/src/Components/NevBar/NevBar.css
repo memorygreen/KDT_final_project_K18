@@ -93,11 +93,11 @@
     }
 
     25% {
-        transform: rotate(-10deg);
+        transform: rotate(-30deg);
     }
 
     75% {
-        transform: rotate(10deg);
+        transform: rotate(30deg);
     }
 }
 
@@ -319,6 +319,7 @@
     background-color: transparent;
 }
 
+
 @media (max-width: 44rem) {
     .nevbar_hide {
         display: none;
@@ -388,8 +389,14 @@
 
 .noti_div a {
     display: inline-block;
-    padding: 10px 10px;
+    padding: 5px 5px;
     color: blue;
     text-decoration: none;
     text-align: end;
+    border: none;
+    border-radius: 10px;
+}
+
+.noti_div a:hover{
+    background-color: #d4d4d43f;
 }
