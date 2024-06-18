@@ -4,6 +4,7 @@ import mapicons_red from './assets/mapicons_red.png';
 import mapicons_blue from './assets/mapicons_blue.png';
 import './KakaoMap.css';
 import axios from 'axios';
+import CaptureDetail from '../../Page/MyPage/My_capture/CaptureDetail';
 
 const KakaoMap = ({ missingIdx }) => {
     const [loading, error] = useKakaoLoader({
@@ -13,6 +14,7 @@ const KakaoMap = ({ missingIdx }) => {
     const [cctvData, setCctvData] = useState([]);
     const [selectedMarker, setSelectedMarker] = useState(null);
     const [userCaptures, setUserCaptures] = useState([]);
+    const [selectedCapture, setSelectedCapture] = useState(null);
 
     useEffect(() => {
         // CCTV 데이터를 가져오는 함수
@@ -66,6 +68,14 @@ const KakaoMap = ({ missingIdx }) => {
         setSelectedMarker(prevMarker => (prevMarker === marker ? null : marker));
     };
 
+    const handleImageClick = (capture) => {
+        setSelectedCapture(capture);
+    };
+
+    const handleCloseModal = () => {
+        setSelectedCapture(null);
+    };
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
 
@@ -108,14 +118,17 @@ const KakaoMap = ({ missingIdx }) => {
                             <div className="body">
                                 <div className="desc">
                                     <div className="ellipsis">
-
                                         {`위치 : ${selectedMarker.CCTV_LOAD_ADDRESS}`}
                                         <br />
                                         {`위도: ${selectedMarker.CCTV_LAT}, 경도: ${selectedMarker.CCTV_LNG}`}
                                     </div>
                                     <div className='Captrue_Map'>
                                         {userCaptures.find(capture => capture.CCTV_IDX === selectedMarker.CCTV_IDX) &&
-                                            <img src={userCaptures.find(capture => capture.CCTV_IDX === selectedMarker.CCTV_IDX).CAPTURE_PATH} alt="캡처 이미지" />
+                                            <img 
+                                                src={userCaptures.find(capture => capture.CCTV_IDX === selectedMarker.CCTV_IDX).CAPTURE_PATH} 
+                                                alt="캡처 이미지" 
+                                                onClick={() => handleImageClick(userCaptures.find(capture => capture.CCTV_IDX === selectedMarker.CCTV_IDX))} 
+                                            />
                                         }
                                     </div>
                                     {/* 세션 스토리지에 userCate 값이 INDI 가 아니면 상세보기 링크 표시 */}
@@ -135,6 +148,12 @@ const KakaoMap = ({ missingIdx }) => {
                         </div>
                     </div>
                 </CustomOverlayMap>
+            )}
+            {selectedCapture && (
+                <CaptureDetail 
+                    capture={selectedCapture} 
+                    onClose={handleCloseModal} 
+                />
             )}
         </Map>
     );
