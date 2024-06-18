@@ -7,17 +7,12 @@ from dotenv import load_dotenv
 signup_bp = Blueprint('signup', __name__)
 
 # 비밀번호를 bcrypt로 해싱하는 함수
-
-
 def hash_password(password):
     return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
 # 비밀번호 비교 함수
-
-
 def check_password(hashed_password, password):
     return bcrypt.checkpw(password.encode('utf-8'), hashed_password)
-
 
 app = Flask(__name__)
 
@@ -29,7 +24,6 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 # Flask 애플리케이션에 SECRET_KEY 설정
 app.secret_key = SECRET_KEY
-
 
 @signup_bp.route('/signup', methods=['POST'])
 def signup():
@@ -78,7 +72,6 @@ def signup():
     finally:
         connection.close()
 
-
 @signup_bp.route('/login', methods=['POST'])
 def login():
     data = request.json
@@ -125,7 +118,6 @@ def login():
     finally:
         connection.close()
 
-
 @signup_bp.route('/userInfoOne', methods=['POST'])
 def userInfoOne():
     data = request.json
@@ -152,7 +144,6 @@ def userInfoOne():
         return jsonify({'message': str(e)}), 500
     finally:
         connection.close()
-
 
 if __name__ == '__main__':
     app.register_blueprint(signup_bp)
