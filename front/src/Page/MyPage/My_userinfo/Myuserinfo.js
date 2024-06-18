@@ -105,7 +105,6 @@ const Myuserinfo = ({ sessionId, onIconClick, onDivClick }) => {
                     selectedArticle={selectedMissing}
                 />
             )}
-            
         </div>
     );
 };

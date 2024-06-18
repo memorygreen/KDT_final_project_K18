@@ -6,7 +6,7 @@ const Notification = ({ sessionId, missingIdx }) => {
     const [notifications, setNotifications] = useState([]);
     const [cctvAddresses, setCctvAddresses] = useState({});
     const [selectedNotification, setSelectedNotification] = useState(null);
-    const [filter, setFilter] = useState('all');
+    const [filter, setFilter] = useState('all'); // 'all', 'report', 'capture'
     const [filteredNotifications, setFilteredNotifications] = useState([]);
     const [userId, setUserId] = useState(sessionId);
 
@@ -57,7 +57,6 @@ const Notification = ({ sessionId, missingIdx }) => {
                 console.error('Error fetching notifications:', error);
             }
         };
-
         fetchNotifications();
     }, [userId]);
 
@@ -109,7 +108,6 @@ const Notification = ({ sessionId, missingIdx }) => {
                     console.error('Error fetching notifications:', error);
                 }
             };
-
             fetchNotificationsForMissing();
         } else {
             const fetchNotifications = async () => {
@@ -135,7 +133,6 @@ const Notification = ({ sessionId, missingIdx }) => {
                         ...captureResponse.data.map(notification => ({ ...notification, type: 'capture' })),
                         ...reportResponse.data.map(notification => ({ ...notification, type: 'report' }))
                     ];
-
                     combinedNotifications.sort((a, b) => new Date(b.CAPTURE_FIRST_TIME || b.REPORT_TIME) - new Date(a.CAPTURE_FIRST_TIME || a.REPORT_TIME));
 
                     setNotifications(combinedNotifications);
@@ -158,7 +155,6 @@ const Notification = ({ sessionId, missingIdx }) => {
                     console.error('Error fetching notifications:', error);
                 }
             };
-
             fetchNotifications();
         }
     }, [missingIdx, userId]);
@@ -174,7 +170,6 @@ const Notification = ({ sessionId, missingIdx }) => {
                 await axios.post('http://localhost:5000/capture_detail', {
                     capture_idx: notification.CAPTURE_IDX
                 });
-                // 클릭 후 바로 회색으로 변경
                 notification.CAPTURE_ALARM_CK = 1;
             } catch (error) {
                 console.error('Error updating capture detail:', error);
@@ -188,15 +183,11 @@ const Notification = ({ sessionId, missingIdx }) => {
                         'Content-Type': 'application/json'
                     }
                 });
-                // 클릭 후 바로 회색으로 변경
-                notification.REPORT_NOTIFICATION = 1;
             } catch (error) {
                 console.error('Error updating report detail:', error);
             }
         }
         setSelectedNotification(notification);
-        // 상태 업데이트를 통해 UI를 강제로 리렌더링
-        setNotifications([...notifications]);
     };
 
     const handleCloseModal = () => {
@@ -241,8 +232,7 @@ const Notification = ({ sessionId, missingIdx }) => {
                                 </>
                                 :
                                 <div>{notification.REPORT_TIME}에 온 제보입니다</div>
-                            }                        
-                        </div>
+                            }                        </div>
                     </div>
                 ))}
             </div>
