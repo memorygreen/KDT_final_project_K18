@@ -23,11 +23,11 @@
    place-items: center;
    grid-template-columns: repeat(var(--grid-columns), 1fr);
    gap: var(--grid-gap);
-   align-items: start; /* 모든 아이템을 상단에서 시작하도록 설정 */
+   align-items: start;
+   /* 모든 아이템을 상단에서 시작하도록 설정 */
 }
 
 .column {
-   width: 100%;
    position: relative;
    display: grid;
    gap: var(--grid-gap);
@@ -35,14 +35,18 @@
    will-change: transform;
 }
 
-@media screen and (min-width: 53em) {
-   .frame {
-      text-align: center;
-      justify-items: center;
+@media (max-width: 58rem) {
+   .columns {
+      grid-template-columns: repeat(2, 1fr); /* 한 열 변경 */
+      gap: 1.5vw; /* 간격을 줄임 */
+      justify-items: center; /* 아이템을 가운데 정렬 */
    }
+}
 
-   .card-wrap {
-      grid-template-columns: repeat(2, 300px);
+@media (max-width: 42rem) {
+   .columns {
+      grid-template-columns: repeat(1, 1fr); /* 한 열 변경 */
+      gap: 1.5vw; /* 간격을 줄임 */
+      justify-items: center; /* 아이템을 가운데 정렬 */
    }
-
 }

@@ -28,7 +28,7 @@
 }
 
 .input-container_update {
-    width: calc(100% - 130px); /* 라벨의 너비를 고려하여 인풋의 너비를 설정 */
+    width: 90% /* 라벨의 너비를 고려하여 인풋의 너비를 설정 */
 }
 
 .input_update {

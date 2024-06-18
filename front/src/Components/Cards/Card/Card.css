@@ -8,6 +8,7 @@
     max-width: 1200px;
     gap: 1.5rem;
 }
+
 .Slider_size {
     flex-wrap: wrap;
     margin: 0 auto;
@@ -20,6 +21,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%; /* 전체 너비를 사용 */
-    height: 100%; /* 필요한 경우 전체 높이를 사용 */
+    width: 100%;
+    /* 전체 너비를 사용 */
+    height: 100%;
+    /* 필요한 경우 전체 높이를 사용 */
 }
