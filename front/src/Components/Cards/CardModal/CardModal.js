@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // 상단에 import 추가
+import { useNavigate } from 'react-router-dom';
 import closeIcon from '../assets/xxx.png';
-import axios from 'axios'; // Import Axios
-import './CardModal.css'; // 모달 스타일이 필요하면 추가
+import axios from 'axios';
+import './CardModal.css';
+import defaultPosterImage from '../assets/default_profile.jpeg';
 
 const CardModal = ({ isOpen, onClose, selectedArticle }) => {
-    const navigate = useNavigate(); // useNavigate 훅 사용
+    const navigate = useNavigate();
     const [showReportForm, setShowReportForm] = useState(false);
     const [showFirstButton, setShowFirstButton] = useState(true);
     const [reportDetails, setReportDetails] = useState({
@@ -13,9 +14,7 @@ const CardModal = ({ isOpen, onClose, selectedArticle }) => {
         time: '',
         details: ''
     });
-    console.log(selectedArticle)
-    const isOwner = selectedArticle && selectedArticle.USER_ID === sessionStorage.getItem('userId');
-    console.log(selectedArticle);
+
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden'; // 모달이 열리면 스크롤 비활성화
@@ -35,8 +34,7 @@ const CardModal = ({ isOpen, onClose, selectedArticle }) => {
         };
     }, [isOpen]);
 
-
-    if (!isOpen) return null;
+    if (!isOpen || !selectedArticle) return null;
 
     const handleFirstReportClick = () => {
         setShowReportForm(true); // 제보 양식을 보여주도록 설정
@@ -55,20 +53,21 @@ const CardModal = ({ isOpen, onClose, selectedArticle }) => {
         e.preventDefault();
         // POST request to submit form data
         axios.post('/report', {
-            POSTER_IDX: selectedArticle.POSTER_INFO.POSTER_IDX, // Assuming you have access to selectedArticle.POSTER_INFO.POSTER_IDX
+            POSTER_IDX: selectedArticle.POSTER_INFO.POSTER_IDX,
             REPORT_SIGHTING_PLACE: reportDetails.location,
             REPORT_SIGHTING_TIME: reportDetails.time,
-            REPORT_ETC: reportDetails.details
+            REPORT_ETC: reportDetails.details,
+            POSTER_IMG_PATH: selectedArticle.POSTER_INFO.POSTER_IMG_PATH || defaultPosterImage // 포스터 이미지 경로 설정
         })
             .then(response => {
                 console.log('Report submitted successfully:', response.data);
                 setShowReportForm(false);
                 onClose(); // 모달을 닫고 싶으면 추가
-                // 감사멘트 추가하기
+                // 감사 메시지 추가
             })
             .catch(error => {
                 console.error('Error submitting report:', error);
-                // Handle error
+                // 에러 처리
             });
     };
 
@@ -78,17 +77,16 @@ const CardModal = ({ isOpen, onClose, selectedArticle }) => {
     };
 
     const handleHidePost = () => {
-        axios.post('/missing_finding_change', // 엔드포인트 변경
-            {
-                idx: selectedArticle.MISSING_IDX,
-                user_id: selectedArticle.USER_ID,
-                newfinding: 'stop' // MISSING_FINDING 값을 'stop'으로 설정
-            })
+        axios.post('/missing_finding_change', {
+            idx: selectedArticle.MISSING_IDX,
+            user_id: selectedArticle.USER_ID,
+            newfinding: 'stop' // MISSING_FINDING 값을 'stop'으로 설정
+        })
             .then(response => {
                 console.log('Post successfully hidden:', response.data);
                 alert('실종자 정보가 삭제되었습니다.'); // 사용자에게 정보 삭제 알림
                 onClose(); // 모달을 닫음
-                window.location.href = '/'; // 메인 페이지로 리다이렉트
+                navigate('/'); // 메인 페이지로 리다이렉트
             })
             .catch(error => {
                 console.error('Error hiding post:', error);
@@ -112,91 +110,86 @@ const CardModal = ({ isOpen, onClose, selectedArticle }) => {
                 <button onClick={onClose} className="modal_close-btn">
                     <img src={closeIcon} alt="Close" />
                 </button>
-                {selectedArticle && (
-                    <figure className='Card_modal'>
-                        <div className='Card_missingInfo'>
-                            <div className='Card_missingInfo_title'>실종자 정보</div>
-                            <div className='Card_imgs'>
-                                <div className='card_img'>
-                                    <img src={selectedArticle.POSTER_INFO.POSTER_IMG_PATH} alt="Poster Image" />
-                                </div>
-                                <div className='card_img'>
-                                    <img src={selectedArticle.MISSING_IMG} alt="Missing Image" />
-                                </div>
+                <figure className='Card_modal'>
+                    <div className='Card_missingInfo'>
+                        <div className='Card_missingInfo_title'>실종자 정보</div>
+                        <div className='Card_imgs'>
+                            <div className='card_img'>
+                                <img src={selectedArticle.POSTER_INFO.POSTER_IMG_PATH || defaultPosterImage} alt="Poster Image" />
                             </div>
-                            {showFirstButton && (
-                                <div className='Card_missingInfo_details'>
-                                    {missingInfoDetails.map((detail, index) => (
-                                        <div key={index} className='Card_missingInfo_detail'>
-                                            <div>{detail.label}</div>
-                                            <div>{detail.value}</div>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                            <div className="button-group">
-                                {isOwner ? (
-                                    <div className='Card_missingInfo_button'>
-                                        <button className="follow" onClick={() => {
-                                            navigate('/EditMissing', { state: { missingIdx: selectedArticle.MISSING_IDX } });
-                                        }}>수정</button>
-                                        <button className="follow" onClick={() => {
-                                            if (window.confirm('확인시 실종자 정보가 삭제 됩니다 삭제 하시겠습니까?')) {
-                                                handleHidePost();
-                                            }
-                                        }}>삭제</button>
-                                    </div>
-                                ) : (
-                                    <>
-                                        {showFirstButton && (
-                                            <button onClick={handleFirstReportClick} className="follow">
-                                                제보하기
-                                            </button>
-                                        )}
-                                        {showReportForm && (
-                                            <form className='missing_report' onSubmit={handleReportSubmit}>
-                                                <hr />
-                                                <div className='missing_report_form'>
-                                                    <div>발견장소</div>
-                                                    <div>
-                                                        <input
-                                                            name="location"
-                                                            value={reportDetails.location}
-                                                            onChange={handleInputChange}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className='missing_report_form'>
-                                                    <div>발견시간</div>
-                                                    <div>
-                                                        <input
-                                                            type='datetime-local'
-                                                            name="time"
-                                                            value={reportDetails.time}
-                                                            onChange={handleInputChange}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className='missing_report_form'>
-                                                    <div>특이사항</div>
-                                                    <div>
-                                                        <input
-                                                            name="details"
-                                                            value={reportDetails.details}
-                                                            onChange={handleInputChange}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <button type="submit" className="report_submit">전송하기</button>
-                                                <button type="button" className="report_cancel" onClick={handleCloseForm}>접기</button>
-                                            </form>
-                                        )}
-                                    </>
-                                )}
+                            <div className='card_img'>
+                                <img src={selectedArticle.MISSING_IMG} alt="Missing Image" />
                             </div>
                         </div>
-                    </figure>
-                )}
+                        {showFirstButton && (
+                            <div className='Card_missingInfo_details'>
+                                {missingInfoDetails.map((detail, index) => (
+                                    <div key={index} className='Card_missingInfo_detail'>
+                                        <div>{detail.label}</div>
+                                        <div>{detail.value}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                        <div className="button-group">
+                            {selectedArticle.USER_ID === sessionStorage.getItem('userId') && (
+                                <div className='Card_missingInfo_button'>
+                                    <button className="follow" onClick={() => {
+                                        navigate('/EditMissing', { state: { missingIdx: selectedArticle.MISSING_IDX } });
+                                    }}>수정</button>
+                                    <button className="follow" onClick={() => {
+                                        if (window.confirm('확인시 실종자 정보가 삭제 됩니다 삭제 하시겠습니까?')) {
+                                            handleHidePost();
+                                        }
+                                    }}>삭제</button>
+                                </div>
+                            )}
+                            {!showFirstButton && (
+                                <form className='missing_report' onSubmit={handleReportSubmit}>
+                                    <hr />
+                                    <div className='missing_report_form'>
+                                        <div>발견장소</div>
+                                        <div>
+                                            <input
+                                                name="location"
+                                                value={reportDetails.location}
+                                                onChange={handleInputChange}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className='missing_report_form'>
+                                        <div>발견시간</div>
+                                        <div>
+                                            <input
+                                                type='datetime-local'
+                                                name="time"
+                                                value={reportDetails.time}
+                                                onChange={handleInputChange}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className='missing_report_form'>
+                                        <div>특이사항</div>
+                                        <div>
+                                            <input
+                                                name="details"
+                                                value={reportDetails.details}
+                                                onChange={handleInputChange}
+                                            />
+                                        </div>
+                                    </div>
+                                    <button type="submit" className="report_submit">전송하기</button>
+                                    <button type="button" className="report_cancel" onClick={handleCloseForm}>접기</button>
+                                </form>
+                            )}
+                            {showFirstButton && (
+                                <button onClick={handleFirstReportClick} className="follow">
+                                    제보하기
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </figure>
             </div>
         </div>
     );

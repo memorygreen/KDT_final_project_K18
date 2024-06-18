@@ -5,7 +5,7 @@ import default_profile from '../assets/default_profile.jpeg';
 import alram from '../assets/alr.png';
 import setting from '../assets/set.png';
 import cap from '../assets/cap.png';
-import CardModal from '../../../Components/Cards/CardModal/CardModal'; 
+import CardModal from '../../../Components/Cards/CardModal/CardModal'; // CardModal component imported
 import MyCapture from '../My_capture/MyCapture';
 
 const Myuserinfo = ({ sessionId, onIconClick, onDivClick }) => {
@@ -13,18 +13,20 @@ const Myuserinfo = ({ sessionId, onIconClick, onDivClick }) => {
     const [userId, setUserId] = useState(sessionId);
     const [userInfo, setUserInfo] = useState(null);
     const [missingList, setMissingList] = useState([]);
-    const [selectedMissing, setSelectedMissing] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedMissing, setSelectedMissing] = useState(null); // State to store selected missing person info
+    const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal open/close
 
     const handleMissingClick = (missing) => {
-        setSelectedMissing(missing);
-        setIsModalOpen(true);
+        setSelectedMissing(missing); // Store selected missing person info
+        setIsModalOpen(true); // Open modal
     };
 
+    // 알람 및 설정 아이콘 클릭 핸들러
     const handleIconClick = (type) => {
         if (type === 'capture' || type === 'notification') {
             setShowMissingList(true);
-        } else {
+        }
+        else {
             setShowMissingList(false);
         }
         onIconClick(type);
@@ -32,14 +34,10 @@ const Myuserinfo = ({ sessionId, onIconClick, onDivClick }) => {
 
     const handleDivClick = (missing) => {
         onDivClick(missing);
-        setSelectedMissing(missing);
+        setSelectedMissing(missing); // Update selected missing person
     };
 
-    const handleAllClick = () => {
-        onDivClick(null); // 전체 알림을 보여주기 위해 null을 전달
-        setSelectedMissing(null);
-    };
-
+    // 유저 정보 불러오기
     const fetchUserInfo = () => {
         axios.post('/userInfoOne', { user_id: userId })
             .then(response => {
@@ -51,8 +49,9 @@ const Myuserinfo = ({ sessionId, onIconClick, onDivClick }) => {
             });
     };
 
+    // 실종자 목록 불러오기
     const fetchMissingData = () => {
-        axios.post('/missing_info_oneuser', { user_id: userId })
+        axios.post('/missing_info_oneuser', { user_id: userId })  // 'userId' changed to 'user_id'
             .then(response => {
                 console.log('Missing data:', response.data);
                 setMissingList(response.data);
@@ -70,7 +69,7 @@ const Myuserinfo = ({ sessionId, onIconClick, onDivClick }) => {
     return (
         <div className='Mypage_userinfo_all'>
             <div className='Mypage_userinfo'>
-                <img className='userinfo_img' src={userInfo && userInfo.USER_IMG ? userInfo.USER_IMG : default_profile} alt="default_profile" />
+                <img className='userinfo_img' src={userInfo && userInfo.USER_IMG ? userInfo.USER_IMG : default_profile} alt={default_profile} />
                 <div className='Mypage_userinfo_name'>{userInfo && userInfo.USER_NAME}</div>
             </div>
             <div className='Mypage_userinfo_icon'>
@@ -86,14 +85,14 @@ const Myuserinfo = ({ sessionId, onIconClick, onDivClick }) => {
             </div>
             {showMissingList && (
                 <div className='My_missingList'>
-                    <div className='My_missingList_title' onClick={handleAllClick}>
+                    <div className='My_missingList_title'>
                         실종자 목록
                     </div>
                     <div className='My_missingList_items'>
                         {missingList.map((missing) => (
                             <div className='My_missingList_item' key={missing.MISSING_IDX} onClick={() => handleDivClick(missing)}>
                                 {missing.MISSING_NAME}
-                                <button className='Mypage_missing_btn' onClick={(e) => { e.stopPropagation(); handleMissingClick(missing); }}>정보</button>
+                                <button className='Mypage_missing_btn' onClick={() => handleMissingClick(missing)}>정보</button>
                             </div>
                         ))}
                     </div>
@@ -106,6 +105,7 @@ const Myuserinfo = ({ sessionId, onIconClick, onDivClick }) => {
                     selectedArticle={selectedMissing}
                 />
             )}
+            
         </div>
     );
 };
