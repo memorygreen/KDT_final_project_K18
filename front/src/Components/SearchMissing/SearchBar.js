@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './SearchBar.css';
 const SearchBar = ({ setSelectTxt , handle_submit}) => {
 
   const btnContents = ['인적사항', '상의', '하의', '소지품']
   console.log("서치바 : ", handle_submit);
+
+  useEffect(() => {
+    setSelectTxt({ item: '인적사항' });
+  }, [setSelectTxt]);
   return (
 
     <div className='searchBar'>
@@ -15,6 +19,7 @@ const SearchBar = ({ setSelectTxt , handle_submit}) => {
           id={item}
           value={item}
           className='search_bar_cate_radio'
+          defaultChecked={item === '인적사항'} // 기본 선택 항목 설정
           onChange={() => setSelectTxt({ item: item })} // 객체로 전달
         />
         <label key={index} className='search_bar_cate_label' htmlFor={item}>

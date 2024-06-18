@@ -19,7 +19,7 @@ const MyPage = () => {
 
     const handleDivClick = (missing) => {
         console.log('missing', missing);
-        setMissingIdx(missing.MISSING_IDX);
+        setMissingIdx(missing ? missing.MISSING_IDX : null);
         setSelectedMissing(missing); // Update selected missing person
     };
 
