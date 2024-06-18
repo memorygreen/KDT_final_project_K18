@@ -35,7 +35,7 @@ def get_user_captures():
            m.MISSING_LOCATION
     FROM TB_CAPTURE c
     JOIN TB_MISSING m ON c.MISSING_IDX = m.MISSING_IDX
-    WHERE m.USER_ID = %s
+    WHERE m.USER_ID = %s AND m.MISSING_FINDING = 'finding'
     ORDER BY c.CAPTURE_FIRST_TIME DESC
     """
 
