@@ -28,7 +28,8 @@ load_dotenv()
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
-
+# .env 파일에서 환경 변수 로드
+app.secret_key = os.getenv('SECRET_KEY')
 
 
 # 블루프린트 등록
