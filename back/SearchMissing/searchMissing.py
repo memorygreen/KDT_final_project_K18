@@ -165,7 +165,7 @@ def search_missing():
     except Exception as e:
         # 에러 메시지를 상세하게 출력
         print("Error occurred:", str(e))
-        response = {
+        response = {    
             'status': 'error',
             'message': str(e)
         }

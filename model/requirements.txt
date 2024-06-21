@@ -1,0 +1,14 @@
+   Flask
+   Flask-Bcrypt
+   Flask-JWT-Extended
+   PyMySQL
+   requests
+   flask-cors
+   torch
+   torchvision
+   clip-by-openai
+   timm
+   Pillow
+   opencv-python
+   numpy
+   boto3
