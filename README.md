@@ -39,6 +39,9 @@
     git clone https://github.com/memorygreen/final_project_K18.git
     ```
 
+## model 설치
+1. <a herf = 'https://www.dropbox.com/scl/fo/e1l7kwn6qdnu91auiw13m/AIQCWlAnK3vJwwoc7pgUak4?rlkey=1e6pwpoa3x14nk6fmg8ewhvva&st=8ydslwcc&dl=0' target = "_blank">모델 다운로드</a> 링크를 클릭해서 모델을 설치합니다.
+
 ## Front 실행 환경 구성
 ### 노드 설치하기
 1. <a href="https://nodejs.org/en" target="_blank">Node.js 공식 사이트</a>에서 Node.js를 다운로드하여 설치합니다.
