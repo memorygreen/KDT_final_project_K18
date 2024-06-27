@@ -34,7 +34,7 @@
 ![alt text](/assets/image-1.png)
 
 ## 화면구성시연영상
-<video controls src="assets/Demo.mp4" title="Title"></video>
+[동영상 보기](https://duckgeun.s3.ap-northeast-2.amazonaws.com/%EC%8B%A4%EC%A0%84%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8/KakaoTalk_20240619_100620107.mp4)
 
 ## 팀원역할
 ![alt text](/assets/image-2.png)
